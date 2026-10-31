@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
 /* Layout: a scoreboard band on top, then one phone-width column of court cards — like the board by the clubhouse */
 :root{
@@ -314,7 +314,6 @@ function buildDoc(){
     "<script type=\"application/json\" id=\"state\">"+json+"<\/script>\n"+TPL.js+"</body></html>";
 }
 function save(){
-  if(PUBLIC)return;
   if(!art||!canEdit){ if(preview) setSave("Preview – not saved"); return; }
   setSave("Saving…");
   clearTimeout(saveTimer);
@@ -401,8 +400,7 @@ function buildOOP(seed){
   }
   return {rounds,swaps:[]};
 }
-const PUBLIC=!!window.SMASH_PUBLIC;
-const shownOOP=()=>S.oop||(PUBLIC?null:buildOOP(S.date+"#"+S.shuffle+"#"+inIds().join(",")));
+const shownOOP=()=>S.oop||buildOOP(S.date+"#"+S.shuffle+"#"+inIds().join(","));
 const inRound=(rd,id)=>rd.rest.includes(id)||rd.courts.some(c=>c.a.includes(id)||c.b.includes(id));
 
 /* ---------- scoring ---------- */
@@ -465,7 +463,7 @@ function render(){
     '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+when+'<button class="helpbtn" data-act="help">📖 How it works</button></div>'+
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
-    '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
+    '<span class="save" id="savestate">'+esc(ui.save||(canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
   '<main class="gut"><div class="col stack">'+({today:vToday,quiz:vQuiz,cards:vCards,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
   (ui.sheet?vSheet():"")+'<div id="toastbox"></div>';
   renderToast();ui.flip=false;
@@ -494,7 +492,7 @@ function vToday(){
     '<p class="sub">'+(S.oop?'Locked in. Drop-outs swap straight in.':'Changes live as people go in and out. Lock it in when the numbers are right.')+'</p></div>'+
     (canEdit?'<div class="row">'+(S.oop?'<button class="btn small ghost" data-act="unlock">Unlock</button>':'<button class="btn small ghost" data-act="shuffle">Shuffle</button><button class="btn small" data-act="lock"'+(oop?'':' disabled')+'>Lock it in</button>')+'</div>':'')+
   '</div>';
-  if(!oop){html+='<div class="card empty-note">'+(PUBLIC?'The order of play is posted here on Friday 🎾':'Mark at least 4 players as <b>In</b> to make the order of play.')+'</div>'}
+  if(!oop){html+='<div class="card empty-note">Mark at least 4 players as <b>In</b> to make the order of play.</div>'}
   else{
     const lr=liveRound();let k=0;
     oop.rounds.forEach((rd,ri)=>{
@@ -806,7 +804,7 @@ function vQuiz(){
       (done?'':'<div class="empty-note">No cards yet. Be the first – then share the quiz link in the group.</div>')+'</div></section>';
   }
   if(z.mode==="avail"){
-    if(z.done)return '<section class="card"><h2>'+(canEdit?'Updated ✓':'Last step: send it')+'</h2><p class="sub">'+(canEdit?'Saved to '+esc(z.a.name)+'\'s profile.':sendHint())+'</p><pre class="wa" id="wa-avail">'+esc(availText(z.a))+'</pre>'+sendRow("avail",availText(z.a),"update")+'<button class="btn ghost" data-act="qzaway0">Done</button></div></section>';
+    if(z.done)return '<section class="card"><h2>'+(canEdit?'Updated ✓':'Last step: send it')+'</h2><p class="sub">'+(canEdit?'Saved to '+esc(z.a.name)+'\'s profile.':(orgHref("x")?'Tap send – it goes straight to '+esc(org().name||'the organiser')+' on WhatsApp.':'Copy this and paste it in the KLTC Sat 2~4 group (or send it to the organiser).'))+'</p><pre class="wa" id="wa-avail">'+esc(availText(z.a))+'</pre>'+sendRow("avail",availText(z.a),"update")+'<button class="btn ghost" data-act="qzaway0">Done</button></div></section>';
     const v=z.a.rsvp&&z.a.rsvp.v;
     return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">30 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>Update my availability</h2>'+
       '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label>'+
@@ -824,7 +822,7 @@ function vQuiz(){
         '<div><span>Weapon</span><b>'+esc(optLabel("weapon",a.weapon))+'</b></div>'+
         '<div><span>Late swaps</span><b>'+(a.oncall==="yes"?"🦸 On call":a.oncall==="maybe"?"Ask me":"Not on call")+'</b></div>'+
       '</div>'+(a.motto?'<p class="pc-motto">“'+esc(a.motto)+'”</p>':'')+'</section>'+
-      '<section class="card"><h2>'+(canEdit?'Saved to the squad ✓':'Last step: share your card')+'</h2><p class="sub">'+(canEdit?'This profile is now on the Players tab.':sendHint())+'</p>'+
+      '<section class="card"><h2>'+(canEdit?'Saved to the squad ✓':'Last step: share your card')+'</h2><p class="sub">'+(canEdit?'This profile is now on the Players tab.':(orgHref("x")?'Tap send – it goes straight to '+esc(org().name||'the organiser')+' on WhatsApp. Or copy it into the group for everyone to see.':'Copy your card and paste it in the KLTC Sat 2~4 group. The organiser adds it to the squad from there.'))+'</p>'+
       '<pre class="wa" id="wa-card">'+esc(cardText(a))+'</pre>'+sendRow("card",cardText(a),"card")+'<button class="btn ghost" data-act="qzagain">Take it again</button></div></section>';
   }
   const q=QUIZ[z.step],val=z.a[q.k];
@@ -1015,9 +1013,8 @@ function setPhone(id,v){const m=phones();if(v)m[id]=v;else delete m[id];try{loca
 const phoneOf=p=>phones()[p.id]||"";
 const org=()=>S.org||{name:"",phone:""};
 const orgHref=msg=>{const ph=normPhone(org().phone);return ph?waLink(ph,msg):""};
-const sendHint=()=>'Tap the yellow button – WhatsApp opens with it ready. '+(orgHref("x")?'It goes straight to '+esc(org().name||'the organiser')+'.':'Pick <b>'+esc(org().name||'Jurate')+'</b> and press send.');
-function sendRow(key,msg,label){const h=orgHref(msg)||pickHref(msg);
-  return '<div class="row"><a class="btn ball" href="'+esc(h)+'" target="_blank" rel="noopener">Send my '+label+' to '+esc(org().name||"the organiser")+' 📲</a><button class="btn ghost" data-act="copy" data-k="'+key+'">Copy</button>';}
+function sendRow(key,msg,label){const h=orgHref(msg);
+  return '<div class="row">'+(h?'<a class="btn ball" href="'+esc(h)+'" target="_blank" rel="noopener">Send my '+label+' to '+esc(org().name||"the organiser")+' 📲</a>':'')+'<button class="btn '+(h?'ghost':'ball')+'" data-act="copy" data-k="'+key+'">Copy my '+label+'</button>';}
 const waHref=(p,msg)=>{const ph=normPhone(phoneOf(p));return ph?waLink(ph,msg):""};
 function msgRow(p,msg,key,extra){
   const href=waHref(p,msg)||pickHref(msg);const r=regular(p);
@@ -1216,7 +1213,6 @@ function start(data){
   if(location.hash==="#cards")ui.tab="cards";
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
-  if(PUBLIC){canEdit=false;preview=false;render();return}
   const c=window.claude;
   if(!c||!c.use){canEdit=true;preview=true;render();return}
   (async()=>{
@@ -1233,5 +1229,4 @@ const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
-</script>
-</body></html>
+</script></body></html>
