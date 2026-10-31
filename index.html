@@ -1601,7 +1601,10 @@ function start(data){
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
   if(PUBLIC){canEdit=false;preview=false;render();
-    try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")}catch(e){}
+    try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"})}catch(e){}
+    // phones keep apps open in the background: come back after a minute or more and it reloads the latest version
+    let hiddenAt=0;document.addEventListener("visibilitychange",()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>60000&&!ui.quiz)location.reload()});
+    setInterval(()=>{if(!document.hidden&&!ui.quiz&&!ui.sheet)location.reload()},15*60000);
     addEventListener("beforeinstallprompt",e=>{e.preventDefault();ui.installEv=e;if(ui.sheet&&ui.sheet.type==="install")render()});
     return}
   const c=window.claude;
