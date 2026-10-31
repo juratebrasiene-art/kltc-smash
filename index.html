@@ -111,6 +111,7 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.dmy{display:flex;gap:6px}.dmy select{flex:1;min-width:0}
 .weekbox{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .kind{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted)}
 .menuserved{font-weight:600;font-size:14px;padding:8px 14px;border-radius:12px;background:var(--bg);border:1px dashed var(--line)}
@@ -629,7 +630,7 @@ function vToday(){
 }
 function vSettings(){
   return '<details class="card"><summary>Session settings</summary><div class="grid2">'+
-    '<label class="f">Date<input type="date" id="set-date" value="'+S.date+'" data-act="set" data-k="date"></label>'+
+    '<label class="f">Date<select id="set-date" data-act="set" data-k="date">'+satOptions(S.date)+'</select></label>'+
     '<label class="f">Start<input type="time" id="set-start" value="'+S.start+'" data-act="set" data-k="start"></label>'+
     '<label class="f">Courts booked<input type="number" id="set-courts" min="1" max="10" value="'+S.courts+'" data-act="set" data-k="courts"></label>'+
     '<label class="f">Sessions<input type="number" id="set-rounds" min="1" max="8" value="'+S.rounds+'" data-act="set" data-k="rounds"></label>'+
@@ -999,7 +1000,7 @@ function vQuiz(){
       '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" list="qa-names" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label><datalist id="qa-names">'+live().map(p=>'<option value="'+esc(p.name)+'">').join("")+'</datalist>'+
       '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
       (r.v==="yes"?'<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+menuPicker("qzmenu",z.a.g,r.menu):'')+
-      '<details style="margin-top:14px"><summary class="sub"><b style="color:var(--ink)">✈️ Away for a while?</b> Add the dates and we won\'t chase you.</summary>'+awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:8px"><button class="btn ghost small" data-act="qzawadd">Add these dates</button></div></details>'+
+      '<details style="margin-top:14px"'+((z.a.away||[]).length?' open':'')+'><summary class="sub"><b style="color:var(--ink)">✈️ Away for a while?</b> Add the dates and we won\'t chase you.</summary>'+awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:8px"><button class="btn ghost small" data-act="qzawadd">Add these dates</button></div></details>'+
       '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
   }
   if(z.step>=QUIZ.length){
@@ -1335,8 +1336,21 @@ function applyAway(p,list){
   const seen=new Set();p.away=p.away.filter(a=>{const k=a.from+a.to;if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.from<b.from?-1:1);
   if(awayOn(p,S.date)&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out";
 }
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function dmyPicker(id){ // British order: day · month · year; the hidden input holds yyyy-mm-dd
+  const y=new Date().getFullYear(),opt=(v,l)=>'<option value="'+v+'">'+l+'</option>';
+  return '<span class="dmy"><select data-dmy="'+id+'" data-p="d" aria-label="Day">'+opt("","Day")+Array.from({length:31},(_,i)=>opt(i+1,i+1)).join("")+'</select>'+
+    '<select data-dmy="'+id+'" data-p="m" aria-label="Month">'+opt("","Month")+MONTHS.map((m,i)=>opt(i+1,m)).join("")+'</select>'+
+    '<select data-dmy="'+id+'" data-p="y" aria-label="Year">'+[y,y+1].map(v=>opt(v,v)).join("")+'</select><input type="hidden" id="'+id+'"></span>';
+}
+function satOptions(cur){ // Session date: pick a Saturday, shown the British way
+  const out=[],d=dOf(iso(new Date()));d.setDate(d.getDate()-28+((6-d.getDay()+7)%7));
+  for(let i=0;i<24;i++){out.push(iso(d));d.setDate(d.getDate()+7)}
+  if(!out.includes(cur))out.unshift(cur);
+  return out.map(v=>'<option value="'+v+'"'+(v===cur?' selected':'')+'>'+esc(fmtD(v))+' '+v.slice(0,4)+'</option>').join("");
+}
 function awayForm(prefix,list){
-  return '<div class="grid2" style="margin-top:8px"><label class="f">From<input type="date" id="'+prefix+'-from"></label><label class="f">To<input type="date" id="'+prefix+'-to"></label>'+
+  return '<div class="grid2" style="margin-top:8px"><label class="f">From'+dmyPicker(prefix+'-from')+'</label><label class="f">To'+dmyPicker(prefix+'-to')+'</label>'+
     '<label class="f">Why (optional)<input type="text" id="'+prefix+'-note" maxlength="60" placeholder="Holiday, injury, busy months…"></label></div>'+
     (list&&list.length?'<div class="pmeta" style="margin-top:8px">'+list.map((a,i)=>'<span class="badge">✈️ '+esc(fmtRange(a))+(a.note?' · '+esc(a.note):'')+' <button class="x" style="font-size:14px;padding:0 2px" data-act="'+prefix+'del" data-i="'+i+'" data-id="'+(ui.sheet&&ui.sheet.id||"")+'" aria-label="Remove dates">×</button></span>').join("")+'</div>':'');
 }
@@ -1454,7 +1468,10 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.act==="qztext"){e.preventDefault();quizAct("qznext",e.target)}});
 document.addEventListener("change",e=>{
-  const t=e.target;if(!canEdit||!t.dataset)return;
+  const t=e.target;
+  if(t.dataset&&t.dataset.dmy){const id=t.dataset.dmy,g=p=>(document.querySelector('[data-dmy="'+id+'"][data-p="'+p+'"]')||{}).value,h=$("#"+id);
+    const d=g("d"),m=g("m"),y=g("y");if(h)h.value=d&&m&&y?y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0"):"";return}
+  if(!canEdit||!t.dataset)return;
   if(t.dataset.act==="pphone"){const ok=setPhone(t.dataset.id,t.value.trim().slice(0,20));toast(ok?"Number saved on this device only":"This browser won't store numbers – use Copy instead");render();return}
   if(t.dataset.act==="score"){const r=+t.dataset.r,c=+t.dataset.c,v=t.value.trim();
     mutate(s=>{s.oop.rounds[r].courts[c].score=v});
