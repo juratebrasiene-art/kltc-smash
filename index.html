@@ -1023,7 +1023,7 @@ function vQuiz(){
   if(!z){
     return '<section class="quizhero"><div class="eyebrow">My player card · 2 minutes, once</div><h2>What kind of Saturday player are you?</h2>'+
       '<p>Make your player card once – are you The Wall, The Net Ninja or The Big Hitter? Change it whenever you like with ✏️ Update my card.</p>'+
-      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzpick">✏️ Update my card</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
+      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzmine">✏️ Update my card</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
       (canEdit?vTracker():'')+
       '<section class="card"><h2>The squad so far</h2><p class="sub">'+done+' of '+total+' player cards in</p><div class="meter"><b style="width:'+(total?done/total*100:0)+'%"></b></div>'+
       '<div class="cards">'+live().filter(p=>p.q).map(p=>{const pr=persona(p.q);return '<button class="mini pc-'+pr.key+'" data-act="profile" data-id="'+p.id+'"><span class="mi">'+pr.icon+'</span><b>'+esc(p.name)+'</b><span>'+esc(pr.name)+'</span></button>'}).join("")+
@@ -1207,7 +1207,7 @@ function quizAct(a,t){
   const z=ui.quiz;
   if(a==="qzstart"||a==="qzagain"){ui.quiz={step:0,a:me()};render();return}
   if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});return}
-  if(a==="qzpick"){ui.quiz={mode:"pick",a:{}};render();return}
+  if(a==="qzmine"){ui.quiz={mode:"pick",a:{}};render();return}
   if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
   if(!z)return;
