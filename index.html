@@ -111,6 +111,10 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.kind{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted)}
+.menuserved{font-weight:600;font-size:14px;padding:8px 14px;border-radius:12px;background:var(--bg);border:1px dashed var(--line)}
+.menu{display:grid;gap:10px;margin-top:10px}.course{border:2px solid var(--line);border-radius:14px;padding:10px 12px}.course h4{margin:0 0 8px;font-size:15px}.course h4 small{color:var(--muted);font-weight:600}.mopts{display:flex;flex-wrap:wrap;gap:6px}.mopts button{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-weight:600;font-size:13px}.mopts button[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.orders{display:grid;gap:6px;margin-top:10px}.orders div{font-size:14px}
 .team{font-weight:600;overflow-wrap:anywhere}
 .team.win{color:var(--good)}
 .vs{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--muted)}
@@ -214,6 +218,12 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 .prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
 .prow span{font-weight:600;overflow-wrap:anywhere}
 .psteps{margin:10px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14px}
+.wxcard{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:linear-gradient(135deg,var(--surface),var(--good-soft));border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.wxcard.muted{background:var(--surface)}
+.wxi{font-size:46px;line-height:1}
+.wxt{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:2px 0}
+.wxt b{font-family:var(--display);font-weight:900;font-size:36px;line-height:1;color:var(--court)}
+.wxt span{font-weight:700}
 /* help guide */
 .band .col{position:relative}
 .helpbtn{border:2px solid var(--ball);background:transparent;color:var(--on-court);border-radius:999px;padding:5px 12px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;gap:6px}
@@ -311,7 +321,7 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 </style>
 <div id="app"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
-<script type="application/json" id="state">{"v":1,"club":"KLTC","group":"Sat 2–4 Advanced","date":"2026-11-07","start":"14:00","rounds":4,"roundMins":30,"courts":4,"warmup":{"on":true,"start":"13:30","end":"13:50"},"challenges":true,"link":"https://juratebrasiene-art.github.io/kltc-smash/","shuffle":1,"oop":null,"history":[],"forecasts":{"2026-11-07":{"date":"2026-11-07","t":10,"rain":4,"code":0,"wind":4,"at":"Sat 13:52"},"2026-11-14":{"date":"2026-11-14","t":10,"rain":20,"code":3,"wind":16,"at":"Sat 13:52"}},"players":[{"id":"p1","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Nick R.","level":3,"q":{"goal":"friends","fuel":"cake","rain":"dance","motives":["social"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"volley","better":["tourn"],"motto":"don't annoy me","at":"2026-10-31"}},{"id":"p2","status":"reserve","warmup":false,"name":"Jane B.","level":3},{"id":"p3","status":"reserve","warmup":false,"name":"Seb","level":3,"q":{"goal":"escape","fuel":"sofa","rain":"dance","motives":["escape"],"avail":"some","oncall":"no","warm":"sometimes","style":"tactics","weapon":"volley","better":["themes"],"motto":"dancing on the moon ...","at":"2026-10-31"}},{"id":"p4","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Victor","level":3},{"id":"p5","status":"reserve","warmup":false,"name":"Shula","level":3},{"id":"p6","status":"reserve","warmup":true,"name":"Alex","level":3},{"id":"p7","status":"reserve","warmup":false,"name":"Lesley","level":3},{"id":"p8","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Jurate","level":3,"q":{"goal":"improve","fuel":"shake","rain":"dance","motives":["improve","win"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"forehand","better":["tourn"],"motto":"high five","at":"2026-10-31"}},{"id":"pmvwef4y2ru","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Test T.","level":3,"q":{"goal":"escape","fuel":"fizz","rain":"home","motives":["social","escape"],"avail":"most","oncall":"yes","warm":"sometimes","style":"fun","weapon":"lob","better":["drinks"],"motto":"Lob it and hope","at":"2026-10-31"}},{"id":"pmvwef4y22qc","status":"out","warmup":false,"rsvp":{"date":"2026-11-07","v":"no"},"name":"Test A.","level":3},{"id":"ptestsam","status":"reserve","warmup":true,"name":"Test S.","level":3,"q":{"goal":"fitter","fuel":"coffee","rain":"play","motives":["fit","win"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"legs","better":["ladder"],"motto":"Everything comes back","at":"2026-10-31"}},{"id":"pmvwet0ou664","status":"reserve","warmup":false,"name":"Jane S.","level":3,"q":{"goal":"fitter","fuel":"fizz","rain":"home","motives":["fit"],"avail":"some","oncall":"no","warm":"no","style":"net","weapon":"backhand","better":["drinks"],"motto":"Serve big, smile bigger","at":"2026-10-31"}},{"id":"pmvwf369e3re","status":"reserve","warmup":false,"name":"Test L.","level":3,"q":{"goal":"improve","fuel":"cake","rain":"wait","motives":["social"],"avail":"most","oncall":"maybe","warm":"sometimes","style":"wall","weapon":"forehand","better":["mix"],"motto":"Lob queen","at":"2026-10-31"}},{"id":"pmvwfbk753jf","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Jane B.","level":3,"q":{"goal":"team","fuel":"cake","rain":"dance","motives":["fit"],"avail":"most","oncall":"yes","warm":"always","style":"wall","weapon":"legs","better":["drinks"],"motto":"i'm better then enyone else","at":"2026-10-31"}},{"id":"pmvwg480s3ds","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Test M.","level":3,"q":{"goal":"improve","fuel":"shake","rain":"home","motives":["improve"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"backhand","better":["mix"],"motto":"Ace or nothing","at":"2026-10-31"}},{"id":"pwa00","status":"reserve","warmup":false,"name":"Emma","level":3},{"id":"pwa01","status":"reserve","warmup":false,"name":"Even","level":3},{"id":"pwa02","status":"reserve","warmup":false,"name":"Gillian W.","level":3},{"id":"pwa03","status":"reserve","warmup":false,"name":"Nathalie M.","level":3},{"id":"pwa04","status":"reserve","warmup":false,"name":"Nick","level":3},{"id":"pwa06","status":"reserve","warmup":false,"name":"Oscar C.","level":3},{"id":"pwa07","status":"reserve","warmup":false,"name":"Ryan","level":3},{"id":"pwa08","status":"reserve","warmup":false,"name":"Sarah H.","level":3},{"id":"pwa11","status":"reserve","warmup":false,"name":"Valentin","level":3},{"id":"pwa13","status":"reserve","warmup":false,"name":"Alfred D.","level":3},{"id":"pwa14","status":"reserve","warmup":false,"name":"Andrew M.","level":3},{"id":"pwa15","status":"reserve","warmup":false,"name":"Andrew N.","level":3},{"id":"pwa16","status":"reserve","warmup":false,"name":"Andy","level":3},{"id":"pwa17","status":"reserve","warmup":false,"name":"Ben D.","level":3},{"id":"pwa18","status":"reserve","warmup":false,"name":"Bev M.","level":3},{"id":"pwa19","status":"reserve","warmup":false,"name":"Brad L.","level":3},{"id":"pwa20","status":"reserve","warmup":false,"name":"Caroline S.","level":3},{"id":"pwa21","status":"reserve","warmup":false,"name":"Chris H.","level":3},{"id":"pwa22","status":"reserve","warmup":false,"name":"Claire D.","level":3},{"id":"pwa23","status":"reserve","warmup":false,"name":"Clive G.","level":3},{"id":"pwa24","status":"reserve","warmup":false,"name":"Daniel","level":3},{"id":"pwa25","status":"reserve","warmup":false,"name":"David","level":3},{"id":"pwa26","status":"reserve","warmup":false,"name":"Dom","level":3},{"id":"pwa27","status":"reserve","warmup":false,"name":"Freddy","level":3},{"id":"pwa28","status":"reserve","warmup":false,"name":"Hannah R.","level":3},{"id":"pwa29","status":"reserve","warmup":false,"name":"Henry","level":3},{"id":"pwa30","status":"reserve","warmup":false,"name":"Jake","level":3},{"id":"pwa31","status":"reserve","warmup":false,"name":"James B.","level":3},{"id":"pwa32","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"James F.","level":3},{"id":"pwa34","status":"reserve","warmup":false,"name":"Jane C.","level":3},{"id":"pwa35","status":"reserve","warmup":false,"name":"Janet","level":3},{"id":"pwa36","status":"reserve","warmup":false,"name":"John","level":3},{"id":"pwa37","status":"reserve","warmup":false,"name":"Joseph","level":3},{"id":"pwa38","status":"reserve","warmup":false,"name":"Karen G.","level":3},{"id":"pwa39","status":"reserve","warmup":false,"name":"Kat L.","level":3},{"id":"pwa40","status":"reserve","warmup":false,"name":"Kevin S.","level":3},{"id":"pwa41","status":"reserve","warmup":false,"name":"Lee","level":3},{"id":"pwa43","status":"reserve","warmup":false,"name":"MB","level":3},{"id":"pwa44","status":"reserve","warmup":false,"name":"Niamh H.","level":3},{"id":"pwa45","status":"reserve","warmup":false,"name":"Nigel C.","level":3},{"id":"pwa46","status":"reserve","warmup":false,"name":"Paulh","level":3},{"id":"pwa47","status":"reserve","warmup":false,"name":"Peter W.","level":3},{"id":"pwa48","status":"reserve","warmup":false,"name":"Rebecca","level":3},{"id":"pwa49","status":"reserve","warmup":false,"name":"Rob H.","level":3},{"id":"pwa50","status":"reserve","warmup":false,"name":"Robin H.","level":3},{"id":"pwa51","status":"reserve","warmup":false,"name":"Ruth E.","level":3},{"id":"pwa52","status":"reserve","warmup":false,"name":"Simon M.","level":3},{"id":"pwa53","status":"reserve","warmup":false,"name":"Steve","level":3},{"id":"pwa54","status":"reserve","warmup":false,"name":"Steve W.","level":3},{"id":"pwa55","status":"reserve","warmup":false,"name":"Steviemezza","level":3},{"id":"pwa56","status":"reserve","warmup":false,"name":"Tom W.","level":3},{"id":"pwa58","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Xisha C.","level":3}],"inbox":[],"org":{"name":"Jurate","phone":""}}</script>
+<script type="application/json" id="state">{"v":1,"club":"KLTC","group":"Sat 2–4 Advanced","date":"2026-11-07","start":"14:00","rounds":3,"roundMins":40,"courts":4,"warmup":{"on":true,"start":"13:30","end":"13:50"},"challenges":true,"link":"https://juratebrasiene-art.github.io/kltc-smash/","shuffle":3,"oop":null,"history":[],"forecasts":{"2026-11-07":{"date":"2026-11-07","t":10,"rain":4,"code":0,"wind":4,"at":"Sat 13:52"},"2026-11-14":{"date":"2026-11-14","t":10,"rain":20,"code":3,"wind":16,"at":"Sat 13:52"}},"players":[{"id":"p1","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Nick R.","level":3,"q":{"goal":"friends","fuel":"cake","rain":"dance","motives":["social"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"volley","better":["tourn"],"motto":"don't annoy me","at":"2026-10-31"}},{"id":"p2","status":"reserve","warmup":false,"name":"Jane B.","level":3},{"id":"p3","status":"reserve","warmup":false,"name":"Seb","level":3,"q":{"goal":"escape","fuel":"sofa","rain":"dance","motives":["escape"],"avail":"some","oncall":"no","warm":"sometimes","style":"tactics","weapon":"volley","better":["themes"],"motto":"dancing on the moon ...","at":"2026-10-31"}},{"id":"p4","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Victor","level":3},{"id":"p5","status":"reserve","warmup":false,"name":"Shula","level":3},{"id":"p6","status":"reserve","warmup":true,"name":"Alex","level":3},{"id":"p7","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes","warm":true},"name":"Lesley","level":3},{"id":"p8","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Jurate","level":3,"q":{"goal":"improve","fuel":"shake","rain":"dance","motives":["improve","win"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"forehand","better":["tourn"],"motto":"high five","at":"2026-10-31"}},{"id":"pmvwef4y2ru","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Test T.","level":3,"q":{"goal":"escape","fuel":"fizz","rain":"home","motives":["social","escape"],"avail":"most","oncall":"yes","warm":"sometimes","style":"fun","weapon":"lob","better":["drinks"],"motto":"Lob it and hope","at":"2026-10-31"}},{"id":"pmvwef4y22qc","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes","warm":false},"name":"Test A.","level":3},{"id":"ptestsam","status":"reserve","warmup":true,"name":"Test S.","level":3,"q":{"goal":"fitter","fuel":"coffee","rain":"play","motives":["fit","win"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"legs","better":["ladder"],"motto":"Everything comes back","at":"2026-10-31"}},{"id":"pmvwet0ou664","status":"reserve","warmup":false,"name":"Jane S.","level":3,"q":{"goal":"fitter","fuel":"fizz","rain":"home","motives":["fit"],"avail":"some","oncall":"no","warm":"no","style":"net","weapon":"backhand","better":["drinks"],"motto":"Serve big, smile bigger","at":"2026-10-31"}},{"id":"pmvwf369e3re","status":"reserve","warmup":false,"name":"Test L.","level":3,"q":{"goal":"improve","fuel":"cake","rain":"wait","motives":["social"],"avail":"most","oncall":"maybe","warm":"sometimes","style":"wall","weapon":"forehand","better":["mix"],"motto":"Lob queen","at":"2026-10-31"}},{"id":"pmvwfbk753jf","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Jane B.","level":3,"q":{"goal":"team","fuel":"cake","rain":"dance","motives":["fit"],"avail":"most","oncall":"yes","warm":"always","style":"wall","weapon":"legs","better":["drinks"],"motto":"i'm better then enyone else","at":"2026-10-31"}},{"id":"pmvwg480s3ds","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Test M.","level":3,"q":{"goal":"improve","fuel":"shake","rain":"home","motives":["improve"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"backhand","better":["mix"],"motto":"Ace or nothing","at":"2026-10-31"}},{"id":"pwa00","status":"reserve","warmup":false,"name":"Emma","level":3},{"id":"pwa01","status":"reserve","warmup":false,"name":"Even","level":3},{"id":"pwa02","status":"reserve","warmup":false,"name":"Gillian W.","level":3},{"id":"pwa03","status":"reserve","warmup":false,"name":"Nathalie M.","level":3},{"id":"pwa04","status":"reserve","warmup":false,"name":"Nick","level":3},{"id":"pwa06","status":"reserve","warmup":false,"name":"Oscar C.","level":3},{"id":"pwa07","status":"reserve","warmup":false,"name":"Ryan","level":3},{"id":"pwa08","status":"reserve","warmup":false,"name":"Sarah H.","level":3},{"id":"pwa11","status":"reserve","warmup":false,"name":"Valentin","level":3},{"id":"pwa13","status":"reserve","warmup":false,"name":"Alfred D.","level":3},{"id":"pwa14","status":"reserve","warmup":false,"name":"Andrew M.","level":3},{"id":"pwa15","status":"reserve","warmup":false,"name":"Andrew N.","level":3},{"id":"pwa16","status":"reserve","warmup":false,"name":"Andy","level":3},{"id":"pwa17","status":"reserve","warmup":false,"name":"Ben D.","level":3},{"id":"pwa18","status":"reserve","warmup":false,"name":"Bev M.","level":3},{"id":"pwa19","status":"reserve","warmup":false,"name":"Brad L.","level":3},{"id":"pwa20","status":"reserve","warmup":false,"name":"Caroline S.","level":3},{"id":"pwa21","status":"reserve","warmup":false,"name":"Chris H.","level":3},{"id":"pwa22","status":"reserve","warmup":false,"name":"Claire D.","level":3},{"id":"pwa23","status":"reserve","warmup":false,"name":"Clive G.","level":3},{"id":"pwa24","status":"reserve","warmup":false,"name":"Daniel","level":3},{"id":"pwa25","status":"reserve","warmup":false,"name":"David","level":3},{"id":"pwa26","status":"reserve","warmup":false,"name":"Dom","level":3},{"id":"pwa27","status":"reserve","warmup":false,"name":"Freddy","level":3},{"id":"pwa28","status":"reserve","warmup":false,"name":"Hannah R.","level":3},{"id":"pwa29","status":"reserve","warmup":false,"name":"Henry","level":3},{"id":"pwa30","status":"reserve","warmup":false,"name":"Jake","level":3},{"id":"pwa31","status":"reserve","warmup":false,"name":"James B.","level":3},{"id":"pwa32","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"James F.","level":3},{"id":"pwa34","status":"reserve","warmup":false,"name":"Jane C.","level":3},{"id":"pwa35","status":"reserve","warmup":false,"name":"Janet","level":3},{"id":"pwa36","status":"reserve","warmup":false,"name":"John","level":3},{"id":"pwa37","status":"reserve","warmup":false,"name":"Joseph","level":3},{"id":"pwa38","status":"reserve","warmup":false,"name":"Karen G.","level":3},{"id":"pwa39","status":"reserve","warmup":false,"name":"Kat L.","level":3},{"id":"pwa40","status":"reserve","warmup":false,"name":"Kevin S.","level":3},{"id":"pwa41","status":"reserve","warmup":false,"name":"Lee","level":3},{"id":"pwa43","status":"reserve","warmup":false,"name":"MB","level":3},{"id":"pwa44","status":"reserve","warmup":false,"name":"Niamh H.","level":3},{"id":"pwa45","status":"reserve","warmup":false,"name":"Nigel C.","level":3},{"id":"pwa46","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes","warm":false},"name":"Paulh","level":3},{"id":"pwa47","status":"reserve","warmup":false,"name":"Peter W.","level":3},{"id":"pwa48","status":"reserve","warmup":false,"name":"Rebecca","level":3},{"id":"pwa49","status":"reserve","warmup":false,"name":"Rob H.","level":3},{"id":"pwa50","status":"reserve","warmup":false,"name":"Robin H.","level":3},{"id":"pwa51","status":"reserve","warmup":false,"name":"Ruth E.","level":3},{"id":"pwa52","status":"reserve","warmup":false,"name":"Simon M.","level":3},{"id":"pwa53","status":"reserve","warmup":false,"name":"Steve","level":3},{"id":"pwa54","status":"reserve","warmup":false,"name":"Steve W.","level":3},{"id":"pwa55","status":"reserve","warmup":false,"name":"Steviemezza","level":3},{"id":"pwa56","status":"reserve","warmup":false,"name":"Tom W.","level":3},{"id":"pwa58","status":"in","warmup":false,"rsvp":{"date":"2026-11-07","v":"yes"},"name":"Xisha C.","level":3}],"inbox":[],"org":{"name":"Jurate","phone":""}}</script>
 <script>window.SMASH_PUBLIC=true</script>
 <script id="app-js">
 (function(){
@@ -391,38 +401,99 @@ const QUESTS=[
 ];
 const questFor=r=>{const order=shuffle(QUESTS.slice(),rng(hash(S.date+"q")));return order[r%order.length]};
 
+/* ---------- Saturday menu: each session is a course, each player orders a format for it ---------- */
+const COURSES=[["🥗","Starter"],["🍝","Main"],["🍰","Dessert"]];
+const course=i=>COURSES[i]||["🎾","Round "+(i+1)];
+const MENU_KEYS=["d","x","s","a"];
+function menuOpt(k,g){
+  if(k==="x")return ["👫","Mixed doubles"];
+  if(k==="a")return ["🎲","Chef's choice"];
+  if(k==="d")return g==="m"?["👬","Men's doubles"]:g==="f"?["👭","Ladies' doubles"]:["👭","Ladies' / men's doubles"];
+  return g==="m"?["🎯","Men's singles"]:g==="f"?["🎯","Ladies' singles"]:["🎯","Singles"];
+}
+const sex=id=>pBy(id)?.g||"";
+const pick=(id,k)=>{const p=pBy(id),m=p&&p.rsvp&&p.rsvp.date===S.date&&p.rsvp.menu;return (m&&m[k])||"a"};
+function courtKind(c){ // s singles · d ladies'/men's doubles · x mixed · o anything else
+  const all=c.a.concat(c.b).filter(Boolean);if(all.length===2)return "s";
+  const g=all.map(sex);if(all.length<4||g.includes(""))return "o";
+  if(g.every(x=>x===g[0]))return "d";
+  return g[0]!==g[1]&&g[2]!==g[3]?"x":"o";
+}
+function kindLabel(c){
+  const k=courtKind(c),g=sex(c.a.concat(c.b).find(Boolean));
+  if(k==="s"){const gs=c.a.concat(c.b).filter(Boolean).map(sex);return gs[0]&&gs[0]===gs[1]?menuOpt("s",g):["🎯","Singles"]}
+  return k==="o"?null:menuOpt(k,g);
+}
+function wishMet(id,c,k){
+  const w=pick(id,k);if(w==="a")return true;
+  const kind=courtKind(c);
+  if(w==="s")return kind==="s"&&c.a.concat(c.b).every(i=>sex(i)===sex(id));
+  return w===kind;
+}
+function menuStats(oop){
+  let met=0,all=0;
+  if(oop)oop.rounds.forEach((rd,k)=>rd.courts.forEach(c=>c.a.concat(c.b).forEach(id=>{if(id&&pick(id,k)!=="a"){all++;if(wishMet(id,c,k))met++}})));
+  return {met,all};
+}
+
+const setPick=(m,i,v)=>{const a=(m||"").padEnd(S.rounds,"a").split("");a[i]=v;return a.join("").replace(/a+$/,"")};
+function menuPicker(act,g,menu,extra){
+  extra=extra||"";
+  return '<div class="menu"><div class="course"><h4>I play on the…</h4><div class="mopts">'+[["f","👩 Ladies' side"],["m","👨 Men's side"]].map(([k,l])=>'<button data-act="'+act+'" data-g="'+k+'"'+extra+' aria-pressed="'+(g===k)+'">'+l+'</button>').join("")+'</div></div>'+
+    Array.from({length:S.rounds},(_,i)=>'<div class="course"><h4>'+course(i)[0]+' '+course(i)[1]+' <small>'+roundTime(i)+'</small></h4><div class="mopts">'+
+      MENU_KEYS.map(k=>{const o=menuOpt(k,g);return '<button data-act="'+act+'" data-i="'+i+'" data-v="'+k+'"'+extra+' aria-pressed="'+(((menu||"")[i]||"a")===k)+'">'+o[0]+' '+esc(o[1])+'</button>'}).join("")+'</div></div>').join("")+'</div>';
+}
+const menuText=(menu,g)=>Array.from({length:S.rounds},(_,i)=>course(i)[0]+" "+menuOpt((menu||"")[i]||"a",g).join(" ")).join(" · ");
+function waMenu(){
+  return "🍽️ *Saturday Smash menu – "+when()+"*\n\nThree sessions, three courses – what do you fancy?\n"+
+    Array.from({length:S.rounds},(_,i)=>course(i)[0]+" "+course(i)[1]+" "+hhmm(mins(S.start)+i*S.roundMins)).join(" · ")+
+    "\n\n👭 Ladies' doubles · 👬 Men's doubles · 👫 Mixed\n🎯 Ladies' or men's singles · 🎲 Chef's choice\n\nOrder here, 30 seconds 👉 "+(S.link?S.link+"#menu":"[link]")+
+    "\nThe order of play gets cooked around your orders – singles only when there's a spare court 😄";
+}
+
 /* ---------- order of play ---------- */
 function buildOOP(seed){
   const r=rng(hash(seed));
   const ids=inIds();const n=ids.length;
-  const courts=Math.min(S.courts,Math.floor(n/4));
-  if(courts<1)return null;
+  if(n<4||S.courts<1)return null;
   const lvl=id=>pBy(id)?.level||3;
   const key=(a,b)=>a<b?a+"|"+b:b+"|"+a;
   const sat={},part={},opp={};ids.forEach(i=>sat[i]=0);
-  let lastRest=[];const rounds=[];const restN=n-courts*4;
+  let lastRest=[];const rounds=[];
   for(let k=0;k<S.rounds;k++){
-    const order=shuffle(ids.slice(),r).sort((a,b)=>(sat[a]-sat[b])||((lastRest.includes(a)?1:0)-(lastRest.includes(b)?1:0)));
-    const rest=order.slice(0,restN);
+    // singles only when it puts as many people on court as doubles would (e.g. a spare court or 2 left over)
+    const sw=g=>ids.filter(i=>pick(i,k)==="s"&&sex(i)===g).length;
+    const pairs=Math.floor(sw("f")/2)+Math.floor(sw("m")/2);
+    let ns=0,nd=0,P=-1;
+    for(let s2=0;s2<=Math.min(pairs,S.courts);s2++){const d=Math.min(S.courts-s2,Math.floor((n-2*s2)/4)),p=2*s2+4*d;if(p>P||(p===P&&s2>ns)){P=p;ns=s2;nd=d}}
+    const wantS=i=>ns&&pick(i,k)==="s"?0:1;
+    const order=shuffle(ids.slice(),r).sort((a,b)=>(sat[a]-sat[b])||((lastRest.includes(a)?1:0)-(lastRest.includes(b)?1:0))||(wantS(b)-wantS(a)));
+    const rest=order.slice(0,n-P);
     const active=ids.filter(i=>!rest.includes(i));
+    const courtsOf=a=>{const cs=[];for(let c=0;c<ns;c++)cs.push({a:[a[2*c]],b:[a[2*c+1]],score:""});
+      for(let c=0;c<nd;c++){const o=2*ns+4*c;cs.push({a:[a[o],a[o+1]],b:[a[o+2],a[o+3]],score:""})}return cs};
+    const cost=a=>{let s=0;
+      for(const c of courtsOf(a)){
+        if(c.a.length===2){s+=((part[key(c.a[0],c.a[1])]||0)**2+(part[key(c.b[0],c.b[1])]||0)**2)*10}
+        for(const x of c.a)for(const y of c.b)s+=(opp[key(x,y)]||0)*3;
+        s+=Math.abs(c.a.reduce((t,i)=>t+lvl(i),0)-c.b.reduce((t,i)=>t+lvl(i),0))*4;
+        for(const id of c.a.concat(c.b))if(!wishMet(id,c,k))s+=12;
+      }return s};
+    // random starts, each polished by swapping pairs of players while it helps
     let best=null,bs=Infinity;
-    for(let t=0;t<600;t++){
-      const a=shuffle(active.slice(),r);let s=0;const cs=[];
-      for(let c=0;c<courts;c++){
-        const [p1,p2,p3,p4]=a.slice(c*4,c*4+4);
-        s+=((part[key(p1,p2)]||0)**2+(part[key(p3,p4)]||0)**2)*10;
-        for(const x of [p1,p2])for(const y of [p3,p4])s+=(opp[key(x,y)]||0)*3;
-        s+=Math.abs(lvl(p1)+lvl(p2)-lvl(p3)-lvl(p4))*4;
-        cs.push({a:[p1,p2],b:[p3,p4],score:""});
-      }
-      if(s<bs){bs=s;best=cs}
+    for(let t=0;t<40;t++){
+      const a=shuffle(active.slice(),r);let cur=cost(a);
+      for(let u=0;u<250;u++){const i=Math.floor(r()*a.length),j=Math.floor(r()*a.length);if(i===j)continue;
+        [a[i],a[j]]=[a[j],a[i]];const c2=cost(a);if(c2<=cur)cur=c2;else [a[i],a[j]]=[a[j],a[i]]}
+      if(cur<bs){bs=cur;best=a.slice()}
     }
-    const str=c=>c.a.concat(c.b).reduce((t,i)=>t+lvl(i),0);
-    best.sort((x,y)=>str(y)-str(x));
-    best.forEach(c=>{part[key(c.a[0],c.a[1])]=(part[key(c.a[0],c.a[1])]||0)+1;part[key(c.b[0],c.b[1])]=(part[key(c.b[0],c.b[1])]||0)+1;
+    const cs=courtsOf(best);
+    const str=c=>c.a.concat(c.b).reduce((t,i)=>t+lvl(i),0)/c.a.concat(c.b).length;
+    cs.sort((x,y)=>(y.a.length-x.a.length)||(str(y)-str(x)));
+    cs.forEach(c=>{if(c.a.length===2){part[key(c.a[0],c.a[1])]=(part[key(c.a[0],c.a[1])]||0)+1;part[key(c.b[0],c.b[1])]=(part[key(c.b[0],c.b[1])]||0)+1}
       for(const x of c.a)for(const y of c.b)opp[key(x,y)]=(opp[key(x,y)]||0)+1});
     rest.forEach(i=>sat[i]++);lastRest=rest;
-    rounds.push({courts:best,rest});
+    rounds.push({courts:cs,rest});
   }
   return {rounds,swaps:[]};
 }
@@ -503,6 +574,11 @@ function vToday(){
   const resv=S.players.filter(p=>p.status==="reserve");
   let html='';
   if(last&&last.potd){html+='<div class="potd"><div class="crown">👑</div><div><div class="eyebrow">Last time · '+fmtD(last.date)+'</div><h3>'+esc(nm(last.potd))+'</h3><p>Player of the day'+(last.heroes.length?' · 🦸 Hero: '+esc(last.heroes.map(nm).join(", ")):'')+'</p></div></div>'}
+  const w=wx();
+  if(w){const f=(S.forecasts||{})[S.date]||S.forecast;
+    html+='<section class="wxcard"><span class="wxi">'+w.ic+'</span><div><div class="eyebrow">Forecast · '+esc(fmtD(S.date))+', '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</div>'+
+      '<div class="wxt"><b>'+f.t+'°C</b><span>💧 '+f.rain+'% rain</span><span>💨 '+f.wind+' km/h</span></div><p class="sub">Kingswood · updated '+esc(f.at||"")+' · it\'s in the poll question too</p></div></section>'}
+  else html+='<section class="wxcard muted"><span class="wxi">🌦️</span><div><div class="eyebrow">Forecast</div><p class="sub">The forecast for '+esc(fmtD(S.date))+' appears here up to 2 weeks before – it refreshes at 12:00 and 20:00.</p></div></section>';
   html+=vRoll();
   // headcount
   let viz='';for(let c=0;c<S.courts;c++){const filled=Math.max(0,Math.min(4,h.n-c*4));viz+='<div class="cz'+(filled?'':' empty')+'" title="Court '+(c+1)+'">'+[0,1,2,3].map(i=>'<i class="'+(i<filled?'on':'')+'"></i>').join("")+'</div>'}
@@ -519,16 +595,19 @@ function vToday(){
     '<p class="sub">'+(S.oop?'Locked in. Drop-outs swap straight in.':'Changes live as people go in and out. Lock it in when the numbers are right.')+'</p></div>'+
     (canEdit?'<div class="row">'+(S.oop?'<button class="btn small ghost" data-act="unlock">Unlock</button>':'<button class="btn small ghost" data-act="shuffle">Shuffle</button><button class="btn small" data-act="lock"'+(oop?'':' disabled')+'>Lock it in</button>')+'</div>':'')+
   '</div>';
+  const ms=menuStats(oop);
+  if(oop&&ms.all)html+='<div class="menuserved">🍽️ <b>'+ms.met+' of '+ms.all+'</b> menu orders served'+(ms.met===ms.all?' – chef\'s kiss 👌':'')+'</div>';
   if(!oop){html+='<div class="card empty-note">'+(PUBLIC?'The order of play is posted here on Friday 🎾':'Mark at least 4 players as <b>In</b> to make the order of play.')+'</div>'}
   else{
     const lr=liveRound();let k=0;
     oop.rounds.forEach((rd,ri)=>{
-      html+='<article class="round'+(ri===lr?' now':'')+'"><div class="rhead"><span class="rn">Round '+(ri+1)+'</span><span class="row" style="gap:8px">'+(ri===lr?'<span class="live">ON NOW</span>':'')+'<span class="t">'+roundTime(ri)+'</span></span></div>';
+      html+='<article class="round'+(ri===lr?' now':'')+'"><div class="rhead"><span class="rn">'+course(ri)[0]+' '+(ri<COURSES.length?course(ri)[1]:'Round '+(ri+1))+'</span><span class="row" style="gap:8px">'+(ri===lr?'<span class="live">ON NOW</span>':'')+'<span class="t">'+roundTime(ri)+'</span></span></div>';
       rd.courts.forEach((c,ci)=>{
         const sc=parseScore(c.score);const aw=sc&&sc[0]>sc[1],bw=sc&&sc[1]>sc[0];
         const team=(ids,side)=>ids.map((id,j)=>id?esc(nm(id))+(isHero(pBy(id))?' 🦸':''):'<button class="open" style="border:0;background:none;padding:0" data-act="fill" data-r="'+ri+'" data-c="'+ci+'" data-s="'+side+'" data-j="'+j+'">Open spot – tap to fill</button>').join(" & ");
         const d=ui.flip?' flip" style="animation-delay:'+(k++*45)+'ms':'';
-        html+='<div class="match'+d+'"><div class="cn">COURT<b>'+(ci+1)+'</b></div><div class="teams"><div class="team'+(aw?' win':'')+'">'+team(c.a,"a")+'</div><div class="vs">VS</div><div class="team'+(bw?' win':'')+'">'+team(c.b,"b")+'</div></div>'+
+        const kl=kindLabel(c);
+        html+='<div class="match'+d+'"><div class="cn">COURT<b>'+(ci+1)+'</b></div><div class="teams">'+(kl?'<span class="kind">'+kl[0]+' '+esc(kl[1])+'</span>':'')+'<div class="team'+(aw?' win':'')+'">'+team(c.a,"a")+'</div><div class="vs">VS</div><div class="team'+(bw?' win':'')+'">'+team(c.b,"b")+'</div></div>'+
           (S.oop&&canEdit?'<input class="score" id="sc-'+ri+'-'+ci+'" type="text" inputmode="numeric" placeholder="6-4" aria-label="Score round '+(ri+1)+' court '+(ci+1)+'" value="'+esc(c.score)+'" data-act="score" data-r="'+ri+'" data-c="'+ci+'">':
             (c.score?'<span class="scoreview">'+esc(c.score)+'</span>':'<span></span>'))+'</div>';
       });
@@ -548,7 +627,7 @@ function vSettings(){
     '<label class="f">Date<input type="date" id="set-date" value="'+S.date+'" data-act="set" data-k="date"></label>'+
     '<label class="f">Start<input type="time" id="set-start" value="'+S.start+'" data-act="set" data-k="start"></label>'+
     '<label class="f">Courts booked<input type="number" id="set-courts" min="1" max="10" value="'+S.courts+'" data-act="set" data-k="courts"></label>'+
-    '<label class="f">Rounds<input type="number" id="set-rounds" min="1" max="8" value="'+S.rounds+'" data-act="set" data-k="rounds"></label>'+
+    '<label class="f">Sessions<input type="number" id="set-rounds" min="1" max="8" value="'+S.rounds+'" data-act="set" data-k="rounds"></label>'+
     '<label class="f">Minutes per round<input type="number" id="set-mins" min="10" max="90" step="5" value="'+S.roundMins+'" data-act="set" data-k="roundMins"></label>'+
     '<label class="f">Warm-up start<input type="time" id="set-wus" value="'+S.warmup.start+'" data-act="set" data-k="wu.start"></label>'+
     '<label class="f">Warm-up end<input type="time" id="set-wue" value="'+S.warmup.end+'" data-act="set" data-k="wu.end"></label>'+
@@ -612,13 +691,13 @@ function vLadder(){
 function waOOP(){
   const oop=shownOOP();const h=headcount();const L=[];
   L.push("🎾 *"+S.club.toUpperCase()+" SATURDAY SMASH* 🎾");
-  L.push(fmtD(S.date)+" · "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins)+" · "+h.n+" players · "+h.full+" court"+(h.full===1?"":"s"));
+  L.push(fmtD(S.date)+" · "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins)+" · "+h.n+" players · "+(oop?oop.rounds[0].courts.length:h.full)+" court"+((oop?oop.rounds[0].courts.length:h.full)===1?"":"s"));
   if(wx())L.push("Forecast: "+wx().text);
   const warm=S.players.filter(p=>p.status==="in"&&p.warmup);
   if(S.warmup.on&&warm.length)L.push("","☀️ *Triples warm-up "+hhmm(mins(S.warmup.start))+"–"+hhmm(mins(S.warmup.end))+":* "+warm.map(p=>first(p.id)).join(", "));
   if(oop)oop.rounds.forEach((rd,ri)=>{
-    L.push("","*Round "+(ri+1)+" · "+hhmm(mins(S.start)+ri*S.roundMins)+"*");
-    rd.courts.forEach((c,ci)=>L.push("C"+(ci+1)+": "+c.a.map(i=>nm(i)||"OPEN").join(" & ")+"  v  "+c.b.map(i=>nm(i)||"OPEN").join(" & ")));
+    L.push("","*"+course(ri)[0]+" "+(ri<COURSES.length?course(ri)[1]:"Round "+(ri+1))+" · "+hhmm(mins(S.start)+ri*S.roundMins)+"*");
+    rd.courts.forEach((c,ci)=>{const kl=kindLabel(c);L.push("C"+(ci+1)+(kl?" "+kl[0]:"")+": "+c.a.map(i=>nm(i)||"OPEN").join(" & ")+"  v  "+c.b.map(i=>nm(i)||"OPEN").join(" & "))});
     if(rd.rest.length)L.push("Sitting out: "+rd.rest.map(nm).join(", "));
     if(S.challenges)L.push("🎯 "+questFor(ri).replace(/<\/?b>/g,"*"));
   });
@@ -664,7 +743,7 @@ function waIntroGroup(){
   return "Hi all 🎾 Nick and I are trying something fun for Saturdays – *Saturday Smash*!\n• Order of play all in one place\n• Player cards – find out what kind of player you are 🧱🥷🚀\n• A little ladder, with 🦸 hero points for stepping in when someone drops out\n\nFirst step is a 2-minute quiz. It also tells us when you can play, so less chasing 😄\n"+(S.link?S.link+"#quiz":"[link]")+"\nTotally optional – any feedback welcome!";
 }
 /* roll call poll: one tap answers "in", "in + warm-up" or a fun reason for being out */
-const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["reserve","🙋","Reserve – call me if you're short"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","👨‍👩‍👧","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"],["work","💼","Out – work got me"]];
+const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["reserve","🙋","Reserve – call me if you're short"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","🏡","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"]];
 const REASON=Object.fromEntries(POLL.filter(o=>o[2].startsWith("Out")).map(([k,ic,l])=>[k,[ic,l.replace(/^Out – /,"")]]));
 /* Saturday-afternoon forecast for Kingswood, refreshed by the twice-daily collector */
 function wx(){const f=(S.forecasts||{})[S.date]||S.forecast;if(!f||f.date!==S.date)return null;const c=f.code;
@@ -672,11 +751,11 @@ function wx(){const f=(S.forecasts||{})[S.date]||S.forecast;if(!f||f.date!==S.da
   return {ic,text:ic+" "+f.t+"°C · "+f.rain+"% rain"+(f.wind>=25?" · 💨 windy":""),at:f.at}}
 const wxText=()=>{const w=wx();return w?" "+w.text:""};
 const pollQ=()=>"🎾 "+fmtD(S.date)+", "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins)+" – are you in?"+wxText();
-const pollOpt=o=>o[1]+" "+o[2]+(o[0]==="warm"&&S.warmup.on?" "+hhmm(mins(S.warmup.start)):"");
+const pollOpt=(o,menu)=>o[0]==="warm"?(menu?"☀️ In + triples warm-up":"☀️ + Triples warm-up")+(S.warmup.on?" "+hhmm(mins(S.warmup.start)):""):o[1]+" "+o[2];
 function vPollBlock(){
   const row=(k,txt,lab)=>'<div class="prow"><span>'+esc(txt)+'</span><button class="btn small ghost" data-act="copy" data-k="'+k+'">Copy</button><pre hidden id="wa-'+k+'">'+esc(txt)+'</pre></div>';
   return '<section class="card"><h2>Roll call poll 🗳️</h2><p class="sub">Monday or Tuesday. Players tap one answer – the collector reads the votes and fills in the roll call, warm-up and reasons by itself.</p>'+
-    '<ol class="psteps"><li>Open the group in WhatsApp → 📎 → <b>Poll</b></li><li>Copy the question, then each answer into its own line</li><li>Turn <b>off</b> “Allow multiple answers” → Send</li></ol>'+
+    '<ol class="psteps"><li>Open the group in WhatsApp → 📎 → <b>Poll</b></li><li>Copy the question, then each answer into its own line</li><li>Leave <b>“Allow multiple answers” on</b> (players can tick 👍 and ☀️ together) → Send</li></ol>'+
     '<p class="status-tag" style="margin-top:10px">Question</p>'+row("pq",pollQ())+
     '<p class="status-tag" style="margin-top:10px">Answers</p>'+POLL.map((o,i)=>row("po"+i,pollOpt(o))).join("")+'</section>';
 }
@@ -698,6 +777,7 @@ function vShare(){
   h+=sendBlock("introgroup","2 · Group intro","After Nick is happy. Pick KLTC Sat 2~4 in WhatsApp.",waIntroGroup(),null);
   h+='<h2 class="secttl">📣 To the group</h2>';
   h+=vPollBlock();
+  h+=sendBlock("menu","🍽️ Saturday menu","With the poll: everyone picks mixed, doubles or singles for each session.",waMenu(),null);
   h+=sendBlock("invite","Player quiz","Everyone gets a card; you get their availability.",waInvite(),null);
   h+=sendBlock("oop","Order of play","Friday, once the numbers are right.",waOOP(),null);
   h+=sendBlock("need","Need players","When the count isn't a multiple of 4.",waNeed(),null);
@@ -728,9 +808,10 @@ function vSheet(){
   }else if(sh.type==="rsvp"){const p=pBy(sh.id),cur=rsvp(p),r=p.rsvp||{};
     const on=k=>k==="none"?!cur:k==="reserve"?cur==="reserve":k==="in"?cur==="yes"&&!r.warm:k==="warm"?cur==="yes"&&!!r.warm:cur==="no"&&r.reason===k;
     inner='<h3>'+esc(p.name)+'</h3><p class="sub">'+esc(when())+'</p><div class="pick">'+
-      POLL.map(o=>'<button data-act="dorsvp" data-id="'+p.id+'" data-v="'+o[0]+'"'+(on(o[0])?' class="on"':'')+'><span>'+esc(pollOpt(o))+'</span>'+(on(o[0])?'<span>✓</span>':'')+'</button>').join("")+
+      POLL.map(o=>'<button data-act="dorsvp" data-id="'+p.id+'" data-v="'+o[0]+'"'+(on(o[0])?' class="on"':'')+'><span>'+esc(pollOpt(o,true))+'</span>'+(on(o[0])?'<span>✓</span>':'')+'</button>').join("")+
       '<button data-act="dorsvp" data-id="'+p.id+'" data-v="none"'+(on("none")?' class="on"':'')+'><span>⏳ No reply yet</span>'+(on("none")?'<span>✓</span>':'')+'</button></div>'+
-      '<div class="row"><button class="btn ghost" data-act="close">Cancel</button></div>';
+      (cur==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Their menu</b></p>'+menuPicker("mnpick",p.g,r.menu,' data-id="'+p.id+'"'):'')+
+      '<div class="row"><button class="btn ghost" data-act="close">'+(cur==="yes"?'Done':'Cancel')+'</button></div>';
   }else if(sh.type==="help"){inner=vHelp();
   }else if(sh.type==="profile"){inner=profileSheet(sh.id);
   }else if(sh.type==="remove"){
@@ -774,7 +855,7 @@ const b64=t=>btoa(unescape(encodeURIComponent(t))).replace(/=+$/,""),unb64=t=>de
 function enc(a){
   const one=V2S.map(k=>{const i=qOf(k).opts.findIndex(o=>o[0]===a[k]);return i<0?"-":i.toString(36)}).join("");
   const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
-  const r=a.rsvp?(a.rsvp.v==="yes"?"y":"n")+ymd(a.rsvp.date):"";
+  const r=a.rsvp?(a.rsvp.v==="yes"?"y":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
   return b64(["2",String(a.name||"").replace(/~/g," "),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
 }
@@ -790,7 +871,8 @@ function dec(code){
     (many||"").split(".").forEach((m,j)=>{const bits=parseInt(m||"0",36);a[V2M[j]]=qOf(V2M[j]).opts.filter((o,i)=>bits&(1<<i)).map(o=>o[0])});
     if(rest.join("~"))a.motto=rest.join("~");
   }
-  if(r)a.rsvp={date:unymd(r.slice(1)),v:r[0]==="y"?"yes":"no"};
+  if(r){const [rv,gm]=r.split(".");a.rsvp={date:unymd(rv.slice(1)),v:rv[0]==="y"?"yes":"no"};
+    if(gm){if(gm[0]!=="-")a.g=gm[0];if(gm.length>1)a.rsvp.menu=gm.slice(1)}}
   a.away=(aw||"").split(",").filter(Boolean).map(w=>{const [f,t2]=w.split("-");return {from:unymd(f),to:unymd(t2||f),note:""}});
   return a;
 }
@@ -808,7 +890,7 @@ function cardText(a){
 }
 function availText(a){
   const bits=[];
-  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍 in for "+fmtD(a.rsvp.date):"👎 can't make "+fmtD(a.rsvp.date));
+  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍 in for "+fmtD(a.rsvp.date)+(a.rsvp.menu?"\n🍽️ "+menuText(a.rsvp.menu,a.g)+"\n":""):"👎 can't make "+fmtD(a.rsvp.date));
   (a.away||[]).forEach(w=>bits.push("✈️ away "+fmtRange(w)));
   return "📅 *"+a.name+"*: "+bits.join(" · ")+" – Saturday Smash 🎾"+hide(enc(a));
 }
@@ -818,6 +900,7 @@ function applyAnswers(a){
   let p=S.players.find(x=>x.name.toLowerCase()===lc)||S.players.find(x=>(one(name)||one(x.name))&&f1(x.name)===f1(name)&&!(one(name)&&one(x.name)));
   if(!p){p={id:newId(),name,level:3,status:"in",warmup:false};S.players.push(p)}
   p.removed=false;
+  if(a.g==="f"||a.g==="m")p.g=a.g;
   applyAway(p,a.away);
   if(a.rsvp&&a.rsvp.date===S.date&&a.rsvp.v==="yes"&&a.rsvp.warm!==undefined)p.warmup=!!a.rsvp.warm;
   if(a.rsvp&&a.rsvp.v==="no"&&a.rsvp.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===p.id&&m.date===a.rsvp.date));S.missLog.push({date:a.rsvp.date,id:p.id,reason:a.rsvp.reason})}
@@ -862,6 +945,7 @@ function vQuiz(){
     return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">30 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>Update my availability</h2>'+
       '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label>'+
       '<p class="sub" style="margin-top:6px"><b style="color:var(--ink)">'+when()+'</b></p><div class="row"><button class="qopt" style="flex:1" aria-pressed="'+(v==="yes")+'" data-act="qzrsvp" data-v="yes"><span class="qi">👍</span>I\'m in</button><button class="qopt" style="flex:1" aria-pressed="'+(v==="no")+'" data-act="qzrsvp" data-v="no"><span class="qi">👎</span>Can\'t make it</button></div>'+
+      (v==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+menuPicker("qzmenu",z.a.g,z.a.rsvp.menu):'')+
       '<p class="sub" style="margin-top:6px"><b style="color:var(--ink)">Away for a while?</b> Add the dates and we won\'t chase you.</p>'+awayForm("qzaw",z.a.away)+
       '<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add another period</button><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
   }
@@ -959,10 +1043,11 @@ function vDash(){
   const awaySoon=new Set(away.filter(([p,a])=>a.from<=in30).map(([p])=>p.id)).size;
   const tile=(num,lab,ic)=>'<div class="tile"><span class="ti">'+ic+'</span><b>'+num+'</b><span>'+lab+'</span></div>';
   const levels=[1,2,3,4,5].map(l=>cards.filter(p=>(p.level||3)===l).length),lmax=Math.max(1,...levels);
-  let h='<section class="album"><div class="eyebrow">Squad dashboard</div><h2>What the cards say</h2><p>Built from '+n+' player card'+(n===1?'':'s')+'. Updates every time a new card arrives.</p></section>';
+  let h='<section class="album"><div class="eyebrow">Squad dashboard</div><h2>What the cards say</h2><p>Built from '+n+' player card'+(n===1?'':'s')+'. Updates every time a new card arrives.</p>'+
+    '<div class="row"><button class="btn small ball" data-act="jump" data-k="sec-cardsay">🃏 What cards say</button><button class="btn small ball" data-act="jump" data-k="sec-reality">📈 Promise vs reality</button></div></section>';
   h+='<div class="tiles">'+tile(n+'<small>/'+ps.length+'</small>','cards collected','🃏')+tile(regs,'regulars','⭐')+tile(heroes,'on call for swaps','🦸')+tile(warm,'always up for warm-up','☀️')+tile(awaySoon,'away in next 30 days','✈️')+'</div>';
   h+='<div class="meter" style="margin-top:-6px"><b style="width:'+(ps.length?n/ps.length*100:0)+'%"></b></div>';
-  h+='<div class="dgrid">';
+  h+='<div class="dgrid" id="sec-cardsay">';
   h+=bars("style","Personas","Which kind of player the squad is",false,k=>({attack:"attack",wall:"wall",net:"net",tactics:"tactics",fun:"fun"})[k]||"all");
   h+=bars("goal","Season goals","What everyone wants from Saturdays");
   h+=bars("avail","How often they can play","Plan courts with this");
@@ -997,7 +1082,7 @@ function vReality(cards){
   const pct=a=>a.length?Math.round(a.reduce((t,r)=>t+r.rate,0)/a.length*100)+"%":"–";
   const onCall=rows.filter(r=>r.p.q.oncall==="yes"),stepped=onCall.filter(r=>r.heroes>0).length;
   const drops=(S.dropLog||[]).length;
-  let h='<section class="card"><h2>Promise vs reality</h2><p class="sub">What the cards say, next to what actually happened on Saturdays'+(hist.length?' ('+hist.length+' banked)':'')+'.</p>';
+  let h='<section class="card" id="sec-reality"><h2>📈 Promise vs reality</h2><p class="sub">What the cards say, next to what actually happened on Saturdays'+(hist.length?' ('+hist.length+' banked)':'')+'.</p>';
   h+='<div class="tiles" style="margin-top:10px">'+
     '<div class="tile"><span class="ti">🗓️</span><b>'+pct(group("every"))+'</b><span>attendance of “every week” players</span></div>'+
     '<div class="tile"><span class="ti">✅</span><b>'+pct(group("most"))+'</b><span>attendance of “most weeks” players</span></div>'+
@@ -1032,7 +1117,8 @@ function quizAct(a,t){
   if(!z)return;
   if(a==="qzawadd"){const v=readAway("qzaw");if(!v){toast("Pick a From date first");return}const n=$("#qa-name");if(n)z.a.name=n.value.trim();z.a.away=(z.a.away||[]).concat(v);render();return}
   if(a==="qzawdel"){z.a.away.splice(+t.dataset.i,1);render();return}
-  if(a==="qzrsvp"){z.a.rsvp={date:S.date,v:t.dataset.v};const n=$("#qa-name");if(n)z.a.name=n.value.trim();render();return}
+  if(a==="qzmenu"){const n=$("#qa-name");if(n)z.a.name=n.value.trim();if(t.dataset.g)z.a.g=t.dataset.g;else z.a.rsvp.menu=setPick(z.a.rsvp.menu,+t.dataset.i,t.dataset.v);render();return}
+  if(a==="qzrsvp"){z.a.rsvp=Object.assign({},z.a.rsvp,{date:S.date,v:t.dataset.v});const n=$("#qa-name");if(n)z.a.name=n.value.trim();render();return}
   if(a==="qzavaildone"){const n=$("#qa-name");z.a.name=n?n.value.trim():z.a.name;const v=readAway("qzaw");if(v)z.a.away=(z.a.away||[]).concat(v);
     if(!z.a.name){toast("Pop your name in first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Tap 👍 or 👎, or add away dates");return}
     z.a.partial=true;z.done=true;if(canEdit)mutate(()=>{applyAnswers(z.a)});render();return}
@@ -1157,6 +1243,7 @@ function waRoll(){
   const yes=live().filter(p=>rsvp(p)==="yes").length;
   return "🎾 *Saturday roll call – "+when()+"* 🎾"+(wx()?"\nForecast: "+wx().text:"")+"\n\nReact 👍 if you're in, 👎 if you can't make it – by Thursday evening please, so the order of play is out on Friday.\n"+
     (S.warmup.on?"☀️ Up for the "+hhmm(mins(S.warmup.start))+" triples warm-up? Add a ☀️ too!\n":"")+
+    "🍽️ Mixed, doubles or singles? Pick your menu"+(S.link?": "+S.link+"#menu":"")+"\n"+
     "\n✈️ Away for a while (holiday, injury, busy months)? Tell us your dates"+(S.link?": "+S.link+"#quiz":"")+"\n"+(yes?"\nSo far "+yes+" in 🙌":"");
 }
 function vRoll(){
@@ -1168,6 +1255,9 @@ function vRoll(){
     '<div class="rc">'+ps.map(p=>{const aw=awayNow(p);const v=rsvp(p);
       if(aw)return '<span class="rcb away" title="Away">✈️ '+esc(first(p.id))+'<small>till '+esc(fmtD(aw.to||aw.from).replace(/^\w+ /,""))+'</small></span>';
       return '<button class="rcb '+(v||"")+'" '+(canEdit?'data-act="rsvp" data-id="'+p.id+'"':'disabled')+' aria-label="'+esc(p.name)+': '+(v==="yes"?"in":v==="no"?"out":"no reply")+'">'+(v==="yes"?(p.rsvp.warm?"👍☀️":"👍"):v==="no"?((REASON[p.rsvp.reason]||["👎"])[0]):v==="reserve"?"🙋":"⏳")+' '+esc(chipName(p))+'</button>'}).join("")+'</div>';
+  const orders=Array.from({length:S.rounds},(_,i)=>{const c={};yes.forEach(p=>{const k=pick(p.id,i);if(k!=="a"){const o=menuOpt(k,p.g).join(" ");c[o]=(c[o]||0)+1}});return c});
+  if(orders.some(o=>Object.keys(o).length))h+='<div class="orders"><b>🍽️ Menu orders</b>'+orders.map((o,i)=>'<div>'+course(i)[0]+' '+course(i)[1]+': '+(Object.keys(o).length?Object.entries(o).map(([l,n])=>esc(l)+' ×'+n).join(' · '):'🎲 chef\'s choice')+'</div>').join("")+'</div>';
+  h+='<div class="row" style="margin-top:10px"><button class="btn small ghost" data-act="menugo">🍽️ Pick my menu</button></div>';
   if(canEdit)h+='<div class="row" style="margin-top:12px"><button class="btn small ball" data-act="copy" data-k="roll">Copy roll-call message</button>'+(wait.length?'<button class="btn small ghost" data-act="togglenudge">'+(ui.nudge?'Hide':'Nudge')+' the '+wait.length+' quiet ones privately</button>':'')+'</div><pre hidden id="wa-roll">'+esc(waRoll())+'</pre>';
   if(canEdit&&ui.nudge&&wait.length)h+='<div class="plist" style="margin-top:8px">'+wait.sort(byRegular).map(p=>msgRow(p,nudgeMsg(p),"nudge-"+p.id)).join("")+'</div>'+
     '<p class="sub" style="margin-top:6px">Add phone numbers in each player\'s profile and the WhatsApp button opens their private chat with the message ready.</p>';
@@ -1175,7 +1265,8 @@ function vRoll(){
 }
 function setRsvp(id,v,extra){
   const p=pBy(id);const inOOP=S.oop&&attendedIn(S.oop).includes(id);
-  const r=Object.assign({date:S.date,v},extra||{});
+  const old=p.rsvp&&p.rsvp.date===S.date&&p.rsvp.menu;
+  const r=Object.assign({date:S.date,v},old&&v==="yes"?{menu:old}:{},extra||{});
   if(r.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===id&&m.date===S.date));S.missLog.push({date:S.date,id,reason:r.reason})}
   if(v==="no"&&inOOP){mutate(s=>{pBy(id).rsvp=r},{local:true});ui.sheet={type:"swap",id};render();return}
   mutate(s=>{const q=pBy(id);if(v)q.rsvp=r;else delete q.rsvp;if(v==="yes"&&extra&&extra.warm!==undefined)q.warmup=!!extra.warm;
@@ -1264,6 +1355,7 @@ document.addEventListener("click",e=>{
     render();window.scrollTo({top:0});return}
   if(a==="help"){ui.sheet={type:"help"};ui.helpFor=ui.helpFor||(canEdit?"org":"player");render();return}
   if(a==="helpfor"){ui.helpFor=t.dataset.k;render();return}
+  if(a==="jump"){const el=document.getElementById(t.dataset.k);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});el.classList.add("glow");setTimeout(()=>el.classList.remove("glow"),1800)}return}
   if(a==="flip"){const c=t.closest(".tcard");if(c)c.classList.toggle("flipped");return}
   if(a==="profile"){ui.sheet={type:"profile",id};render();return}
   if(a.startsWith("qz")){quizAct(a,t);return}
@@ -1291,6 +1383,8 @@ document.addEventListener("click",e=>{
     case "fill":ui.sheet={type:"fill",slot:{r:+t.dataset.r,c:+t.dataset.c,s:t.dataset.s,j:+t.dataset.j}};render();break;
     case "doswap":{const sh=ui.sheet;doSwap(sh.type==="swap"?sh.id:null,id||null,sh.type==="fill"?sh.slot:null);break}
     case "rsvp":ui.sheet={type:"rsvp",id};render();break;
+    case "menugo":ui.tab="quiz";ui.quiz={mode:"avail",a:{rsvp:{date:S.date,v:"yes"}}};render();break;
+    case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
     case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
       if(k==="none")setRsvp(id,null);else if(k==="reserve")setRsvp(id,"reserve");else if(k==="in"||k==="warm")setRsvp(id,"yes",{warm:k==="warm"});else setRsvp(id,"no",{reason:k});
       if(ui.sheet===null)render();break}
@@ -1340,6 +1434,7 @@ function start(data){
   try{if(!localStorage.getItem("ss-seen-help")){ui.sheet={type:"help"};localStorage.setItem("ss-seen-help","1")}}catch(e){}
   if(location.hash==="#quiz")ui.tab="quiz";
   if(location.hash==="#cards")ui.tab="cards";
+  if(location.hash==="#menu"){ui.tab="quiz";ui.quiz={mode:"avail",a:{rsvp:{date:S.date,v:"yes"}}}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
   if(PUBLIC){canEdit=false;preview=false;render();return}
