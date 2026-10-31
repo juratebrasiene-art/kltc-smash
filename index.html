@@ -111,6 +111,7 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.pend{border:2px solid var(--clay)}.pitem{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
 .np input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .nplist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto}
 .nplist button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:600;font-size:14px}
@@ -332,7 +333,7 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 </style>
 <div id="app"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
-<script type="application/json" id="state">{"v":1,"club":"KLTC","group":"Sat 2–4 Advanced","date":"2026-11-07","start":"14:00","rounds":3,"roundMins":40,"courts":4,"warmup":{"on":true,"start":"13:30","end":"13:50"},"challenges":true,"link":"https://juratebrasiene-art.github.io/kltc-smash/","shuffle":3,"oop":null,"history":[],"forecasts":{"2026-11-07":{"date":"2026-11-07","t":8,"rain":4,"code":3,"wind":8,"at":"Sat 19:25"},"2026-11-14":{"date":"2026-11-14","t":10,"rain":20,"code":51,"wind":25,"at":"Sat 19:25"}},"missLog":[],"dbFrom":6,"players":[{"id":"p1","status":"reserve","warmup":true,"name":"Nick R.","level":3,"q":{"goal":"friends","fuel":"cake","rain":"dance","motives":["social"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"volley","better":["tourn"],"motto":"don't annoy me","at":"2026-10-31"}},{"id":"p2","status":"reserve","warmup":false,"name":"Jane B.","level":3},{"id":"p3","status":"reserve","warmup":false,"name":"Seb","level":3,"q":{"goal":"escape","fuel":"sofa","rain":"dance","motives":["escape"],"avail":"some","oncall":"no","warm":"sometimes","style":"tactics","weapon":"volley","better":["themes"],"motto":"dancing on the moon ...","at":"2026-10-31"}},{"id":"p4","status":"reserve","warmup":false,"name":"Victor","level":3},{"id":"p5","status":"reserve","warmup":false,"name":"Shula","level":3},{"id":"p6","status":"reserve","warmup":true,"name":"Alex","level":3},{"id":"p7","status":"reserve","warmup":true,"name":"Lesley","level":3},{"id":"p8","status":"reserve","warmup":false,"g":"f","name":"Jurate","level":3,"q":{"goal":"improve","fuel":"shake","rain":"dance","motives":["improve","win"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"forehand","better":["tourn"],"motto":"high five","at":"2026-10-31"}},{"id":"pmvwef4y2ru","status":"reserve","warmup":false,"name":"Test T.","level":3,"q":{"goal":"escape","fuel":"fizz","rain":"home","motives":["social","escape"],"avail":"most","oncall":"yes","warm":"sometimes","style":"fun","weapon":"lob","better":["drinks"],"motto":"Lob it and hope","at":"2026-10-31"}},{"id":"pmvwef4y22qc","status":"reserve","warmup":false,"name":"Test A.","level":3},{"id":"ptestsam","status":"reserve","warmup":true,"name":"Test S.","level":3,"q":{"goal":"fitter","fuel":"coffee","rain":"play","motives":["fit","win"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"legs","better":["ladder"],"motto":"Everything comes back","at":"2026-10-31"}},{"id":"pmvwet0ou664","status":"reserve","warmup":false,"name":"Jane S.","level":3,"q":{"goal":"fitter","fuel":"fizz","rain":"home","motives":["fit"],"avail":"some","oncall":"no","warm":"no","style":"net","weapon":"backhand","better":["drinks"],"motto":"Serve big, smile bigger","at":"2026-10-31"}},{"id":"pmvwf369e3re","status":"reserve","warmup":false,"name":"Test L.","level":3,"q":{"goal":"improve","fuel":"cake","rain":"wait","motives":["social"],"avail":"most","oncall":"maybe","warm":"sometimes","style":"wall","weapon":"forehand","better":["mix"],"motto":"Lob queen","at":"2026-10-31"}},{"id":"pmvwfbk753jf","status":"reserve","warmup":true,"name":"Jane B.","level":3,"q":{"goal":"team","fuel":"cake","rain":"dance","motives":["fit"],"avail":"most","oncall":"yes","warm":"always","style":"wall","weapon":"legs","better":["drinks"],"motto":"i'm better then enyone else","at":"2026-10-31"}},{"id":"pmvwg480s3ds","status":"reserve","warmup":true,"name":"Test M.","level":3,"q":{"goal":"improve","fuel":"shake","rain":"home","motives":["improve"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"backhand","better":["mix"],"motto":"Ace or nothing","at":"2026-10-31"}},{"id":"pwa00","status":"reserve","warmup":false,"name":"Emma","level":3},{"id":"pwa01","status":"reserve","warmup":false,"name":"Even","level":3},{"id":"pwa02","status":"reserve","warmup":false,"name":"Gillian W.","level":3},{"id":"pwa03","status":"reserve","warmup":false,"name":"Nathalie M.","level":3},{"id":"pwa04","status":"reserve","warmup":false,"g":"m","name":"Nick","level":3},{"id":"pwa06","status":"reserve","warmup":false,"name":"Oscar C.","level":3},{"id":"pwa07","status":"reserve","warmup":false,"name":"Ryan","level":3},{"id":"pwa08","status":"reserve","warmup":false,"name":"Sarah H.","level":3},{"id":"pwa11","status":"reserve","warmup":false,"name":"Valentin","level":3},{"id":"pwa13","status":"reserve","warmup":false,"name":"Alfred D.","level":3},{"id":"pwa14","status":"reserve","warmup":false,"name":"Andrew M.","level":3},{"id":"pwa15","status":"reserve","warmup":false,"name":"Andrew N.","level":3},{"id":"pwa16","status":"reserve","warmup":false,"name":"Andy","level":3},{"id":"pwa17","status":"reserve","warmup":false,"name":"Ben D.","level":3},{"id":"pwa18","status":"reserve","warmup":false,"name":"Bev M.","level":3},{"id":"pwa19","status":"reserve","warmup":false,"name":"Brad L.","level":3},{"id":"pwa20","status":"reserve","warmup":false,"name":"Caroline S.","level":3},{"id":"pwa21","status":"reserve","warmup":false,"name":"Chris H.","level":3},{"id":"pwa22","status":"reserve","warmup":false,"name":"Claire D.","level":3},{"id":"pwa23","status":"reserve","warmup":false,"name":"Clive G.","level":3},{"id":"pwa24","status":"reserve","warmup":false,"name":"Daniel","level":3},{"id":"pwa25","status":"reserve","warmup":false,"name":"David","level":3},{"id":"pwa26","status":"reserve","warmup":false,"name":"Dom","level":3},{"id":"pwa27","status":"reserve","warmup":false,"name":"Freddy","level":3},{"id":"pwa28","status":"reserve","warmup":false,"name":"Hannah R.","level":3},{"id":"pwa29","status":"reserve","warmup":false,"name":"Henry","level":3},{"id":"pwa30","status":"reserve","warmup":false,"name":"Jake","level":3},{"id":"pwa31","status":"reserve","warmup":false,"name":"James B.","level":3},{"id":"pwa32","status":"reserve","warmup":false,"name":"James F.","level":3},{"id":"pwa34","status":"reserve","warmup":false,"name":"Jane C.","level":3},{"id":"pwa35","status":"reserve","warmup":false,"name":"Janet","level":3},{"id":"pwa36","status":"reserve","warmup":false,"name":"John","level":3},{"id":"pwa37","status":"reserve","warmup":false,"name":"Joseph","level":3},{"id":"pwa38","status":"reserve","warmup":false,"name":"Karen G.","level":3},{"id":"pwa39","status":"reserve","warmup":false,"name":"Kat L.","level":3},{"id":"pwa40","status":"reserve","warmup":false,"name":"Kevin S.","level":3},{"id":"pwa41","status":"reserve","warmup":false,"name":"Lee","level":3},{"id":"pwa43","status":"reserve","warmup":false,"name":"MB","level":3},{"id":"pwa44","status":"reserve","warmup":false,"name":"Niamh H.","level":3},{"id":"pwa45","status":"reserve","warmup":false,"name":"Nigel C.","level":3},{"id":"pwa46","status":"reserve","warmup":false,"name":"Paulh","level":3},{"id":"pwa47","status":"reserve","warmup":false,"name":"Peter W.","level":3},{"id":"pwa48","status":"reserve","warmup":false,"name":"Rebecca","level":3},{"id":"pwa49","status":"reserve","warmup":false,"name":"Rob H.","level":3},{"id":"pwa50","status":"reserve","warmup":false,"name":"Robin H.","level":3},{"id":"pwa51","status":"reserve","warmup":false,"name":"Ruth E.","level":3},{"id":"pwa52","status":"reserve","warmup":false,"name":"Simon M.","level":3},{"id":"pwa53","status":"reserve","warmup":false,"name":"Steve","level":3},{"id":"pwa54","status":"reserve","warmup":false,"name":"Steve W.","level":3},{"id":"pwa55","status":"reserve","warmup":false,"name":"Steviemezza","level":3},{"id":"pwa56","status":"reserve","warmup":false,"name":"Tom W.","level":3},{"id":"pwa58","status":"reserve","warmup":false,"name":"Xisha C.","level":3},{"id":"pmvwsyx2567u","status":"reserve","warmup":true,"name":"Max T.","level":3,"q":{"goal":"ladder","fuel":"sofa","rain":"dance","motives":["win"],"avail":"every","oncall":"maybe","warm":"always","style":"fun","weapon":"backhand","better":["tourn"],"motto":"bla bla bla","at":"2026-10-31"}},{"id":"pmvwup5yf4cu","status":"reserve","warmup":false,"name":"TJG","level":3,"q":{"goal":"improve","fuel":"coffee","rain":"play","motives":["win"],"avail":"every","oncall":"yes","warm":"sometimes","style":"fun","weapon":"serve","better":["tourn"],"motto":"In god we trist","at":"2026-10-31"}},{"id":"pmvwup5yf198","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes","warm":true,"menu":"ads"},"g":"m","name":"Mr B.","level":3}],"inbox":[],"org":{"name":"Jurate","phone":""}}</script>
+<script type="application/json" id="state">{"v":1,"club":"KLTC","group":"Sat 2–4 Advanced","date":"2026-11-07","start":"14:00","rounds":3,"roundMins":40,"courts":4,"warmup":{"on":true,"start":"13:30","end":"13:50"},"challenges":true,"link":"https://juratebrasiene-art.github.io/kltc-smash/","shuffle":3,"oop":null,"history":[],"forecasts":{"2026-11-07":{"date":"2026-11-07","t":8,"rain":4,"code":3,"wind":8,"at":"Sat 19:25"},"2026-11-14":{"date":"2026-11-14","t":10,"rain":20,"code":51,"wind":25,"at":"Sat 19:25"}},"missLog":[],"dbFrom":6,"players":[{"id":"p1","status":"reserve","warmup":true,"name":"Nick R.","level":3,"q":{"goal":"friends","fuel":"cake","rain":"dance","motives":["social"],"avail":"every","oncall":"maybe","warm":"always","style":"wall","weapon":"volley","better":["tourn"],"motto":"don't annoy me","at":"2026-10-31"}},{"id":"p2","status":"reserve","warmup":false,"name":"Jane B.","level":3},{"id":"p3","status":"reserve","warmup":false,"name":"Seb","level":3,"q":{"goal":"escape","fuel":"sofa","rain":"dance","motives":["escape"],"avail":"some","oncall":"no","warm":"sometimes","style":"tactics","weapon":"volley","better":["themes"],"motto":"dancing on the moon ...","at":"2026-10-31"}},{"id":"p4","status":"reserve","warmup":false,"name":"Victor","level":3},{"id":"p5","status":"reserve","warmup":false,"name":"Shula","level":3},{"id":"p6","status":"reserve","warmup":true,"name":"Alex","level":3},{"id":"p7","status":"reserve","warmup":true,"name":"Lesley","level":3},{"id":"p8","status":"in","warmup":true,"rsvp":{"date":"2026-11-07","v":"yes","warm":true,"menu":"xxd"},"g":"f","name":"Jurate","level":3,"q":{"goal":"improve","fuel":"shake","rain":"dance","motives":["improve","win"],"avail":"every","oncall":"yes","warm":"always","style":"attack","weapon":"forehand","better":["tourn"],"motto":"high five","at":"2026-10-31"}},{"id":"pwa00","status":"reserve","warmup":false,"name":"Emma","level":3},{"id":"pwa01","status":"reserve","warmup":false,"name":"Even","level":3},{"id":"pwa02","status":"reserve","warmup":false,"name":"Gillian W.","level":3},{"id":"pwa03","status":"reserve","warmup":false,"name":"Nathalie M.","level":3},{"id":"pwa04","status":"reserve","warmup":false,"g":"m","name":"Nick","level":3},{"id":"pwa06","status":"reserve","warmup":false,"name":"Oscar C.","level":3},{"id":"pwa07","status":"reserve","warmup":false,"name":"Ryan","level":3},{"id":"pwa08","status":"reserve","warmup":false,"name":"Sarah H.","level":3},{"id":"pwa11","status":"reserve","warmup":false,"name":"Valentin","level":3},{"id":"pwa13","status":"reserve","warmup":false,"name":"Alfred D.","level":3},{"id":"pwa14","status":"reserve","warmup":false,"name":"Andrew M.","level":3},{"id":"pwa15","status":"reserve","warmup":false,"name":"Andrew N.","level":3},{"id":"pwa16","status":"reserve","warmup":false,"name":"Andy","level":3},{"id":"pwa17","status":"reserve","warmup":false,"name":"Ben D.","level":3},{"id":"pwa18","status":"reserve","warmup":false,"name":"Bev M.","level":3},{"id":"pwa19","status":"reserve","warmup":false,"name":"Brad L.","level":3},{"id":"pwa20","status":"reserve","warmup":false,"name":"Caroline S.","level":3},{"id":"pwa21","status":"reserve","warmup":false,"name":"Chris H.","level":3},{"id":"pwa22","status":"reserve","warmup":false,"name":"Claire D.","level":3},{"id":"pwa23","status":"reserve","warmup":false,"name":"Clive G.","level":3},{"id":"pwa24","status":"reserve","warmup":false,"name":"Daniel","level":3},{"id":"pwa25","status":"reserve","warmup":false,"name":"David","level":3},{"id":"pwa26","status":"reserve","warmup":false,"name":"Dom","level":3},{"id":"pwa27","status":"reserve","warmup":false,"name":"Freddy","level":3},{"id":"pwa28","status":"reserve","warmup":false,"name":"Hannah R.","level":3},{"id":"pwa29","status":"reserve","warmup":false,"name":"Henry","level":3},{"id":"pwa30","status":"reserve","warmup":false,"name":"Jake","level":3},{"id":"pwa31","status":"reserve","warmup":false,"name":"James B.","level":3},{"id":"pwa32","status":"reserve","warmup":false,"name":"James F.","level":3},{"id":"pwa34","status":"reserve","warmup":false,"name":"Jane C.","level":3},{"id":"pwa35","status":"reserve","warmup":false,"name":"Janet","level":3},{"id":"pwa36","status":"reserve","warmup":false,"name":"John","level":3},{"id":"pwa37","status":"reserve","warmup":false,"name":"Joseph","level":3},{"id":"pwa38","status":"reserve","warmup":false,"name":"Karen G.","level":3},{"id":"pwa39","status":"reserve","warmup":false,"name":"Kat L.","level":3},{"id":"pwa40","status":"reserve","warmup":false,"name":"Kevin S.","level":3},{"id":"pwa41","status":"reserve","warmup":false,"name":"Lee","level":3},{"id":"pwa43","status":"reserve","warmup":false,"name":"MB","level":3},{"id":"pwa44","status":"reserve","warmup":false,"name":"Niamh H.","level":3},{"id":"pwa45","status":"reserve","warmup":false,"name":"Nigel C.","level":3},{"id":"pwa46","status":"reserve","warmup":false,"name":"Paulh","level":3},{"id":"pwa47","status":"reserve","warmup":false,"name":"Peter W.","level":3},{"id":"pwa48","status":"reserve","warmup":false,"name":"Rebecca","level":3},{"id":"pwa49","status":"reserve","warmup":false,"name":"Rob H.","level":3},{"id":"pwa50","status":"reserve","warmup":false,"name":"Robin H.","level":3},{"id":"pwa51","status":"reserve","warmup":false,"name":"Ruth E.","level":3},{"id":"pwa52","status":"reserve","warmup":false,"name":"Simon M.","level":3},{"id":"pwa53","status":"reserve","warmup":false,"name":"Steve","level":3},{"id":"pwa54","status":"reserve","warmup":false,"name":"Steve W.","level":3},{"id":"pwa55","status":"reserve","warmup":false,"name":"Steviemezza","level":3},{"id":"pwa56","status":"reserve","warmup":false,"name":"Tom W.","level":3},{"id":"pwa58","status":"reserve","warmup":false,"name":"Xisha C.","level":3}],"inbox":[],"org":{"name":"Jurate","phone":""}}</script>
 <script>window.SMASH_PUBLIC=true</script>
 <script id="app-js">
 (function(){
@@ -590,6 +591,7 @@ function vToday(){
     html+='<section class="wxcard"><span class="wxi">'+w.ic+'</span><div><div class="eyebrow">Forecast · '+esc(fmtD(S.date))+', '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</div>'+
       '<div class="wxt"><b>'+f.t+'°C</b><span>💧 '+f.rain+'% rain</span><span>💨 '+f.wind+' km/h</span></div><p class="kit"><b>Kit check:</b> '+esc(kit(f))+'</p><p class="sub">Kingswood · updated '+esc(f.at||"")+' · it\'s in the Monday message too</p></div></section>'}
   else html+='<section class="wxcard muted"><span class="wxi">🌦️</span><div><div class="eyebrow">Forecast</div><p class="sub">The forecast for '+esc(fmtD(S.date))+' appears here up to 2 weeks before – it refreshes at 12:00 and 20:00.</p></div></section>';
+  if(canEdit&&(S.pending||[]).length)html+=vPending();
   html+=vRoll();
   // headcount
   let viz='';for(let c=0;c<S.courts;c++){const filled=Math.max(0,Math.min(4,h.n-c*4));viz+='<div class="cz'+(filled?'':' empty')+'" title="Court '+(c+1)+'">'+[0,1,2,3].map(i=>'<i class="'+(i<filled?'on':'')+'"></i>').join("")+'</div>'}
@@ -883,14 +885,14 @@ function enc(a){
   const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
   const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
-  return b64(["2",String(a.name||"").replace(/[~#]/g," ")+(a.pid?"#"+a.pid:""),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
+  return b64(["2",String(a.name||"").replace(/[~#]/g," ")+(a.pid?"#"+a.pid+(a.tok?"#"+a.tok:""):""),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
 }
 function dec(code){
   const t=unb64(code);
   if(t[0]==="{")return JSON.parse(t);
-  const [v,nameId,kind,one,many,r,aw,...rest]=t.split("~"),[name,pid]=nameId.split("#");
+  const [v,nameId,kind,one,many,r,aw,...rest]=t.split("~"),[name,pid,tok]=nameId.split("#");
   if(v!=="2")throw new Error("unknown card");
-  const a={name};if(pid)a.pid=pid;
+  const a={name};if(pid)a.pid=pid;if(tok)a.tok=tok;
   if(kind==="p")a.partial=true;
   else{
     V2S.forEach((k,i)=>{const c=(one||"")[i];if(c&&c!=="-"){const o=qOf(k).opts[parseInt(c,36)];if(o)a[k]=o[0]}});
@@ -922,8 +924,15 @@ function availText(a){
   (a.away||[]).forEach(w=>bits.push("✈️ away "+fmtRange(w)));
   return "📅 *"+a.name+"*: "+bits.join(" · ")+" – Saturday Smash 🎾"+hide(enc(a));
 }
+let pendingAdded=0;
 function applyAnswers(a){
   const name=String(a.name||"").trim().slice(0,40);if(!name)return null;
+  if(a.tok){const p0=a.pid&&pBy(a.pid);
+    if(!p0||!(p0.devs||[]).includes(a.tok)){
+      if(PUBLIC||!canEdit)return null; // the players' page never shows unchecked answers
+      S.pending=(S.pending||[]).filter(x=>!(x.pid===a.pid&&x.tok===a.tok&&JSON.stringify(x.a.rsvp||null)===JSON.stringify(a.rsvp||null)&&!!x.a.partial===!!a.partial));
+      S.pending.push({pid:a.pid||"",tok:a.tok,a,at:iso(new Date())});pendingAdded++;return null}
+  }
   const lc=name.toLowerCase(),one=n=>!/\s/.test(n.trim()),f1=n=>n.trim().split(/\s+/)[0].toLowerCase();
   let p=(a.pid&&S.players.find(x=>x.id===a.pid))||S.players.find(x=>x.name.toLowerCase()===lc)||S.players.find(x=>(one(name)||one(x.name))&&f1(x.name)===f1(name)&&!(one(name)&&one(x.name)));
   const ini=n=>{const w=n.trim().toLowerCase().split(/\s+/);return w.length>1?w[0]+" "+w[w.length-1][0]:null},short=n=>/\s\S\.?$/.test(n.trim());
@@ -958,14 +967,20 @@ async function seal(text){
   const ek=await crypto.subtle.encrypt({name:"RSA-OAEP"},pk,await crypto.subtle.exportKey("raw",k));
   return b(ek)+"."+b(iv)+"."+b(ct);
 }
+/* every phone keeps its own random key; the organiser approves a phone once, then its answers count straight away */
+function deviceKey(){
+  try{let k=localStorage.getItem("ss-dev");if(!k){k=Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>b.toString(16).padStart(2,"0")).join("");localStorage.setItem("ss-dev",k)}return k}
+  catch(e){return ui.devKey||(ui.devKey=Array.from(crypto.getRandomValues(new Uint8Array(8)),b=>b.toString(16).padStart(2,"0")).join(""))}
+}
 async function saveToDB(a){
-  const pub=enc(Object.assign({},a,{name:shortName(a.name),priority:undefined,level:undefined,away:[]}));
-  const r=await fetch(DB.url,{method:"POST",headers:{apikey:DB.key,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({pub,enc:await seal(enc(a))})});
+  const full=Object.assign({},a,{tok:deviceKey()});
+  const pub=enc(Object.assign({},full,{name:shortName(a.name),priority:undefined,level:undefined,away:[],tok:undefined}));
+  const r=await fetch(DB.url,{method:"POST",headers:{apikey:DB.key,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({pub,enc:await seal(enc(full))})});
   if(!r.ok)throw new Error("save failed "+r.status);
 }
 function saveCard(z){ // players' side: save, then show the result on the same screen
   z.saved=null;
-  saveToDB(z.a).then(()=>{z.saved=true;dbSeen.clear();loadDB()},()=>{z.saved=false}).then(()=>{if(ui.quiz===z)render()});
+  saveToDB(z.a).then(()=>{z.saved=true;try{applyAnswers(Object.assign({},z.a))}catch(e){}},()=>{z.saved=false}).then(()=>{if(ui.quiz===z)render()});
 }
 const dbSeen=new Set();
 async function loadDB(){ // players' site: everyone's cards the moment they're saved
@@ -978,8 +993,9 @@ async function loadDB(){ // players' site: everyone's cards the moment they're s
 function processInbox(){
   if(!S.inbox||!S.inbox.length)return 0;
   S.seen=S.seen||[];let n=0;
+  pendingAdded=0;
   S.inbox.forEach(c=>{const h=hash(c).toString(36);if(S.seen.includes(h))return;try{if(applyAnswers(dec(c)))n++}catch(e){}S.seen.push(h)});
-  S.inbox=[];return n;
+  S.inbox=[];return n+pendingAdded;
 }
 function importCodes(txt){
   txt=unhideAll(txt);
@@ -989,8 +1005,8 @@ function importCodes(txt){
   mutate(()=>{codes.forEach(c=>{try{const p=applyAnswers(dec(c));if(p)names.push(first(p.id))}catch(e){}})});
   toast(names.length?"Profiles added: "+names.join(", "):"Those cards couldn't be read");
 }
-const savedHead=z=>z.saved===true?'Saved ✓ The organisers have it':z.saved===false?'Last step: send it':'Saving… 🎾';
-const savedSub=(z,ok)=>z.saved===true?ok:z.saved===false?'Couldn\'t reach the server – '+sendHint():'One second…';
+const savedHead=z=>z.saved===true?'Saved ✓ '+esc(org().name||'Jurate')+' has it':z.saved===false?'Last step: send it':'Saving… 🎾';
+const savedSub=(z,ok)=>z.saved===true?ok+'<br>It shows for everyone within 15 minutes. First time on this phone? '+esc(org().name||'Jurate')+' gives it a quick ✅ once.':z.saved===false?'Couldn\'t reach the server – '+sendHint():'One second…';
 function vQuiz(){
   const z=ui.quiz;
   const done=live().filter(p=>p.q).length,total=live().length;
@@ -1336,6 +1352,20 @@ function waRoll(){
   const yes=live().filter(p=>rsvp(p)==="yes").length;
   return waWeek()+(yes?"\n\nSo far "+yes+" in 🙌":"");
 }
+function pendSummary(a){
+  const r=a.rsvp,bits=[];
+  if(r)bits.push(r.v==="yes"?"👍"+(r.warm?"☀️ In + warm-up":" In"):r.v==="reserve"?"🙋 Reserve":((REASON[r.reason]||["👎","Out"])[0]+" Out – "+((REASON[r.reason]||[0,"can't make it"])[1])));
+  if(r&&r.date!==S.date)bits.push("for "+fmtD(r.date));
+  if(r&&r.menu)bits.push("🍽️ "+menuText(r.menu,a.g));
+  if(!a.partial)bits.push("🎴 player card"+(a.motto?" “"+a.motto+"”":""));
+  if((a.away||[]).length)bits.push("✈️ away "+a.away.map(fmtRange).join(", "));
+  return bits.join(" · ");
+}
+function vPending(){
+  const items=S.pending.map((x,i)=>[x,i]).filter(([x])=>pBy(x.pid));
+  return '<section class="card pend" id="sec-pend"><h2>🔒 New phones to check</h2><p class="sub">Someone answered from a phone we haven\'t seen before. Is it really them? Say yes once – after that, that phone counts straight away.</p>'+
+    items.map(([x,i])=>'<div class="pitem"><div><b>'+esc(pBy(x.pid).name)+'</b><p class="sub">'+esc(pendSummary(x.a))+'</p></div><div class="row"><button class="btn small ball" data-act="pendok" data-i="'+i+'">✅ Yes, it\'s '+esc(first(x.pid))+'</button><button class="btn small ghost" data-act="pendno" data-i="'+i+'">❌ No</button></div></div>').join("")+'</section>';
+}
 function vRoll(){
   const ps=live().slice().sort((a,b)=>a.name.localeCompare(b.name));
   const away=ps.filter(p=>awayOn(p,S.date));
@@ -1487,6 +1517,13 @@ document.addEventListener("click",e=>{
     case "fill":ui.sheet={type:"fill",slot:{r:+t.dataset.r,c:+t.dataset.c,s:t.dataset.s,j:+t.dataset.j}};render();break;
     case "doswap":{const sh=ui.sheet;doSwap(sh.type==="swap"?sh.id:null,id||null,sh.type==="fill"?sh.slot:null);break}
     case "rsvp":ui.sheet={type:"rsvp",id};render();break;
+    case "pendok":{const x=(S.pending||[])[+t.dataset.i];if(!x)break;
+      mutate(s=>{const p=pBy(x.pid);p.devs=(p.devs||[]).concat(x.tok);
+        const mine=s.pending.filter(y=>y.tok===x.tok&&y.pid===x.pid);s.pending=s.pending.filter(y=>!mine.includes(y));
+        mine.sort((u,v)=>u.at<v.at?-1:1).forEach(y=>applyAnswers(y.a))});
+      toast("✅ "+first(x.pid)+"'s phone is trusted now");break}
+    case "pendno":{const x=(S.pending||[])[+t.dataset.i];if(!x)break;
+      mutate(s=>{s.pending=s.pending.filter(y=>!(y.tok===x.tok&&y.pid===x.pid))});toast("❌ Ignored");break}
     case "menugo":ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});break;
     case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
     case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
@@ -1548,7 +1585,7 @@ function start(data){
   if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
-  if(PUBLIC){canEdit=false;preview=false;render();loadDB();setInterval(loadDB,30000);return}
+  if(PUBLIC){canEdit=false;preview=false;render();return}
   const c=window.claude;
   if(!c||!c.use){canEdit=true;preview=true;render();return}
   (async()=>{
@@ -1556,7 +1593,7 @@ function start(data){
       art=await c.use("artifact");const u=await c.use("user");
       if(art){preview=false;canEdit=u?await u.canEdit():false}
       else{canEdit=true;preview=true}
-      if(fromInbox&&canEdit&&art){save();toast("📥 "+fromInbox+" new card"+(fromInbox>1?"s":"")+" added from WhatsApp")}
+      if(fromInbox&&canEdit&&art){save();toast("📥 "+fromInbox+" new answer"+(fromInbox>1?"s":"")+(pendingAdded?" – "+pendingAdded+" from new phones to check 🔒":""))}
     }catch(err){canEdit=false}
     render();
   })();
