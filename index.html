@@ -1030,6 +1030,7 @@ function vQuiz(){
     const r=z.a.rsvp||{},pk=r.v==="yes"?(r.warm?"warm":"in"):r.v==="reserve"?"reserve":r.v==="no"?r.reason:null;
     return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">20 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>📅 This Saturday</h2>'+
       '<p class="sub"><b style="color:var(--ink)">'+esc(when())+'</b>'+(wx()?' · '+esc(wx().text):'')+'</p>'+
+      (wx()?'<p class="kit"><b>Kit check:</b> '+esc(kit((S.forecasts||{})[S.date]))+'</p>':'')+
       '<p class="status-tag" style="margin-top:10px">Who are you?</p>'+namePicker("qzname",z.a)+
       '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
       '<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+
@@ -1286,7 +1287,8 @@ function askMsg(p,need,late){
   const f=first(p.id),q=p.q||{},pr=q.style?persona(Object.assign({name:p.name},q)):null;
   const hook=HOOK[q.goal]||"Great group, proper tennis 🎾";
   return "Hi "+f+"! 🎾 "+(late?"We've had a late drop-out for today ("+hhmm(mins(S.start))+")":"We're "+(need===1?"just one":need+" players")+" short for "+fmtD(S.date)+", "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins))+
-    " – any chance you could join us?\n\n"+(pr?"We need "+pr.name+" energy "+pr.icon+" – "+hook:hook[0].toUpperCase()+hook.slice(1))+"\n\nNo worries at all if not – just let me know either way 😊";
+    " – any chance you could join us?\n\n"+(pr?"We need "+pr.name+" energy "+pr.icon+" – "+hook:hook[0].toUpperCase()+hook.slice(1))+
+    "\n\nTap here to say yes (20 seconds): "+(S.link?S.link+"#week":"[link]")+"\n\nNo worries at all if not 😊";
 }
 function missList(){
   const h=S.history.slice().sort((a,b)=>a.date<b.date?1:-1);if(h.length<2)return [];
@@ -1299,11 +1301,12 @@ function missMsg(p){
 function vAsk(need,late){
   const L=askList().slice(0,6);
   if(!L.length)return '<p class="sub" style="margin-top:10px">Nobody on reserve or on call – post the call for players in the group (WhatsApp tab).</p>';
-  return '<div style="margin-top:14px"><div class="row spread"><b>Who to ask</b><span class="sub">🦸 on call first, then reserves</span></div><div class="plist" style="margin-top:4px">'+
-    L.map(p=>{const q=p.q||{};const tag=q.oncall==="yes"?"🦸 on call":p.status;
+  return '<div style="margin-top:14px"><div class="row spread"><b>Short of players? Who to ask</b></div>'+
+    '<p class="sub" style="margin-top:2px">These people are <b>not playing yet</b> – they\'re suggestions to invite. Tap <b>Send</b> – WhatsApp opens with a friendly invite and the link to say yes.<br>🙋 offered to be a reserve · 🦸 happy to step in last minute · ⏳ hasn\'t answered yet</p><div class="plist" style="margin-top:4px">'+
+    L.map(p=>{const q=p.q||{};const tag=rsvp(p)==="reserve"?"🙋 said reserve":q.oncall==="yes"?"🦸 on call":p.status==="out"?"out":"⏳ no answer yet";
       return '<div class="pl" style="grid-template-columns:minmax(0,1fr) auto"><div><b>'+esc(p.name)+'</b><div class="pmeta"><span class="badge'+(q.oncall==="yes"?" hero":"")+'">'+esc(tag)+'</span>'+(q.goal?'<span class="badge">'+esc(optLabel("goal",q.goal))+'</span>':'')+'</div></div>'+
-      '<button class="btn small ball" data-act="copy" data-k="ask-'+p.id+'">Copy message</button><pre hidden id="wa-ask-'+p.id+'">'+esc(askMsg(p,need,late))+'</pre></div>'}).join("")+
-    '</div><p class="sub" style="margin-top:8px">Each message is personal – it mentions what they told us they want from Saturdays. Paste it in a private chat with them.</p></div>';
+      '<a class="btn small ball" href="'+esc(waHref(p,askMsg(p,need,late))||pickHref(askMsg(p,need,late)))+'" target="_blank" rel="noopener">Send to '+esc(first(p.id))+' 📲</a></div>'}).join("")+
+    '</div><p class="sub" style="margin-top:8px">Each invite is personal – it mentions what they told us they want from Saturdays. Saved their number in their profile? WhatsApp opens their chat directly; if not, pick them in WhatsApp.</p></div>';
 }
 /* ---------- roll call, away dates, regulars, private messages ---------- */
 const awayOn=(p,d)=>(p.away||[]).some(a=>a.from<=d&&d<=(a.to||a.from));
