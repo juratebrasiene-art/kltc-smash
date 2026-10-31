@@ -190,6 +190,26 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 }
 
 .secttl{font-family:var(--display);font-weight:800;font-size:24px;margin:8px 0 -4px}
+/* squad dashboard */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:2px}
+.tile .ti{font-size:20px}
+.tile b{font-family:var(--display);font-weight:900;font-size:38px;line-height:1;font-variant-numeric:tabular-nums;color:var(--court)}
+.tile b small{font-size:18px;color:var(--muted)}
+.tile span:last-child{font-size:12.5px;color:var(--muted);font-weight:600}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.dgrid>*{min-width:0}
+.bars{display:grid;gap:8px;margin-top:10px}
+.bar{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:13.5px}
+.bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt{height:12px;background:var(--bg);border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.bt b{display:block;height:100%;background:var(--court);border-radius:99px}
+.bn{font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.cols{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end;height:150px;margin-top:12px}
+.colb{display:grid;grid-template-rows:auto 1fr auto;height:100%;text-align:center;gap:4px}
+.cbar{display:flex;align-items:flex-end;background:var(--bg);border-radius:8px;overflow:hidden}
+.cbar b{display:block;width:100%;background:var(--ball);border-radius:8px 8px 0 0}
+.cv{font-weight:800;font-variant-numeric:tabular-nums}.cl{font-size:12px;color:var(--muted);font-weight:700}
 /* help guide */
 .band .col{position:relative}
 .helpbtn{border:2px solid var(--ball);background:transparent;color:var(--on-court);border-radius:999px;padding:5px 12px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;gap:6px}
@@ -457,7 +477,7 @@ function render(){
   else if(now<st.getTime()){const d=st.getTime()-now,dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4);
     when='<span class="chip ball">First ball in <span class="digits">'+(dd?dd+"d ":"")+hh+"h "+(dd?"":mm+"m")+'</span></span>'}
   else when='<span class="chip ball">Played – '+(canEdit?'finish the day for the ladder':'scores coming')+'</span>';
-  const tabs=[["today","Saturday"],["quiz","Quiz"],["cards","Cards"],["players","Players"],["ladder","Ladder"]].concat(canEdit?[["share","📲 Send"]]:[]);
+  const tabs=[["today","Saturday"],["quiz","Quiz"],["cards","Cards"],["players","Players"],["ladder","Ladder"]].concat(canEdit?[["dash","📊 Squad"],["share","📲 Send"]]:[]);
   app.innerHTML=
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
@@ -466,7 +486,7 @@ function render(){
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
-  '<main class="gut"><div class="col stack">'+({today:vToday,quiz:vQuiz,cards:vCards,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
+  '<main class="gut"><div class="col stack">'+({today:vToday,quiz:vQuiz,cards:vCards,dash:vDash,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
   (ui.sheet?vSheet():"")+'<div id="toastbox"></div>';
   renderToast();ui.flip=false;
 }
@@ -888,6 +908,43 @@ function vHelp(){
     (canEdit?'<div class="seg" style="margin:8px 0 2px"><button class="in" aria-pressed="'+(k==="player")+'" data-act="helpfor" data-k="player">I\'m a player</button><button class="in" aria-pressed="'+(k==="org")+'" data-act="helpfor" data-k="org">I\'m the organiser</button></div>':'<p class="sub">Six steps. That\'s it. 🎾</p>')+
     '<div class="steps">'+HELP[k].map(([ic,c,t,l],i)=>'<button class="step" data-act="helpgo" data-k="'+k+'" data-i="'+i+'" style="--pc:var(--'+c+');animation-delay:'+(i*70)+'ms"><span class="sn">'+(i+1)+'</span><span class="bub">'+ic+'</span><b>'+esc(t.replace("{org}",org().name||"us"))+'</b><span class="sl">'+esc(l)+'</span><span class="go">'+(HELP[k][i][4]==="copylink"?'Copy link':HELP[k][i][4].startsWith("tip")?'How?':'Go')+' →</span></button>').join("")+'</div>'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="'+(k==="player"?'gocard':'close')+'">'+(k==="player"?'Get my card 🎾':'Let\'s go 🎾')+'</button></div>';
+}
+/* ---------- squad dashboard (organiser): everything the player cards tell us ---------- */
+function vDash(){
+  if(!canEdit)return '<div class="card empty-note">This page is for the organiser.</div>';
+  const ps=live(),cards=ps.filter(p=>p.q),n=cards.length;
+  const count=(k,multi)=>{const c={};cards.forEach(p=>{const v=p.q[k];(multi?(v||[]):[v]).forEach(x=>{if(x)c[x]=(c[x]||0)+1})});return c};
+  const bars=(k,title,sub,multi,colorFor)=>{
+    const c=count(k,multi),opts=QUIZ.find(x=>x.k===k).opts,max=Math.max(1,...Object.values(c));
+    const rows=opts.filter(o=>c[o[0]]).sort((a,b)=>c[b[0]]-c[a[0]]);
+    return '<section class="card"><h2>'+title+'</h2><p class="sub">'+sub+'</p><div class="bars">'+
+      (rows.length?rows.map(o=>'<div class="bar"><span class="bl">'+o[1]+' '+esc(k==="style"&&PERSONA[o[0]]?PERSONA[o[0]][1]:o[2].split(/ – |, /)[0])+'</span><span class="bt"><b style="width:'+(c[o[0]]/max*100)+'%;'+(colorFor?'background:var(--p-'+colorFor(o[0])+')':'')+'"></b></span><span class="bn">'+c[o[0]]+'</span></div>').join(""):'<div class="empty-note">No cards yet.</div>')+'</div></section>';
+  };
+  const regs=ps.filter(p=>{const r=regular(p);return r&&r.label.includes("Regular")}).length;
+  const heroes=cards.filter(p=>p.q.oncall==="yes").length;
+  const warm=cards.filter(p=>p.q.warm==="always").length;
+  const in30=iso(new Date(dOf(S.date).getTime()+30*864e5));
+  const away=[];ps.forEach(p=>(p.away||[]).forEach(a=>{if((a.to||a.from)>=S.date)away.push([p,a])}));away.sort((x,y)=>x[1].from<y[1].from?-1:1);
+  const awaySoon=new Set(away.filter(([p,a])=>a.from<=in30).map(([p])=>p.id)).size;
+  const tile=(num,lab,ic)=>'<div class="tile"><span class="ti">'+ic+'</span><b>'+num+'</b><span>'+lab+'</span></div>';
+  const levels=[1,2,3,4,5].map(l=>cards.filter(p=>(p.level||3)===l).length),lmax=Math.max(1,...levels);
+  let h='<section class="album"><div class="eyebrow">Squad dashboard</div><h2>What the cards say</h2><p>Built from '+n+' player card'+(n===1?'':'s')+'. Updates every time a new card arrives.</p></section>';
+  h+='<div class="tiles">'+tile(n+'<small>/'+ps.length+'</small>','cards collected','🃏')+tile(regs,'regulars','⭐')+tile(heroes,'on call for swaps','🦸')+tile(warm,'always up for warm-up','☀️')+tile(awaySoon,'away in next 30 days','✈️')+'</div>';
+  h+='<div class="meter" style="margin-top:-6px"><b style="width:'+(ps.length?n/ps.length*100:0)+'%"></b></div>';
+  h+='<div class="dgrid">';
+  h+=bars("style","Personas","Which kind of player the squad is",false,k=>({attack:"attack",wall:"wall",net:"net",tactics:"tactics",fun:"fun"})[k]||"all");
+  h+=bars("goal","Season goals","What everyone wants from Saturdays");
+  h+=bars("avail","How often they can play","Plan courts with this");
+  h+=bars("priority","Tennis priority","How high Saturday is on the list");
+  h+=bars("motives","Why they come","Up to two each",true);
+  h+=bars("better","What would make it better","Your to-do list for the season",true);
+  h+=bars("weapon","Secret weapons","Best shots in the squad");
+  h+=bars("fuel","Post-match fuel","For the social side");
+  h+=bars("rain","Rain at 1:45","Who you can count on in the drizzle");
+  h+='<section class="card"><h2>Level spread</h2><p class="sub">From the level check (1 = steady club, 5 = county)</p><div class="cols">'+levels.map((v,i)=>'<div class="colb"><span class="cv">'+v+'</span><span class="cbar"><b style="height:'+(v/lmax*100)+'%"></b></span><span class="cl">'+(i+1)+'</span></div>').join("")+'</div></section>';
+  h+='</div>';
+  h+='<section class="card"><h2>Away calendar ✈️</h2><p class="sub">Coming up, from cards and availability updates</p>'+(away.length?'<div class="plist" style="margin-top:6px">'+away.slice(0,20).map(([p,a])=>'<div class="pl" style="grid-template-columns:minmax(0,1fr) auto"><b>'+esc(p.name)+'</b><span class="badge">'+esc(fmtRange(a))+'</span></div>').join("")+'</div>':'<div class="empty-note">Nobody has told us about time away yet.</div>')+'</section>';
+  return h;
 }
 function quizInviteMsg(p){
   return "Hi "+first(p.id)+"! 🎾 We're making player cards for Saturday Smash – a 2-minute quiz: what kind of Saturday player are you? 🧱 The Wall, 🥷 The Net Ninja, 🚀 The Big Hitter…\n\n"+(S.link?S.link+"#quiz":"[quiz link]")+
