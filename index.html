@@ -266,6 +266,10 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 .tfoot:empty{display:none}
 .back{transform:rotateY(180deg);background:var(--surface);color:var(--ink);border:3px solid var(--pc);gap:5px;overflow:auto}
 .fact{display:grid;gap:0}
+/* a flipped card opens out to full width so every answer shows at once */
+.tcard.flipped{grid-column:1/-1;aspect-ratio:auto}
+.tcard.flipped .face.back{position:relative;inset:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;align-content:start}
+.tcard.flipped .back .tname,.tcard.flipped .back .tmotto,.tcard.flipped .back .tstats{grid-column:1/-1}
 .fact span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
 .fact b{font-size:12.5px;font-weight:600;line-height:1.25}
 .tmotto{font-style:italic;font-size:13px;color:var(--pc);font-weight:700}
@@ -839,6 +843,9 @@ const QUIZ=[
   {k:"motto",type:"text",q:"Last one – your court motto or walk-on song",hint:"Optional, but the funnier the better",optional:true}
 ];
 const PERSONA={attack:["🚀","The Big Hitter"],wall:["🧱","The Wall"],net:["🥷","The Net Ninja"],tactics:["♟️","The Chess Master"],fun:["🎉","The Showstopper"]};
+/* every fun answer, in quiz order – level, priority and away dates stay off the card */
+const CARD_FACTS=[["Here for","motives"],["Season goal","goal"],["Saturdays","avail"],["Late swaps","oncall"],["Triples warm-up","warm"],["On court","style"],["Secret weapon","weapon"],["Saturdays need","better"],["Post-match fuel","fuel"],["Rain at 1:45","rain"]];
+const cardFacts=a=>CARD_FACTS.map(([l,k])=>[l,Array.isArray(a[k])?a[k].map(v=>optLabel(k,v)).filter(Boolean).join(" · "):optLabel(k,a[k])]).filter(x=>x[1]);
 const optLabel=(k,v)=>{const q=QUIZ.find(x=>x.k===k);const o=q&&q.opts&&q.opts.find(x=>x[0]===v);return o?o[1]+" "+o[2]:""};
 function persona(a){
   const [icon,name]=PERSONA[a.style]||["🎾","The All-Rounder"];const key=PERSONA[a.style]?a.style:"all";
@@ -986,12 +993,7 @@ function vQuiz(){
   if(z.step>=QUIZ.length){
     const a=z.a,pr=persona(a);
     return '<section class="pcard"><div class="eyebrow">Saturday Smash player card</div><div class="pc-icon">'+pr.icon+'</div><h2>'+esc(a.name)+'</h2><div class="pc-persona">'+esc(pr.name)+'</div><p>'+esc(pr.line)+'</p>'+
-      '<div class="pc-grid">'+
-        '<div><span>Here for</span><b>'+esc((a.motives||[]).map(v=>optLabel("motives",v).replace(/^\S+ /,"")).join(" + ")||"–")+'</b></div>'+
-        '<div><span>Season goal</span><b>'+esc(optLabel("goal",a.goal)||"–")+'</b></div>'+
-        '<div><span>Saturdays</span><b>'+esc(optLabel("avail",a.avail).replace(/^\S+ /,""))+'</b></div>'+
-        '<div><span>Weapon</span><b>'+esc(optLabel("weapon",a.weapon))+'</b></div>'+
-        '<div><span>Late swaps</span><b>'+(a.oncall==="yes"?"🦸 On call":a.oncall==="maybe"?"Ask me":"Not on call")+'</b></div>'+
+      '<div class="pc-grid">'+cardFacts(a).map(([l,v])=>'<div><span>'+l+'</span><b>'+esc(v)+'</b></div>').join("")+
       '</div>'+(a.motto?'<p class="pc-motto">“'+esc(a.motto)+'”</p>':'')+'</section>'+
       '<section class="card"><h2>'+(canEdit?'Saved to the squad ✓':savedHead(z))+'</h2><p class="sub">'+(canEdit?'This profile is now on the Players tab.':savedSub(z,"Want to show it off? Share your card in the group 👇"))+'</p>'+
       '<pre class="wa" id="wa-card">'+esc(cardText(a))+'</pre>'+sendRow("card",cardText(a),"card")+'<button class="btn ghost" data-act="qzagain">Take it again</button></div></section>';
@@ -1024,8 +1026,7 @@ function vCards(){
       '<span class="face front"><span class="num">#'+String(i+1).padStart(2,"0")+'</span><span class="ticon">'+pr.icon+'</span><span class="tname">'+esc(p.name)+'</span><span class="tpers">'+esc(pr.name)+'</span>'+
         '<span class="tfoot">'+(rg?esc(rg.label):'')+(a.oncall==="yes"?' · 🦸':'')+'</span></span>'+
       '<span class="face back"><span class="tname sm">'+esc(first(p.id))+'</span>'+
-        fact("Goal",optLabel("goal",a.goal))+fact("Weapon",optLabel("weapon",a.weapon))+fact("Here for",(a.motives||[]).map(v=>optLabel("motives",v).split(" ")[0]).join(" "))+
-        fact("Post-match",optLabel("fuel",a.fuel))+fact("Rain at 1:45",optLabel("rain",a.rain))+(a.motto?'<span class="tmotto">“'+esc(a.motto)+'”</span>':'')+
+        cardFacts(a).map(([l,v])=>fact(l,v)).join("")+(a.motto?'<span class="tmotto">“'+esc(a.motto)+'”</span>':'')+
         (t?'<span class="tstats">'+t.days+' Sats · '+t.pts+' pts</span>':'')+'</span></button></div>'});
   wait.forEach(p=>{h+='<div class="tcard mystery"><div class="in"><span class="face front"><span class="ticon">?</span><span class="tname">'+esc(first(p.id))+'</span><span class="tpers">Card not collected yet</span></span></div></div>'});
   h+='</div>';
