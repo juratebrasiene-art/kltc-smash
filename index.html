@@ -572,7 +572,7 @@ function render(){
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
     '<h1><span class="h-sat">Saturday</span><span class="h-smash">Smash!</span></h1></div></div>'+
-    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Add to my phone</button>':'')+'</div>'+
+    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Put the app on my phone</button>':'')+'</div>'+
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
@@ -842,11 +842,11 @@ function vSheet(){
   }else if(sh.type==="install"){
     const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),step=(n,t)=>'<li><b>'+n+'</b> '+t+'</li>';
     inner='<div class="row spread"><h3>📲 Saturday Smash on your phone</h3><button class="x" data-act="close" aria-label="Close">×</button></div>'+
-      '<p class="sub">It works like an app: its own 🎾 icon, opens full screen, nothing to download from a store.</p>'+
+      '<p class="sub">It works like an app: its own 🎾 icon on your home screen, opens full screen, nothing to download from a store. Your phone adds it in 3 quick steps:</p>'+
       (ui.installEv?'<div class="row" style="margin-top:12px"><button class="btn ball" data-act="installnow">Add it now 🎾</button></div>':'')+
-      '<div class="howto'+(ios?' first':'')+'"><h4>iPhone</h4><ol>'+step("1","Open the link in <b>Safari</b>")+step("2","Tap <b>Share</b> (the square with the arrow ⬆️)")+step("3","Scroll down → <b>Add to Home Screen</b> → <b>Add</b>")+'</ol></div>'+
-      '<div class="howto"><h4>Android</h4><ol>'+step("1","Open the link in <b>Chrome</b>")+step("2","Tap the <b>⋮</b> menu (top right)")+step("3","<b>Add to Home screen</b> or <b>Install app</b>")+'</ol></div>'+
-      '<p class="sub" style="margin-top:10px">Then open Saturday Smash from the 🎾 icon on your home screen.</p>';
+      '<div class="howto'+(ios?' first':'')+'"><h4>iPhone</h4><ol>'+step("1","Make sure this page is open in <b>Safari</b> (from WhatsApp: tap <b>⋯</b> → <b>Open in Safari</b>)")+step("2","Tap <b>Share</b> (the square with the arrow ⬆️)")+step("3","Scroll down → <b>Add to Home Screen</b> → <b>Add</b>")+'</ol></div>'+
+      '<div class="howto"><h4>Android</h4><ol>'+step("1","Make sure this page is open in <b>Chrome</b> (from WhatsApp: tap <b>⋮</b> → <b>Open in Chrome</b>)")+step("2","Tap the <b>⋮</b> menu (top right)")+step("3","<b>Add to Home screen</b> or <b>Install app</b>")+'</ol></div>'+
+      '<p class="sub" style="margin-top:10px">Then look for the green 🎾 <b>Sat Smash</b> icon on your home screen (often on the last page) and open it from there.</p>';
   }else if(sh.type==="help"){inner=vHelp();
   }else if(sh.type==="profile"){inner=profileSheet(sh.id);
   }else if(sh.type==="remove"){
