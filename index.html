@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap">
 <style id="tpl-style">
@@ -112,6 +111,7 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.howto{border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin-top:10px}.howto h4{margin:0 0 4px}.howto ol{margin:0;padding-left:0;list-style:none;display:grid;gap:6px}.howto b:first-child{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--court);color:#fff;font-size:12px;margin-right:6px}
 .pend{border:2px solid var(--clay)}.pitem{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
 .np input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .nplist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto}
@@ -511,6 +511,7 @@ function buildOOP(seed){
   return {rounds,swaps:[]};
 }
 const PUBLIC=!!window.SMASH_PUBLIC;
+const isApp=()=>{try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
 const shownOOP=()=>S.oop||(PUBLIC?null:buildOOP(S.date+"#"+S.shuffle+"#"+inIds().join(",")));
 const inRound=(rd,id)=>rd.rest.includes(id)||rd.courts.some(c=>c.a.includes(id)||c.b.includes(id));
 
@@ -571,7 +572,7 @@ function render(){
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
     '<h1><span class="h-sat">Saturday</span><span class="h-smash">Smash!</span></h1></div></div>'+
-    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button></div>'+
+    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Add to my phone</button>':'')+'</div>'+
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
@@ -838,6 +839,14 @@ function vSheet(){
       '<button data-act="dorsvp" data-id="'+p.id+'" data-v="none"'+(on("none")?' class="on"':'')+'><span>⏳ No reply yet</span>'+(on("none")?'<span>✓</span>':'')+'</button></div>'+
       (cur==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Their menu</b></p>'+menuPicker("mnpick",p.g,r.menu,' data-id="'+p.id+'"'):'')+
       '<div class="row"><button class="btn ghost" data-act="close">'+(cur==="yes"?'Done':'Cancel')+'</button></div>';
+  }else if(sh.type==="install"){
+    const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),step=(n,t)=>'<li><b>'+n+'</b> '+t+'</li>';
+    inner='<div class="row spread"><h3>📲 Saturday Smash on your phone</h3><button class="x" data-act="close" aria-label="Close">×</button></div>'+
+      '<p class="sub">It works like an app: its own 🎾 icon, opens full screen, nothing to download from a store.</p>'+
+      (ui.installEv?'<div class="row" style="margin-top:12px"><button class="btn ball" data-act="installnow">Add it now 🎾</button></div>':'')+
+      '<div class="howto'+(ios?' first':'')+'"><h4>iPhone</h4><ol>'+step("1","Open the link in <b>Safari</b>")+step("2","Tap <b>Share</b> (the square with the arrow ⬆️)")+step("3","Scroll down → <b>Add to Home Screen</b> → <b>Add</b>")+'</ol></div>'+
+      '<div class="howto"><h4>Android</h4><ol>'+step("1","Open the link in <b>Chrome</b>")+step("2","Tap the <b>⋮</b> menu (top right)")+step("3","<b>Add to Home screen</b> or <b>Install app</b>")+'</ol></div>'+
+      '<p class="sub" style="margin-top:10px">Then open Saturday Smash from the 🎾 icon on your home screen.</p>';
   }else if(sh.type==="help"){inner=vHelp();
   }else if(sh.type==="profile"){inner=profileSheet(sh.id);
   }else if(sh.type==="remove"){
@@ -1521,6 +1530,8 @@ document.addEventListener("click",e=>{
     case "fill":ui.sheet={type:"fill",slot:{r:+t.dataset.r,c:+t.dataset.c,s:t.dataset.s,j:+t.dataset.j}};render();break;
     case "doswap":{const sh=ui.sheet;doSwap(sh.type==="swap"?sh.id:null,id||null,sh.type==="fill"?sh.slot:null);break}
     case "rsvp":ui.sheet={type:"rsvp",id};render();break;
+    case "install":ui.sheet={type:"install"};render();break;
+    case "installnow":if(ui.installEv){ui.installEv.prompt();ui.installEv.userChoice.finally(()=>{ui.installEv=null;ui.sheet=null;render()})}break;
     case "pendok":{const x=(S.pending||[])[+t.dataset.i];if(!x)break;
       mutate(s=>{const p=pBy(x.pid);if(x.tok)p.devs=(p.devs||[]).concat(x.tok);
         const mine=s.pending.filter(y=>y.tok===x.tok&&y.pid===x.pid);s.pending=s.pending.filter(y=>!mine.includes(y));
@@ -1589,7 +1600,10 @@ function start(data){
   if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
-  if(PUBLIC){canEdit=false;preview=false;render();return}
+  if(PUBLIC){canEdit=false;preview=false;render();
+    try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")}catch(e){}
+    addEventListener("beforeinstallprompt",e=>{e.preventDefault();ui.installEv=e;if(ui.sheet&&ui.sheet.type==="install")render()});
+    return}
   const c=window.claude;
   if(!c||!c.use){canEdit=true;preview=true;render();return}
   (async()=>{
@@ -1607,5 +1621,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
