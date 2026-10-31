@@ -111,6 +111,7 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.kit{margin:6px 0 2px;font-size:14.5px;line-height:1.35}
 .dmy{display:flex;gap:6px}.dmy select{flex:1;min-width:0}
 .weekbox{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .kind{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted)}
@@ -583,7 +584,7 @@ function vToday(){
   const w=wx();
   if(w){const f=(S.forecasts||{})[S.date]||S.forecast;
     html+='<section class="wxcard"><span class="wxi">'+w.ic+'</span><div><div class="eyebrow">Forecast · '+esc(fmtD(S.date))+', '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</div>'+
-      '<div class="wxt"><b>'+f.t+'°C</b><span>💧 '+f.rain+'% rain</span><span>💨 '+f.wind+' km/h</span></div><p class="sub">Kingswood · updated '+esc(f.at||"")+' · it\'s in the Monday message too</p></div></section>'}
+      '<div class="wxt"><b>'+f.t+'°C</b><span>💧 '+f.rain+'% rain</span><span>💨 '+f.wind+' km/h</span></div><p class="kit"><b>Kit check:</b> '+esc(kit(f))+'</p><p class="sub">Kingswood · updated '+esc(f.at||"")+' · it\'s in the Monday message too</p></div></section>'}
   else html+='<section class="wxcard muted"><span class="wxi">🌦️</span><div><div class="eyebrow">Forecast</div><p class="sub">The forecast for '+esc(fmtD(S.date))+' appears here up to 2 weeks before – it refreshes at 12:00 and 20:00.</p></div></section>';
   html+=vRoll();
   // headcount
@@ -752,6 +753,19 @@ function waIntroGroup(){
 const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["reserve","🙋","Reserve – call me if you're short"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","🏡","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"]];
 const REASON=Object.fromEntries(POLL.filter(o=>o[2].startsWith("Out")).map(([k,ic,l])=>[k,[ic,l.replace(/^Out – /,"")]]));
 /* Saturday-afternoon forecast for Kingswood, refreshed by the twice-daily collector */
+/* "Kit check": what to wear, from the Saturday forecast – keep in step with kit() in collect_cards.py */
+function kit(f){
+  if(!f)return "";const t=f.t,L=[];
+  L.push(t<=4?"🧤 Arctic mode – thermals, gloves for the warm-up, beanie between points":
+    t<=8?"🧥 Layers! Long sleeves, joggers, jacket for the warm-up – peel off by game two":
+    t<=13?"🧶 Long sleeves or a light jacket – you'll be in a T-shirt by the second set":
+    t<=19?"👕 T-shirt and a hoodie for the warm-up":
+    t<=25?"🩳 Shorts and T-shirt weather – bring plenty of water":"🧢 Cap, sun cream, two bottles of water – it's Wimbledon out there");
+  if(f.rain>=50)L.push("☔ spare socks and a towel");else if(f.rain>=30)L.push("🌂 a towel, just in case");
+  if(f.wind>=25)L.push("💨 windy – lob at your own risk");
+  if(f.code<=1&&t>=12)L.push("😎 sunglasses for serving into the sun");
+  return L.join(" · ");
+}
 function wx(){const f=(S.forecasts||{})[S.date]||S.forecast;if(!f||f.date!==S.date)return null;const c=f.code;
   const ic=c===0?"☀️":c<=2?"🌤️":c===3?"☁️":c<=48?"🌫️":c<=57?"🌦️":c<=67?"🌧️":c<=77?"🌨️":c<=82?"🌦️":"⛈️";
   return {ic,text:ic+" "+f.t+"°C · "+f.rain+"% rain"+(f.wind>=25?" · 💨 windy":""),at:f.at}}
@@ -1297,7 +1311,8 @@ function inviteMsg(p){
   return "Hi "+first(p.id)+"! 🎾 Saturday "+when()+" is shaping up nicely – are you in?"+(hook?"\n\n"+hook[0].toUpperCase()+hook.slice(1):"")+"\n\nA 👍 is all I need. Away for a while? Just tell me the dates and I'll stop pestering you 😄";
 }
 function waWeek(){
-  return "🎾 *Saturday Smash – "+when()+"*"+(wx()?"\nForecast: "+wx().text:"")+"\n\nAre you in? Tap the link – 20 seconds:\n👍 in · ☀️ + "+hhmm(mins(S.warmup.start))+" warm-up · 🙋 reserve · or tell us why you're out 😄\n🍽️ Then pick your menu – mixed, doubles or singles for each session\n\n👉 "+(S.link?S.link+"#week":"[link]")+"\n\nBy Thursday evening please, so the order of play is out on Friday 🙌";
+  const f=(S.forecasts||{})[S.date];
+  return "🎾 *Saturday Smash – "+when()+"*"+(wx()?"\nForecast: "+wx().text+"\nKit check: "+kit(f):"")+"\n\nAre you in? Tap the link – 20 seconds:\n👍 in · ☀️ + "+hhmm(mins(S.warmup.start))+" warm-up · 🙋 reserve · or tell us why you're out 😄\n🍽️ Then pick your menu – mixed, doubles or singles for each session\n\n👉 "+(S.link?S.link+"#week":"[link]")+"\n\nBy Thursday evening please, so the order of play is out on Friday 🙌";
 }
 function waRoll(){
   const yes=live().filter(p=>rsvp(p)==="yes").length;
