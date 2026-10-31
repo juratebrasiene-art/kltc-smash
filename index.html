@@ -947,7 +947,7 @@ function saveCard(z){ // players' side: save, then show the result on the same s
 const dbSeen=new Set();
 async function loadDB(){ // players' site: everyone's cards the moment they're saved
   try{
-    const r=await fetch(DB.url+"?select=id,pub&order=id",{headers:{apikey:DB.key}});if(!r.ok)return;
+    const r=await fetch(DB.url+"?select=id,pub&id=gt.2&order=id",{headers:{apikey:DB.key}});if(!r.ok)return;
     let n=0;(await r.json()).forEach(x=>{if(dbSeen.has(x.id))return;dbSeen.add(x.id);try{if(applyAnswers(dec(x.pub)))n++}catch(e){}});
     if(n&&!ui.sheet)render();
   }catch(e){}
