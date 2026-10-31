@@ -999,7 +999,8 @@ function vQuiz(){
       '<p class="sub"><b style="color:var(--ink)">'+esc(when())+'</b>'+(wx()?' · '+esc(wx().text):'')+'</p>'+
       '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" list="qa-names" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label><datalist id="qa-names">'+live().map(p=>'<option value="'+esc(p.name)+'">').join("")+'</datalist>'+
       '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
-      (r.v==="yes"?'<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+menuPicker("qzmenu",z.a.g,r.menu):'')+
+      '<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+
+      (r.v==="yes"?menuPicker("qzmenu",z.a.g,r.menu):'<div class="menuserved" style="margin-top:8px">👆 Tap <b>👍 I\'m in</b> or <b>☀️ + warm-up</b> above and the menu opens here</div>')+
       '<details style="margin-top:14px"'+((z.a.away||[]).length?' open':'')+'><summary class="sub"><b style="color:var(--ink)">✈️ Away for a while?</b> Add the dates and we won\'t chase you.</summary>'+awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:8px"><button class="btn ghost small" data-act="qzawadd">Add these dates</button></div></details>'+
       '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
   }
