@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap">
 <style id="tpl-style">
 /* Layout: a scoreboard band on top, then one phone-width column of court cards — like the board by the clubhouse */
 :root{
@@ -111,6 +111,7 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.weekbox{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .kind{font-size:11px;font-weight:700;letter-spacing:.03em;color:var(--muted)}
 .menuserved{font-weight:600;font-size:14px;padding:8px 14px;border-radius:12px;background:var(--bg);border:1px dashed var(--line)}
 .menu{display:grid;gap:10px;margin-top:10px}.course{border:2px solid var(--line);border-radius:14px;padding:10px 12px}.course h4{margin:0 0 8px;font-size:15px}.course h4 small{color:var(--muted);font-weight:600}.mopts{display:flex;flex-wrap:wrap;gap:6px}.mopts button{border:2px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-weight:600;font-size:13px}.mopts button[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
@@ -780,8 +781,7 @@ function vShare(){
   h+=sendBlock("intronick","1 · Tell Nick privately","Before anything goes to the group.",waIntroNick(),"Nick");
   h+=sendBlock("introgroup","2 · Group intro","After Nick is happy. Pick KLTC Sat 2~4 in WhatsApp.",waIntroGroup(),null);
   h+='<h2 class="secttl">📣 To the group</h2>';
-  h+=vPollBlock();
-  h+=sendBlock("menu","🍽️ Saturday menu","With the poll: everyone picks mixed, doubles or singles for each session.",waMenu(),null);
+  h+=sendBlock("week","📅 Monday: this Saturday","Ready every Monday at 9am – pick the group and send. Players tap the link: in or out, warm-up and menu.",waWeek(),null);
   h+=sendBlock("invite","Player quiz","Everyone gets a card; you get their availability.",waInvite(),null);
   h+=sendBlock("oop","Order of play","Friday, once the numbers are right.",waOOP(),null);
   h+=sendBlock("need","Need players","When the count isn't a multiple of 4.",waNeed(),null);
@@ -862,7 +862,7 @@ const b64=t=>btoa(unescape(encodeURIComponent(t))).replace(/=+$/,""),unb64=t=>de
 function enc(a){
   const one=V2S.map(k=>{const i=qOf(k).opts.findIndex(o=>o[0]===a[k]);return i<0?"-":i.toString(36)}).join("");
   const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
-  const r=a.rsvp?(a.rsvp.v==="yes"?"y":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):""):"";
+  const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
   return b64(["2",String(a.name||"").replace(/~/g," "),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
 }
@@ -878,7 +878,9 @@ function dec(code){
     (many||"").split(".").forEach((m,j)=>{const bits=parseInt(m||"0",36);a[V2M[j]]=qOf(V2M[j]).opts.filter((o,i)=>bits&(1<<i)).map(o=>o[0])});
     if(rest.join("~"))a.motto=rest.join("~");
   }
-  if(r){const [rv,gm]=r.split(".");a.rsvp={date:unymd(rv.slice(1)),v:rv[0]==="y"?"yes":"no"};
+  if(r){const [body,why]=r.split("!"),[rv,gm]=body.split(".");a.rsvp={date:unymd(rv.slice(1)),v:{y:"yes",w:"yes",r:"reserve"}[rv[0]]||"no"};
+    if(rv[0]==="w"||rv[0]==="y")a.rsvp.warm=rv[0]==="w";
+    if(why)a.rsvp.reason=why;
     if(gm){if(gm[0]!=="-")a.g=gm[0];if(gm.length>1)a.rsvp.menu=gm.slice(1)}}
   a.away=(aw||"").split(",").filter(Boolean).map(w=>{const [f,t2]=w.split("-");return {from:unymd(f),to:unymd(t2||f),note:""}});
   return a;
@@ -897,7 +899,7 @@ function cardText(a){
 }
 function availText(a){
   const bits=[];
-  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍 in for "+fmtD(a.rsvp.date)+(a.rsvp.menu?"\n🍽️ "+menuText(a.rsvp.menu,a.g)+"\n":""):"👎 can't make "+fmtD(a.rsvp.date));
+  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍"+(a.rsvp.warm?"☀️":"")+" in for "+fmtD(a.rsvp.date)+(a.rsvp.menu?"\n🍽️ "+menuText(a.rsvp.menu,a.g)+"\n":""):a.rsvp.v==="reserve"?"🙋 reserve for "+fmtD(a.rsvp.date):(REASON[a.rsvp.reason]||["👎"])[0]+" can't make "+fmtD(a.rsvp.date));
   (a.away||[]).forEach(w=>bits.push("✈️ away "+fmtRange(w)));
   return "📅 *"+a.name+"*: "+bits.join(" · ")+" – Saturday Smash 🎾"+hide(enc(a));
 }
@@ -905,16 +907,18 @@ function applyAnswers(a){
   const name=String(a.name||"").trim().slice(0,40);if(!name)return null;
   const lc=name.toLowerCase(),one=n=>!/\s/.test(n.trim()),f1=n=>n.trim().split(/\s+/)[0].toLowerCase();
   let p=S.players.find(x=>x.name.toLowerCase()===lc)||S.players.find(x=>(one(name)||one(x.name))&&f1(x.name)===f1(name)&&!(one(name)&&one(x.name)));
+  const ini=n=>{const w=n.trim().toLowerCase().split(/\s+/);return w.length>1?w[0]+" "+w[w.length-1][0]:null},short=n=>/\s\S\.?$/.test(n.trim());
+  if(!p&&short(name))p=S.players.filter(x=>ini(x.name)&&ini(x.name)===ini(name)).length===1?S.players.find(x=>ini(x.name)===ini(name)):null;
   if(!p){p={id:newId(),name,level:3,status:"in",warmup:false};S.players.push(p)}
   p.removed=false;
   if(a.g==="f"||a.g==="m")p.g=a.g;
   applyAway(p,a.away);
   if(a.rsvp&&a.rsvp.date===S.date&&a.rsvp.v==="yes"&&a.rsvp.warm!==undefined)p.warmup=!!a.rsvp.warm;
   if(a.rsvp&&a.rsvp.v==="no"&&a.rsvp.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===p.id&&m.date===a.rsvp.date));S.missLog.push({date:a.rsvp.date,id:p.id,reason:a.rsvp.reason})}
-  if(a.rsvp&&a.rsvp.date===S.date){p.rsvp=a.rsvp;if(a.rsvp.v==="yes"&&!awayOn(p,S.date))p.status="in";if(a.rsvp.v==="no"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out"}
+  if(a.rsvp&&a.rsvp.date===S.date){p.rsvp=a.rsvp;if(a.rsvp.v==="yes"&&!awayOn(p,S.date))p.status="in";if(a.rsvp.v==="no"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out";if(a.rsvp.v==="reserve"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="reserve"}
   if(a.partial)return p;
   const keep=["goal","fuel","rain","motives","avail","priority","oncall","warm","style","weapon","level","better","motto"];
-  p.q={};keep.forEach(k=>{if(a[k]!==undefined)p.q[k]=a[k]});p.q.at=iso(new Date());
+  p.q=Object.assign({},p.q||{});keep.forEach(k=>{if(a[k]!==undefined)p.q[k]=a[k]});p.q.at=iso(new Date());
   if(a.level)p.level=+a.level;
   p.warmup=a.warm==="always";
   if(a.avail==="reserve"||a.avail==="some"){if(p.status==="in"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="reserve"}
@@ -973,22 +977,30 @@ function vQuiz(){
   const done=live().filter(p=>p.q).length,total=live().length;
   if(!z){
     return '<section class="quizhero"><div class="eyebrow">2 minutes · '+QUIZ.length+' questions</div><h2>What kind of Saturday player are you?</h2>'+
-      '<p>Answer a few quick questions and get your own player card – are you The Wall, The Net Ninja or The Big Hitter? It also tells the organiser when you can play and whether you can be a 🦸 hero sub.</p>'+
-      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzavail">Just update my availability</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="menugo">🍽️ Pick my Saturday menu</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
+      '<p>Make your player card once – are you The Wall, The Net Ninja or The Big Hitter? Change it whenever you like with ✏️ Update my card.</p>'+
+      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzpick">✏️ Update my card</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
+      '<section class="card weekbox"><div><div class="eyebrow">Every week</div><h2>📅 This Saturday: are you in?</h2><p class="sub">'+esc(when())+' – 20 seconds: in or out, warm-up and your 🍽️ menu.</p></div><button class="btn ball" data-act="qzavail">Tell us →</button></section>'+
       (canEdit?vTracker():'')+
       '<section class="card"><h2>The squad so far</h2><p class="sub">'+done+' of '+total+' player cards in</p><div class="meter"><b style="width:'+(total?done/total*100:0)+'%"></b></div>'+
       '<div class="cards">'+live().filter(p=>p.q).map(p=>{const pr=persona(p.q);return '<button class="mini pc-'+pr.key+'" data-act="profile" data-id="'+p.id+'"><span class="mi">'+pr.icon+'</span><b>'+esc(p.name)+'</b><span>'+esc(pr.name)+'</span></button>'}).join("")+
       (done?'':'<div class="empty-note">No cards yet. Be the first – then share the quiz link in the group.</div>')+'</div></section>';
   }
+  if(z.mode==="pick"){
+    const ps=live().filter(p=>p.q).sort((a,b)=>a.name.localeCompare(b.name));
+    return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">Update my card</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>Which card is yours?</h2><p class="sub">Your answers come up ready – change what you like, keep the rest.</p>'+
+      '<div class="cards" style="margin-top:10px">'+ps.map(p=>{const pr=persona(p.q);return '<button class="mini pc-'+pr.key+'" data-act="qzupd" data-id="'+p.id+'"><span class="mi">'+pr.icon+'</span><b>'+esc(p.name)+'</b><span>'+esc(pr.name)+'</span></button>'}).join("")+'</div>'+
+      '<p class="sub" style="margin-top:12px">Not there? <button class="btn small ghost" data-act="qzstart">Make my card 🎾</button></p></section>';
+  }
   if(z.mode==="avail"){
     if(z.done)return '<section class="card"><h2>'+(canEdit?'Updated ✓':savedHead(z))+'</h2><p class="sub">'+(canEdit?'Saved to '+esc(z.a.name)+'\'s profile.':savedSub(z,"All done – nothing to send. 🎾"))+'</p>'+(z.saved===true?'':'<pre class="wa" id="wa-avail">'+esc(availText(z.a))+'</pre>'+sendRow("avail",availText(z.a),"update"))+'<button class="btn ghost" data-act="qzaway0">Done</button></div></section>';
-    const v=z.a.rsvp&&z.a.rsvp.v;
-    return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">30 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>Update my availability</h2>'+
-      '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label>'+
-      '<p class="sub" style="margin-top:6px"><b style="color:var(--ink)">'+when()+'</b></p><div class="row"><button class="qopt" style="flex:1" aria-pressed="'+(v==="yes")+'" data-act="qzrsvp" data-v="yes"><span class="qi">👍</span>I\'m in</button><button class="qopt" style="flex:1" aria-pressed="'+(v==="no")+'" data-act="qzrsvp" data-v="no"><span class="qi">👎</span>Can\'t make it</button></div>'+
-      (v==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+menuPicker("qzmenu",z.a.g,z.a.rsvp.menu):'')+
-      '<p class="sub" style="margin-top:6px"><b style="color:var(--ink)">Away for a while?</b> Add the dates and we won\'t chase you.</p>'+awayForm("qzaw",z.a.away)+
-      '<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add another period</button><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
+    const r=z.a.rsvp||{},pk=r.v==="yes"?(r.warm?"warm":"in"):r.v==="reserve"?"reserve":r.v==="no"?r.reason:null;
+    return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">20 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>📅 This Saturday</h2>'+
+      '<p class="sub"><b style="color:var(--ink)">'+esc(when())+'</b>'+(wx()?' · '+esc(wx().text):'')+'</p>'+
+      '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" list="qa-names" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label><datalist id="qa-names">'+live().map(p=>'<option value="'+esc(p.name)+'">').join("")+'</datalist>'+
+      '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
+      (r.v==="yes"?'<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+menuPicker("qzmenu",z.a.g,r.menu):'')+
+      '<details style="margin-top:14px"><summary class="sub"><b style="color:var(--ink)">✈️ Away for a while?</b> Add the dates and we won\'t chase you.</summary>'+awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:8px"><button class="btn ghost small" data-act="qzawadd">Add these dates</button></div></details>'+
+      '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
   }
   if(z.step>=QUIZ.length){
     const a=z.a,pr=persona(a);
@@ -1006,7 +1018,7 @@ function vQuiz(){
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">'+(q.optional&&!val?"Skip":"Next")+' →</button></div>';
   else body='<div class="qopts">'+q.opts.map(([v,ic,l])=>{const on=q.type==="multi"?(val||[]).includes(v):val===v;
       return '<button class="qopt" aria-pressed="'+on+'" data-act="qzpick" data-v="'+v+'"><span class="qi">'+ic+'</span><span>'+esc(l)+'</span></button>'}).join("")+'</div>'+
-    (q.type==="multi"?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext"'+((val||[]).length?'':' disabled')+'>Next →</button></div>':'');
+    (q.type==="multi"?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext"'+((val||[]).length?'':' disabled')+'>Next →</button></div>':val?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">Keep it →</button></div>':'');
   return '<section class="quiz"><div class="row spread"><div class="balls" aria-label="Question '+(z.step+1)+' of '+QUIZ.length+'">'+dots+'</div>'+
     '<button class="btn small ghost" data-act="'+(z.step?'qzback':'qzaway0')+'">← Back</button></div>'+
     '<h2 class="flip">'+esc(q.q)+'</h2>'+(q.hint?'<p class="sub">'+esc(q.hint)+'</p>':'')+body+'</section>';
@@ -1147,15 +1159,22 @@ function vTracker(){
 function quizAct(a,t){
   const z=ui.quiz;
   if(a==="qzstart"||a==="qzagain"){ui.quiz={step:0,a:{}};render();return}
-  if(a==="qzavail"){ui.quiz={mode:"avail",a:{}};render();return}
+  if(a==="qzavail"){ui.quiz={mode:"avail",a:{name:me()}};render();return}
+  if(a==="qzpick"){ui.quiz={mode:"pick",a:{}};render();return}
+  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
   if(!z)return;
   if(a==="qzawadd"){const v=readAway("qzaw");if(!v){toast("Pick a From date first");return}const n=$("#qa-name");if(n)z.a.name=n.value.trim();z.a.away=(z.a.away||[]).concat(v);render();return}
   if(a==="qzawdel"){z.a.away.splice(+t.dataset.i,1);render();return}
   if(a==="qzmenu"){const n=$("#qa-name");if(n)z.a.name=n.value.trim();if(t.dataset.g)z.a.g=t.dataset.g;else z.a.rsvp.menu=setPick(z.a.rsvp.menu,+t.dataset.i,t.dataset.v);render();return}
+  if(a==="qzwk"){const k=t.dataset.v,old=z.a.rsvp||{};const n=$("#qa-name");if(n)z.a.name=n.value.trim();
+    z.a.rsvp={date:S.date,v:k==="in"||k==="warm"?"yes":k==="reserve"?"reserve":"no"};
+    if(z.a.rsvp.v==="yes"){z.a.rsvp.warm=k==="warm";if(old.menu)z.a.rsvp.menu=old.menu}
+    if(z.a.rsvp.v==="no")z.a.rsvp.reason=k;render();return}
   if(a==="qzrsvp"){z.a.rsvp=Object.assign({},z.a.rsvp,{date:S.date,v:t.dataset.v});const n=$("#qa-name");if(n)z.a.name=n.value.trim();render();return}
   if(a==="qzavaildone"){const n=$("#qa-name");z.a.name=n?n.value.trim():z.a.name;const v=readAway("qzaw");if(v)z.a.away=(z.a.away||[]).concat(v);
-    if(!z.a.name){toast("Pop your name in first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Tap 👍 or 👎, or add away dates");return}
+    if(!z.a.name){toast("Pop your name in first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Pick one answer – or add away dates");return}
+    remember(z.a.name);
     z.a.partial=true;z.done=true;if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);render();return}
   if(!z)return;
   const q=QUIZ[z.step];
@@ -1167,9 +1186,11 @@ function quizAct(a,t){
     if(q.type==="text"&&!q.optional&&!z.a[q.k]){toast("Pop your name in first");return}
     advance()}
 }
+const me=()=>{try{return localStorage.getItem("ss-me")||""}catch(e){return ""}};
+const remember=n=>{try{if(n)localStorage.setItem("ss-me",n)}catch(e){}};
 function advance(){
   const z=ui.quiz;z.step++;
-  if(z.step>=QUIZ.length){if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);confetti();}
+  if(z.step>=QUIZ.length){remember(z.a.name);if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);confetti();}
   render();window.scrollTo({top:0,behavior:"smooth"});
 }
 function profileEdit(p){
@@ -1274,25 +1295,25 @@ function inviteMsg(p){
   const q=p.q||{};const hook=HOOK[q.goal];
   return "Hi "+first(p.id)+"! 🎾 Saturday "+when()+" is shaping up nicely – are you in?"+(hook?"\n\n"+hook[0].toUpperCase()+hook.slice(1):"")+"\n\nA 👍 is all I need. Away for a while? Just tell me the dates and I'll stop pestering you 😄";
 }
+function waWeek(){
+  return "🎾 *Saturday Smash – "+when()+"*"+(wx()?"\nForecast: "+wx().text:"")+"\n\nAre you in? Tap the link – 20 seconds:\n👍 in · ☀️ + "+hhmm(mins(S.warmup.start))+" warm-up · 🙋 reserve · or tell us why you're out 😄\n🍽️ Then pick your menu – mixed, doubles or singles for each session\n\n👉 "+(S.link?S.link+"#week":"[link]")+"\n\nBy Thursday evening please, so the order of play is out on Friday 🙌";
+}
 function waRoll(){
   const yes=live().filter(p=>rsvp(p)==="yes").length;
-  return "🎾 *Saturday roll call – "+when()+"* 🎾"+(wx()?"\nForecast: "+wx().text:"")+"\n\nReact 👍 if you're in, 👎 if you can't make it – by Thursday evening please, so the order of play is out on Friday.\n"+
-    (S.warmup.on?"☀️ Up for the "+hhmm(mins(S.warmup.start))+" triples warm-up? Add a ☀️ too!\n":"")+
-    "🍽️ Mixed, doubles or singles? Pick your menu"+(S.link?": "+S.link+"#menu":"")+"\n"+
-    "\n✈️ Away for a while (holiday, injury, busy months)? Tell us your dates"+(S.link?": "+S.link+"#quiz":"")+"\n"+(yes?"\nSo far "+yes+" in 🙌":"");
+  return waWeek()+(yes?"\n\nSo far "+yes+" in 🙌":"");
 }
 function vRoll(){
   const ps=live().slice().sort((a,b)=>a.name.localeCompare(b.name));
   const away=ps.filter(p=>awayOn(p,S.date));
   const yes=ps.filter(p=>!awayOn(p,S.date)&&rsvp(p)==="yes"),no=ps.filter(p=>!awayOn(p,S.date)&&rsvp(p)==="no"),maybe=ps.filter(p=>!awayOn(p,S.date)&&rsvp(p)==="reserve"),wait=ps.filter(p=>!awayOn(p,S.date)&&!rsvp(p));
-  let h='<section class="card" id="sec-roll"><div class="row spread"><div><h2>Roll call 👍</h2><p class="sub">Everyone answers the poll for '+fmtD(S.date)+(canEdit?' – tap a name to mark 👍 in or 👎 out':'')+'</p></div>'+
+  let h='<section class="card" id="sec-roll"><div class="row spread"><div><h2>Roll call 👍</h2><p class="sub">Everyone answers the Monday link for '+fmtD(S.date)+(canEdit?' – tap a name to mark 👍 in or 👎 out':'')+'</p></div>'+
     '<div class="row" style="gap:6px"><span class="tally yes">👍 '+yes.length+'</span><span class="tally no">👎 '+no.length+'</span><span class="tally">🙋 '+maybe.length+'</span><span class="tally">⏳ '+wait.length+'</span></div></div>'+
     '<div class="rc">'+ps.map(p=>{const aw=awayNow(p);const v=rsvp(p);
       if(aw)return '<span class="rcb away" title="Away">✈️ '+esc(first(p.id))+'<small>till '+esc(fmtD(aw.to||aw.from).replace(/^\w+ /,""))+'</small></span>';
       return '<button class="rcb '+(v||"")+'" '+(canEdit?'data-act="rsvp" data-id="'+p.id+'"':'disabled')+' aria-label="'+esc(p.name)+': '+(v==="yes"?"in":v==="no"?"out":"no reply")+'">'+(v==="yes"?(p.rsvp.warm?"👍☀️":"👍"):v==="no"?((REASON[p.rsvp.reason]||["👎"])[0]):v==="reserve"?"🙋":"⏳")+' '+esc(chipName(p))+'</button>'}).join("")+'</div>';
   const orders=Array.from({length:S.rounds},(_,i)=>{const c={};yes.forEach(p=>{const k=pick(p.id,i);if(k!=="a"){const o=menuOpt(k,p.g).join(" ");c[o]=(c[o]||0)+1}});return c});
   if(orders.some(o=>Object.keys(o).length))h+='<div class="orders"><b>🍽️ Menu orders</b>'+orders.map((o,i)=>'<div>'+course(i)[0]+' '+course(i)[1]+': '+(Object.keys(o).length?Object.entries(o).map(([l,n])=>esc(l)+' ×'+n).join(' · '):'🎲 chef\'s choice')+'</div>').join("")+'</div>';
-  h+='<div class="row" style="margin-top:10px"><button class="btn small ghost" data-act="menugo">🍽️ Pick my menu</button></div>';
+  h+='<div class="row" style="margin-top:10px"><button class="btn small ghost" data-act="menugo">📅 In or out? + my menu</button></div>';
   if(canEdit)h+='<div class="row" style="margin-top:12px"><button class="btn small ball" data-act="copy" data-k="roll">Copy roll-call message</button>'+(wait.length?'<button class="btn small ghost" data-act="togglenudge">'+(ui.nudge?'Hide':'Nudge')+' the '+wait.length+' quiet ones privately</button>':'')+'</div><pre hidden id="wa-roll">'+esc(waRoll())+'</pre>';
   if(canEdit&&ui.nudge&&wait.length)h+='<div class="plist" style="margin-top:8px">'+wait.sort(byRegular).map(p=>msgRow(p,nudgeMsg(p),"nudge-"+p.id)).join("")+'</div>'+
     '<p class="sub" style="margin-top:6px">Add phone numbers in each player\'s profile and the WhatsApp button opens their private chat with the message ready.</p>';
@@ -1419,7 +1440,7 @@ document.addEventListener("click",e=>{
     case "fill":ui.sheet={type:"fill",slot:{r:+t.dataset.r,c:+t.dataset.c,s:t.dataset.s,j:+t.dataset.j}};render();break;
     case "doswap":{const sh=ui.sheet;doSwap(sh.type==="swap"?sh.id:null,id||null,sh.type==="fill"?sh.slot:null);break}
     case "rsvp":ui.sheet={type:"rsvp",id};render();break;
-    case "menugo":ui.tab="quiz";ui.quiz={mode:"avail",a:{rsvp:{date:S.date,v:"yes"}}};render();break;
+    case "menugo":ui.tab="quiz";ui.quiz={mode:"avail",a:{name:me()}};render();break;
     case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
     case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
       if(k==="none")setRsvp(id,null);else if(k==="reserve")setRsvp(id,"reserve");else if(k==="in"||k==="warm")setRsvp(id,"yes",{warm:k==="warm"});else setRsvp(id,"no",{reason:k});
@@ -1470,7 +1491,7 @@ function start(data){
   try{if(!localStorage.getItem("ss-seen-help")){ui.sheet={type:"help"};localStorage.setItem("ss-seen-help","1")}}catch(e){}
   if(location.hash==="#quiz")ui.tab="quiz";
   if(location.hash==="#cards")ui.tab="cards";
-  if(location.hash==="#menu"){ui.tab="quiz";ui.quiz={mode:"avail",a:{rsvp:{date:S.date,v:"yes"}}}}
+  if(location.hash==="#menu"||location.hash==="#week"){ui.tab="quiz";ui.quiz={mode:"avail",a:{name:me()}}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
   if(PUBLIC){canEdit=false;preview=false;render();loadDB();setInterval(loadDB,30000);return}
@@ -1490,4 +1511,5 @@ const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
-</script></body></html>
+</script>
+</body></html>
