@@ -1,6 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap">
 <style id="tpl-style">
 /* Layout: a scoreboard band on top, then one phone-width column of court cards — like the board by the clubhouse */
 :root{
@@ -111,6 +111,10 @@ main{padding-block:18px 60px}
 .cn{font-family:var(--display);font-weight:800;font-size:13px;line-height:1;text-align:center;color:var(--muted);letter-spacing:.06em}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
+.np input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.nplist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto}
+.nplist button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:600;font-size:14px}
+.iam{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 12px;border:2px solid var(--court);border-radius:12px}
 .kit{margin:6px 0 2px;font-size:14.5px;line-height:1.35}
 .dmy{display:flex;gap:6px}.dmy select{flex:1;min-width:0}
 .weekbox{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -879,14 +883,14 @@ function enc(a){
   const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
   const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
-  return b64(["2",String(a.name||"").replace(/~/g," "),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
+  return b64(["2",String(a.name||"").replace(/[~#]/g," ")+(a.pid?"#"+a.pid:""),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
 }
 function dec(code){
   const t=unb64(code);
   if(t[0]==="{")return JSON.parse(t);
-  const [v,name,kind,one,many,r,aw,...rest]=t.split("~");
+  const [v,nameId,kind,one,many,r,aw,...rest]=t.split("~"),[name,pid]=nameId.split("#");
   if(v!=="2")throw new Error("unknown card");
-  const a={name};
+  const a={name};if(pid)a.pid=pid;
   if(kind==="p")a.partial=true;
   else{
     V2S.forEach((k,i)=>{const c=(one||"")[i];if(c&&c!=="-"){const o=qOf(k).opts[parseInt(c,36)];if(o)a[k]=o[0]}});
@@ -921,7 +925,7 @@ function availText(a){
 function applyAnswers(a){
   const name=String(a.name||"").trim().slice(0,40);if(!name)return null;
   const lc=name.toLowerCase(),one=n=>!/\s/.test(n.trim()),f1=n=>n.trim().split(/\s+/)[0].toLowerCase();
-  let p=S.players.find(x=>x.name.toLowerCase()===lc)||S.players.find(x=>(one(name)||one(x.name))&&f1(x.name)===f1(name)&&!(one(name)&&one(x.name)));
+  let p=(a.pid&&S.players.find(x=>x.id===a.pid))||S.players.find(x=>x.name.toLowerCase()===lc)||S.players.find(x=>(one(name)||one(x.name))&&f1(x.name)===f1(name)&&!(one(name)&&one(x.name)));
   const ini=n=>{const w=n.trim().toLowerCase().split(/\s+/);return w.length>1?w[0]+" "+w[w.length-1][0]:null},short=n=>/\s\S\.?$/.test(n.trim());
   if(!p&&short(name))p=S.players.filter(x=>ini(x.name)&&ini(x.name)===ini(name)).length===1?S.players.find(x=>ini(x.name)===ini(name)):null;
   if(!p){p={id:newId(),name,level:3,status:"in",warmup:false};S.players.push(p)}
@@ -1010,7 +1014,7 @@ function vQuiz(){
     const r=z.a.rsvp||{},pk=r.v==="yes"?(r.warm?"warm":"in"):r.v==="reserve"?"reserve":r.v==="no"?r.reason:null;
     return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">20 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>📅 This Saturday</h2>'+
       '<p class="sub"><b style="color:var(--ink)">'+esc(when())+'</b>'+(wx()?' · '+esc(wx().text):'')+'</p>'+
-      '<label class="f">Your name<input type="text" id="qa-name" maxlength="60" list="qa-names" value="'+esc(z.a.name||"")+'" placeholder="e.g. Jane Beaven"></label><datalist id="qa-names">'+live().map(p=>'<option value="'+esc(p.name)+'">').join("")+'</datalist>'+
+      '<p class="status-tag" style="margin-top:10px">Who are you?</p>'+namePicker("qzname",z.a)+
       '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
       '<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+
       (r.v==="yes"?menuPicker("qzmenu",z.a.g,r.menu):'<div class="menuserved" style="margin-top:8px">👆 Tap <b>👍 I\'m in</b> or <b>☀️ + warm-up</b> above and the menu opens here</div>')+
@@ -1029,6 +1033,7 @@ function vQuiz(){
   const dots=QUIZ.map((_,i)=>'<i class="'+(i<z.step?'done':i===z.step?'cur':'')+'"></i>').join("");
   let body="";
   if(q.type==="away")body=awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add these dates</button><button class="btn ball" data-act="qznext">'+((z.a.away||[]).length?"Next":"No gaps – I'm around")+' →</button></div>';
+  else if(q.k==="name")body=namePicker("qzname",z.a)+(z.a.pid?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">Next →</button></div>':'');
   else if(q.type==="text")body='<input type="text" id="qz-'+q.k+'" maxlength="60" value="'+esc(val||"")+'" placeholder="'+(q.k==="name"?"e.g. Jane Beaven":"e.g. Eye of the Tiger")+'" data-act="qztext" data-k="'+q.k+'">'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">'+(q.optional&&!val?"Skip":"Next")+' →</button></div>';
   else body='<div class="qopts">'+q.opts.map(([v,ic,l])=>{const on=q.type==="multi"?(val||[]).includes(v):val===v;
@@ -1173,23 +1178,26 @@ function vTracker(){
 }
 function quizAct(a,t){
   const z=ui.quiz;
-  if(a==="qzstart"||a==="qzagain"){ui.quiz={step:0,a:{}};render();return}
-  if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:{name:me()}};render();window.scrollTo({top:0});return}
+  if(a==="qzstart"||a==="qzagain"){ui.quiz={step:0,a:me()};render();return}
+  if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzpick"){ui.quiz={mode:"pick",a:{}};render();return}
-  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
+  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
   if(!z)return;
   if(a==="qzawadd"){const v=readAway("qzaw");if(!v){toast("Pick a From date first");return}const n=$("#qa-name");if(n)z.a.name=n.value.trim();z.a.away=(z.a.away||[]).concat(v);render();return}
   if(a==="qzawdel"){z.a.away.splice(+t.dataset.i,1);render();return}
   if(a==="qzmenu"){const n=$("#qa-name");if(n)z.a.name=n.value.trim();if(t.dataset.g)z.a.g=t.dataset.g;else z.a.rsvp.menu=setPick(z.a.rsvp.menu,+t.dataset.i,t.dataset.v);render();return}
+  if(a==="qzname"){const p=pBy(t.dataset.id);if(!p)return;z.a.name=p.name;z.a.pid=p.id;remember(p.id);
+    if(!z.mode&&QUIZ[z.step]&&QUIZ[z.step].k==="name"){advance();return}render();return}
+  if(a==="npchange"){delete z.a.pid;z.a.name="";try{localStorage.removeItem("ss-me-id")}catch(err){}render();return}
   if(a==="qzwk"){const k=t.dataset.v,old=z.a.rsvp||{};const n=$("#qa-name");if(n)z.a.name=n.value.trim();
     z.a.rsvp={date:S.date,v:k==="in"||k==="warm"?"yes":k==="reserve"?"reserve":"no"};
     if(z.a.rsvp.v==="yes"){z.a.rsvp.warm=k==="warm";if(old.menu)z.a.rsvp.menu=old.menu}
     if(z.a.rsvp.v==="no")z.a.rsvp.reason=k;render();return}
   if(a==="qzrsvp"){z.a.rsvp=Object.assign({},z.a.rsvp,{date:S.date,v:t.dataset.v});const n=$("#qa-name");if(n)z.a.name=n.value.trim();render();return}
   if(a==="qzavaildone"){const n=$("#qa-name");z.a.name=n?n.value.trim():z.a.name;const v=readAway("qzaw");if(v)z.a.away=(z.a.away||[]).concat(v);
-    if(!z.a.name){toast("Pop your name in first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Pick one answer – or add away dates");return}
-    remember(z.a.name);
+    if(!z.a.pid){toast("Tap your name first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Pick one answer – or add away dates");return}
+    remember(z.a.pid);
     z.a.partial=true;z.done=true;if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);render();return}
   if(!z)return;
   const q=QUIZ[z.step];
@@ -1198,11 +1206,21 @@ function quizAct(a,t){
     if(q.type==="multi"){const cur=z.a[q.k]||[];z.a[q.k]=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=q.max?cur.slice(1).concat(v):cur.concat(v);render();return}
     z.a[q.k]=v;render();setTimeout(()=>{if(ui.quiz===z&&QUIZ[z.step]===q)advance()},260);return}
   if(a==="qznext"){const inp=$("#qz-"+q.k);if(inp)z.a[q.k]=inp.value.trim();
+    if(q.k==="name"&&!z.a.pid){toast("Tap your name first");return}
     if(q.type==="text"&&!q.optional&&!z.a[q.k]){toast("Pop your name in first");return}
     advance()}
 }
-const me=()=>{try{return localStorage.getItem("ss-me")||""}catch(e){return ""}};
-const remember=n=>{try{if(n)localStorage.setItem("ss-me",n)}catch(e){}};
+/* names are locked to the group list: a player taps their own name, and answers are linked to that player's id */
+const meId=()=>{try{const v=localStorage.getItem("ss-me-id")||"";return pBy(v)&&!pBy(v).removed?v:""}catch(e){return ""}};
+const me=()=>{const p=pBy(meId());return p?{name:p.name,pid:p.id}:{}};
+const remember=id=>{try{if(id)localStorage.setItem("ss-me-id",id)}catch(e){}};
+function namePicker(act,a){
+  const p=a.pid&&pBy(a.pid);
+  if(p)return '<div class="iam"><span>👤 <b>'+esc(p.name)+'</b></span><button class="btn small ghost" data-act="npchange">Not you?</button></div>';
+  return '<div class="np"><input type="search" id="np-q" placeholder="🔎 Start typing your name…" autocomplete="off" aria-label="Find your name">'+
+    '<div class="nplist">'+live().slice().sort((x,y)=>x.name.localeCompare(y.name)).map(x=>'<button data-act="'+act+'" data-id="'+x.id+'" data-n="'+esc(x.name.toLowerCase())+'">'+esc(x.name)+'</button>').join("")+'</div>'+
+    '<p class="sub" style="margin-top:6px">Not on the list? Message '+esc(org().name||"Jurate")+' and you\'ll be added.</p></div>';
+}
 function advance(){
   const z=ui.quiz;z.step++;
   if(z.step>=QUIZ.length){remember(z.a.name);if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);confetti();}
@@ -1434,7 +1452,7 @@ document.addEventListener("click",e=>{
     if(g==="tip:thumbs"){toast("In the WhatsApp group: press and hold the roll-call message, tap 👍 or 👎");return}
     ui.sheet=null;
     if(g==="quiz"){ui.tab="quiz";ui.quiz={step:0,a:{}}}
-    else if(g==="avail"){ui.tab="today";ui.quiz={mode:"avail",a:{name:me()}}}
+    else if(g==="avail"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
     else if(g.startsWith("tab:")){ui.tab=g.slice(4)}
     else if(g.startsWith("go:")){const [,tab,sec]=g.split(":");ui.tab=tab;render();
       const el=sec&&document.getElementById(sec);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});el.classList.add("glow");setTimeout(()=>el.classList.remove("glow"),1800)}else window.scrollTo({top:0});return}
@@ -1469,7 +1487,7 @@ document.addEventListener("click",e=>{
     case "fill":ui.sheet={type:"fill",slot:{r:+t.dataset.r,c:+t.dataset.c,s:t.dataset.s,j:+t.dataset.j}};render();break;
     case "doswap":{const sh=ui.sheet;doSwap(sh.type==="swap"?sh.id:null,id||null,sh.type==="fill"?sh.slot:null);break}
     case "rsvp":ui.sheet={type:"rsvp",id};render();break;
-    case "menugo":ui.tab="today";ui.quiz={mode:"avail",a:{name:me()}};render();window.scrollTo({top:0});break;
+    case "menugo":ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});break;
     case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
     case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
       if(k==="none")setRsvp(id,null);else if(k==="reserve")setRsvp(id,"reserve");else if(k==="in"||k==="warm")setRsvp(id,"yes",{warm:k==="warm"});else setRsvp(id,"no",{reason:k});
@@ -1482,6 +1500,10 @@ document.addEventListener("click",e=>{
   }
 });
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.act==="qztext"){e.preventDefault();quizAct("qznext",e.target)}});
+document.addEventListener("input",e=>{
+  if(e.target.id!=="np-q")return;const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".nplist button").forEach(b=>{b.hidden=!!q&&!b.dataset.n.split(/\s+/).some(w=>w.startsWith(q))&&!b.dataset.n.startsWith(q)});
+});
 document.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset&&t.dataset.dmy){const id=t.dataset.dmy,g=p=>(document.querySelector('[data-dmy="'+id+'"][data-p="'+p+'"]')||{}).value,h=$("#"+id);
@@ -1523,7 +1545,7 @@ function start(data){
   try{if(!localStorage.getItem("ss-seen-help")){ui.sheet={type:"help"};localStorage.setItem("ss-seen-help","1")}}catch(e){}
   if(location.hash==="#quiz")ui.tab="quiz";
   if(location.hash==="#cards")ui.tab="cards";
-  if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:{name:me()}}}
+  if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
   if(PUBLIC){canEdit=false;preview=false;render();loadDB();setInterval(loadDB,30000);return}
@@ -1543,4 +1565,5 @@ const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
-</script></body></html>
+</script>
+</body></html>
