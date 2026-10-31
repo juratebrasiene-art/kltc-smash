@@ -933,7 +933,7 @@ function vQuiz(){
   if(!z){
     return '<section class="quizhero"><div class="eyebrow">2 minutes · '+QUIZ.length+' questions</div><h2>What kind of Saturday player are you?</h2>'+
       '<p>Answer a few quick questions and get your own player card – are you The Wall, The Net Ninja or The Big Hitter? It also tells the organiser when you can play and whether you can be a 🦸 hero sub.</p>'+
-      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzavail">Just update my availability</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
+      '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzavail">👍 I\'m in + 🍽️ my menu</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
       (canEdit?vTracker():'')+
       '<section class="card"><h2>The squad so far</h2><p class="sub">'+done+' of '+total+' player cards in</p><div class="meter"><b style="width:'+(total?done/total*100:0)+'%"></b></div>'+
       '<div class="cards">'+live().filter(p=>p.q).map(p=>{const pr=persona(p.q);return '<button class="mini pc-'+pr.key+'" data-act="profile" data-id="'+p.id+'"><span class="mi">'+pr.icon+'</span><b>'+esc(p.name)+'</b><span>'+esc(pr.name)+'</span></button>'}).join("")+
@@ -1337,7 +1337,8 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("[data-act]");if(!t)return;
   const a=t.dataset.act,id=t.dataset.id;
   if(a==="scrim"){if(e.target===t){ui.sheet=null;render()}return}
-  if(a==="tab"){ui.tab=t.dataset.k;try{localStorage.setItem("ss-tab",ui.tab)}catch(err){}render();window.scrollTo({top:0});return}
+  if(a==="tab"){if(t.dataset.k==="quiz"&&ui.quiz&&ui.quiz.mode==="avail")ui.quiz=null;if(location.hash)try{history.replaceState(null,"",location.pathname+location.search)}catch(err){}
+    ui.tab=t.dataset.k;try{localStorage.setItem("ss-tab",ui.tab)}catch(err){}render();window.scrollTo({top:0});return}
   if(a==="close"){ui.sheet=null;render();return}
   if(a==="togglenudge"){ui.nudge=!ui.nudge;render();return}
   if(a==="gocard"){ui.sheet=null;ui.tab="quiz";ui.quiz={step:0,a:{}};render();window.scrollTo({top:0});return}
