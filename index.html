@@ -210,6 +210,9 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 .cbar{display:flex;align-items:flex-end;background:var(--bg);border-radius:8px;overflow:hidden}
 .cbar b{display:block;width:100%;background:var(--ball);border-radius:8px 8px 0 0}
 .cv{font-weight:800;font-variant-numeric:tabular-nums}.cl{font-size:12px;color:var(--muted);font-weight:700}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.prow span{font-weight:600;overflow-wrap:anywhere}
+.psteps{margin:10px 0 0;padding-left:20px;display:grid;gap:4px;font-size:14px}
 /* help guide */
 .band .col{position:relative}
 .helpbtn{border:2px solid var(--ball);background:transparent;color:var(--on-court);border-radius:999px;padding:5px 12px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;gap:6px}
@@ -657,6 +660,18 @@ function waIntroNick(){
 function waIntroGroup(){
   return "Hi all 🎾 Nick and I are trying something fun for Saturdays – *Saturday Smash*!\n• Order of play all in one place\n• Player cards – find out what kind of player you are 🧱🥷🚀\n• A little ladder, with 🦸 hero points for stepping in when someone drops out\n\nFirst step is a 2-minute quiz. It also tells us when you can play, so less chasing 😄\n"+(S.link?S.link+"#quiz":"[link]")+"\nTotally optional – any feedback welcome!";
 }
+/* roll call poll: one tap answers "in", "in + warm-up" or a fun reason for being out */
+const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","👨‍👩‍👧","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"],["work","💼","Out – work got me"]];
+const REASON=Object.fromEntries(POLL.slice(2).map(([k,ic,l])=>[k,[ic,l.replace(/^Out – /,"")]]));
+const pollQ=()=>"🎾 "+fmtD(S.date)+", "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins)+" – are you in?";
+const pollOpt=o=>o[1]+" "+o[2]+(o[0]==="warm"&&S.warmup.on?" "+hhmm(mins(S.warmup.start)):"");
+function vPollBlock(){
+  const row=(k,txt,lab)=>'<div class="prow"><span>'+esc(txt)+'</span><button class="btn small ghost" data-act="copy" data-k="'+k+'">Copy</button><pre hidden id="wa-'+k+'">'+esc(txt)+'</pre></div>';
+  return '<section class="card"><h2>Roll call poll 🗳️</h2><p class="sub">Monday or Tuesday. Players tap one answer – the collector reads the votes and fills in the roll call, warm-up and reasons by itself.</p>'+
+    '<ol class="psteps"><li>Open the group in WhatsApp → 📎 → <b>Poll</b></li><li>Copy the question, then each answer into its own line</li><li>Turn <b>off</b> “Allow multiple answers” → Send</li></ol>'+
+    '<p class="status-tag" style="margin-top:10px">Question</p>'+row("pq",pollQ())+
+    '<p class="status-tag" style="margin-top:10px">Answers</p>'+POLL.map((o,i)=>row("po"+i,pollOpt(o))).join("")+'</section>';
+}
 function sendBlock(k,title,hint,txt,to){
   const p=to?S.players.find(x=>x.name.toLowerCase().startsWith(to.toLowerCase())):null;
   const href=(p&&waHref(p,txt))||pickHref(txt);
@@ -674,7 +689,7 @@ function vShare(){
   h+=sendBlock("intronick","1 · Tell Nick privately","Before anything goes to the group.",waIntroNick(),"Nick");
   h+=sendBlock("introgroup","2 · Group intro","After Nick is happy. Pick KLTC Sat 2~4 in WhatsApp.",waIntroGroup(),null);
   h+='<h2 class="secttl">📣 To the group</h2>';
-  h+=sendBlock("roll2","Roll call 👍","Monday or Tuesday – everyone reacts 👍 or 👎.",waRoll(),null);
+  h+=vPollBlock();
   h+=sendBlock("invite","Player quiz","Everyone gets a card; you get their availability.",waInvite(),null);
   h+=sendBlock("oop","Order of play","Friday, once the numbers are right.",waOOP(),null);
   h+=sendBlock("need","Need players","When the count isn't a multiple of 4.",waNeed(),null);
@@ -790,6 +805,8 @@ function applyAnswers(a){
   if(!p){p={id:newId(),name,level:3,status:"in",warmup:false};S.players.push(p)}
   p.removed=false;
   applyAway(p,a.away);
+  if(a.rsvp&&a.rsvp.date===S.date&&a.rsvp.v==="yes"&&a.rsvp.warm!==undefined)p.warmup=!!a.rsvp.warm;
+  if(a.rsvp&&a.rsvp.v==="no"&&a.rsvp.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===p.id&&m.date===a.rsvp.date));S.missLog.push({date:a.rsvp.date,id:p.id,reason:a.rsvp.reason})}
   if(a.rsvp&&a.rsvp.date===S.date){p.rsvp=a.rsvp;if(a.rsvp.v==="yes"&&!awayOn(p,S.date))p.status="in";if(a.rsvp.v==="no"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out"}
   if(a.partial)return p;
   const keep=["goal","fuel","rain","motives","avail","priority","oncall","warm","style","weapon","level","better","motto"];
@@ -941,6 +958,8 @@ function vDash(){
   h+=bars("weapon","Secret weapons","Best shots in the squad");
   h+=bars("fuel","Post-match fuel","For the social side");
   h+=bars("rain","Rain at 1:45","Who you can count on in the drizzle");
+  {const c={};(S.missLog||[]).forEach(m=>c[m.reason]=(c[m.reason]||0)+1);const rows=Object.entries(c).sort((a,b)=>b[1]-a[1]),mx=Math.max(1,...Object.values(c));
+   h+='<section class="card"><h2>Why we missed you</h2><p class="sub">Reasons from the roll call polls</p><div class="bars">'+(rows.length?rows.map(([k,v])=>'<div class="bar"><span class="bl">'+(REASON[k]||["👎",k])[0]+' '+esc((REASON[k]||["",k])[1])+'</span><span class="bt"><b style="width:'+(v/mx*100)+'%;background:var(--clay)"></b></span><span class="bn">'+v+'</span></div>').join(""):'<div class="empty-note">No poll answers yet.</div>')+'</div></section>'}
   h+='<section class="card"><h2>Level spread</h2><p class="sub">From the level check (1 = steady club, 5 = county)</p><div class="cols">'+levels.map((v,i)=>'<div class="colb"><span class="cv">'+v+'</span><span class="cbar"><b style="height:'+(v/lmax*100)+'%"></b></span><span class="cl">'+(i+1)+'</span></div>').join("")+'</div></section>';
   h+='</div>';
   h+='<section class="card"><h2>Away calendar ✈️</h2><p class="sub">Coming up, from cards and availability updates</p>'+(away.length?'<div class="plist" style="margin-top:6px">'+away.slice(0,20).map(([p,a])=>'<div class="pl" style="grid-template-columns:minmax(0,1fr) auto"><b>'+esc(p.name)+'</b><span class="badge">'+esc(fmtRange(a))+'</span></div>').join("")+'</div>':'<div class="empty-note">Nobody has told us about time away yet.</div>')+'</section>';
@@ -1084,6 +1103,7 @@ function msgRow(p,msg,key,extra){
 }
 const byRegular=(a,b)=>((regular(b)||{s:-1}).s-(regular(a)||{s:-1}).s)||a.name.localeCompare(b.name);
 const when=()=>fmtD(S.date)+", "+hhmm(mins(S.start))+"–"+hhmm(mins(S.start)+S.rounds*S.roundMins);
+const chipName=p=>{const f=first(p.id);return live().filter(x=>first(x.id).toLowerCase()===f.toLowerCase()).length>1?p.name:f};
 const nudgeMsg=p=>"Hi "+first(p.id)+"! 🎾 Are you playing on "+when()+"? Just a 👍 or 👎 is perfect – it helps us sort the courts. Thank you!";
 function inviteMsg(p){
   const q=p.q||{};const hook=HOOK[q.goal];
@@ -1103,7 +1123,7 @@ function vRoll(){
     '<div class="row" style="gap:6px"><span class="tally yes">👍 '+yes.length+'</span><span class="tally no">👎 '+no.length+'</span><span class="tally">⏳ '+wait.length+'</span></div></div>'+
     '<div class="rc">'+ps.map(p=>{const aw=awayNow(p);const v=rsvp(p);
       if(aw)return '<span class="rcb away" title="Away">✈️ '+esc(first(p.id))+'<small>till '+esc(fmtD(aw.to||aw.from).replace(/^\w+ /,""))+'</small></span>';
-      return '<button class="rcb '+(v||"")+'" '+(canEdit?'data-act="rsvp" data-id="'+p.id+'"':'disabled')+' aria-label="'+esc(p.name)+': '+(v==="yes"?"in":v==="no"?"out":"no reply")+'">'+(v==="yes"?"👍":v==="no"?"👎":"⏳")+' '+esc(first(p.id))+'</button>'}).join("")+'</div>';
+      return '<button class="rcb '+(v||"")+'" '+(canEdit?'data-act="rsvp" data-id="'+p.id+'"':'disabled')+' aria-label="'+esc(p.name)+': '+(v==="yes"?"in":v==="no"?"out":"no reply")+'">'+(v==="yes"?(p.rsvp.warm?"👍☀️":"👍"):v==="no"?((REASON[p.rsvp.reason]||["👎"])[0]):"⏳")+' '+esc(chipName(p))+'</button>'}).join("")+'</div>';
   if(canEdit)h+='<div class="row" style="margin-top:12px"><button class="btn small ball" data-act="copy" data-k="roll">Copy roll-call message</button>'+(wait.length?'<button class="btn small ghost" data-act="togglenudge">'+(ui.nudge?'Hide':'Nudge')+' the '+wait.length+' quiet ones privately</button>':'')+'</div><pre hidden id="wa-roll">'+esc(waRoll())+'</pre>';
   if(canEdit&&ui.nudge&&wait.length)h+='<div class="plist" style="margin-top:8px">'+wait.sort(byRegular).map(p=>msgRow(p,nudgeMsg(p),"nudge-"+p.id)).join("")+'</div>'+
     '<p class="sub" style="margin-top:6px">Add phone numbers in each player\'s profile and the WhatsApp button opens their private chat with the message ready.</p>';
