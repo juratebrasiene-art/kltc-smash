@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
@@ -451,9 +450,12 @@ function menuStats(oop){
 }
 
 const setPick=(m,i,v)=>{const a=(m||"").padEnd(S.rounds,"a").split("");a[i]=v;return a.join("").replace(/a+$/,"")};
-function menuPicker(act,g,menu,extra){
+const SIDES=[["f","🔥","Forehand side"],["b","🎯","Backhand side"],["e","🤷","Either"]];
+const sideLabel=k=>{const o=SIDES.find(x=>x[0]===k);return o?o[1]+" "+o[2]:""};
+function menuPicker(act,g,menu,extra,side){
   extra=extra||"";
   return '<div class="menu"><div class="course"><h4>I play on the…</h4><div class="mopts">'+[["f","👩 Ladies' side"],["m","👨 Men's side"]].map(([k,l])=>'<button data-act="'+act+'" data-g="'+k+'"'+extra+' aria-pressed="'+(g===k)+'">'+l+'</button>').join("")+'</div></div>'+
+    '<div class="course"><h4>In doubles I like the… <small>right = forehand, left = backhand</small></h4><div class="mopts">'+SIDES.map(([k,i,l])=>'<button data-act="'+act+'" data-side="'+k+'"'+extra+' aria-pressed="'+(side===k)+'">'+i+' '+l+'</button>').join("")+'</div></div>'+
     Array.from({length:S.rounds},(_,i)=>'<div class="course"><h4>'+course(i)[0]+' '+course(i)[1]+' <small>'+roundTime(i)+'</small></h4><div class="mopts">'+
       MENU_KEYS.map(k=>{const o=menuOpt(k,g);return '<button data-act="'+act+'" data-i="'+i+'" data-v="'+k+'"'+extra+' aria-pressed="'+(((menu||"")[i]||"a")===k)+'">'+o[0]+' '+esc(o[1])+'</button>'}).join("")+'</div></div>').join("")+'</div>';
 }
@@ -491,6 +493,7 @@ function buildOOP(seed){
         if(c.a.length===2){s+=((part[key(c.a[0],c.a[1])]||0)**2+(part[key(c.b[0],c.b[1])]||0)**2)*10}
         for(const x of c.a)for(const y of c.b)s+=(opp[key(x,y)]||0)*3;
         s+=Math.abs(c.a.reduce((t,i)=>t+lvl(i),0)-c.b.reduce((t,i)=>t+lvl(i),0))*4;
+        if(c.a.length===2)for(const tm of [c.a,c.b]){const x=pBy(tm[0])?.side,y=pBy(tm[1])?.side;if(x&&x===y&&x!=="e")s+=5} // both partners want the same side
         for(const id of c.a.concat(c.b))if(!wishMet(id,c,k))s+=12;
       }return s};
     // random starts, each polished by swapping pairs of players while it helps
@@ -838,7 +841,7 @@ function vSheet(){
     inner='<h3>'+esc(p.name)+'</h3><p class="sub">'+esc(when())+'</p><div class="pick">'+
       POLL.map(o=>'<button data-act="dorsvp" data-id="'+p.id+'" data-v="'+o[0]+'"'+(on(o[0])?' class="on"':'')+'><span>'+esc(pollOpt(o,true))+'</span>'+(on(o[0])?'<span>✓</span>':'')+'</button>').join("")+
       '<button data-act="dorsvp" data-id="'+p.id+'" data-v="none"'+(on("none")?' class="on"':'')+'><span>⏳ No reply yet</span>'+(on("none")?'<span>✓</span>':'')+'</button></div>'+
-      (cur==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Their menu</b></p>'+menuPicker("mnpick",p.g,r.menu,' data-id="'+p.id+'"'):'')+
+      (cur==="yes"?'<p class="sub" style="margin-top:12px"><b style="color:var(--ink)">🍽️ Their menu</b></p>'+menuPicker("mnpick",p.g,r.menu,' data-id="'+p.id+'"',p.side):'')+
       '<div class="row"><button class="btn ghost" data-act="close">'+(cur==="yes"?'Done':'Cancel')+'</button></div>';
   }else if(sh.type==="install"){
     const ios=/iphone|ipad|ipod/i.test(navigator.userAgent),step=(n,t)=>'<li><b>'+n+'</b> '+t+'</li>';
@@ -894,7 +897,7 @@ const b64=t=>btoa(unescape(encodeURIComponent(t))).replace(/=+$/,""),unb64=t=>de
 function enc(a){
   const one=V2S.map(k=>{const i=qOf(k).opts.findIndex(o=>o[0]===a[k]);return i<0?"-":i.toString(36)}).join("");
   const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
-  const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu?"."+(a.g||"-")+(a.rsvp.menu||""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
+  const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu||a.side?"."+(a.g||"-")+(a.rsvp.menu||"")+(a.side?":"+a.side:""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
   return b64(["2",String(a.name||"").replace(/[~#]/g," ")+(a.pid?"#"+a.pid+(a.tok?"#"+a.tok:""):""),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
 }
@@ -913,7 +916,7 @@ function dec(code){
   if(r){const [body,why]=r.split("!"),[rv,gm]=body.split(".");a.rsvp={date:unymd(rv.slice(1)),v:{y:"yes",w:"yes",r:"reserve"}[rv[0]]||"no"};
     if(rv[0]==="w"||rv[0]==="y")a.rsvp.warm=rv[0]==="w";
     if(why)a.rsvp.reason=why;
-    if(gm){if(gm[0]!=="-")a.g=gm[0];if(gm.length>1)a.rsvp.menu=gm.slice(1)}}
+    if(gm){const [gmn,sd]=gm.split(":");if(gmn[0]!=="-")a.g=gmn[0];if(gmn.length>1)a.rsvp.menu=gmn.slice(1);if(sd)a.side=sd}}
   a.away=(aw||"").split(",").filter(Boolean).map(w=>{const [f,t2]=w.split("-");return {from:unymd(f),to:unymd(t2||f),note:""}});
   return a;
 }
@@ -931,7 +934,7 @@ function cardText(a){
 }
 function availText(a){
   const bits=[];
-  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍"+(a.rsvp.warm?"☀️":"")+" in for "+fmtD(a.rsvp.date)+(a.rsvp.menu?"\n🍽️ "+menuText(a.rsvp.menu,a.g)+"\n":""):a.rsvp.v==="reserve"?"🙋 reserve for "+fmtD(a.rsvp.date):(REASON[a.rsvp.reason]||["👎"])[0]+" can't make "+fmtD(a.rsvp.date));
+  if(a.rsvp)bits.push(a.rsvp.v==="yes"?"👍"+(a.rsvp.warm?"☀️":"")+" in for "+fmtD(a.rsvp.date)+(a.rsvp.menu?"\n🍽️ "+menuText(a.rsvp.menu,a.g)+"\n":"")+(a.side?"\n"+sideLabel(a.side)+"\n":""):a.rsvp.v==="reserve"?"🙋 reserve for "+fmtD(a.rsvp.date):(REASON[a.rsvp.reason]||["👎"])[0]+" can't make "+fmtD(a.rsvp.date));
   (a.away||[]).forEach(w=>bits.push("✈️ away "+fmtRange(w)));
   return "📅 *"+a.name+"*: "+bits.join(" · ")+" – Saturday Smash 🎾"+hide(enc(a));
 }
@@ -951,6 +954,7 @@ function applyAnswers(a){
   if(!p){p={id:newId(),name,level:3,status:"in",warmup:false};S.players.push(p)}
   p.removed=false;
   if(a.g==="f"||a.g==="m")p.g=a.g;
+  if(a.side==="f"||a.side==="b"||a.side==="e")p.side=a.side;
   applyAway(p,a.away);
   if(a.rsvp&&a.rsvp.date===S.date&&a.rsvp.v==="yes"&&a.rsvp.warm!==undefined)p.warmup=!!a.rsvp.warm;
   if(a.rsvp&&a.rsvp.v==="no"&&a.rsvp.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===p.id&&m.date===a.rsvp.date));S.missLog.push({date:a.rsvp.date,id:p.id,reason:a.rsvp.reason})}
@@ -1045,7 +1049,7 @@ function vQuiz(){
       '<p class="status-tag" style="margin-top:10px">Who are you?</p>'+namePicker("qzname",z.a)+
       '<div class="qopts" style="margin-top:10px">'+POLL.map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(pollOpt(o,true).replace(/^\S+ /,""))+'</span></button>').join("")+'</div>'+
       '<p class="sub" style="margin-top:14px"><b style="color:var(--ink)">🍽️ Pick your Saturday menu</b> – three sessions, three courses. What do you fancy for each?</p>'+
-      (r.v==="yes"?menuPicker("qzmenu",z.a.g,r.menu):'<div class="menuserved" style="margin-top:8px">👆 Tap <b>👍 I\'m in</b> or <b>☀️ + warm-up</b> above and the menu opens here</div>')+
+      (r.v==="yes"?menuPicker("qzmenu",z.a.g,r.menu,"",z.a.side):'<div class="menuserved" style="margin-top:8px">👆 Tap <b>👍 I\'m in</b> or <b>☀️ + warm-up</b> above and the menu opens here</div>')+
       '<details style="margin-top:14px"'+((z.a.away||[]).length?' open':'')+'><summary class="sub"><b style="color:var(--ink)">✈️ Away for a while?</b> Add the dates and we won\'t chase you.</summary>'+awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:8px"><button class="btn ghost small" data-act="qzawadd">Add these dates</button></div></details>'+
       '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qzavaildone">Done →</button></div></section>';
   }
@@ -1214,7 +1218,7 @@ function quizAct(a,t){
   if(!z)return;
   if(a==="qzawadd"){const v=readAway("qzaw");if(!v){toast("Pick a From date first");return}const n=$("#qa-name");if(n)z.a.name=n.value.trim();z.a.away=(z.a.away||[]).concat(v);render();return}
   if(a==="qzawdel"){z.a.away.splice(+t.dataset.i,1);render();return}
-  if(a==="qzmenu"){const n=$("#qa-name");if(n)z.a.name=n.value.trim();if(t.dataset.g)z.a.g=t.dataset.g;else z.a.rsvp.menu=setPick(z.a.rsvp.menu,+t.dataset.i,t.dataset.v);render();return}
+  if(a==="qzmenu"){const n=$("#qa-name");if(n)z.a.name=n.value.trim();if(t.dataset.side)z.a.side=t.dataset.side;else if(t.dataset.g)z.a.g=t.dataset.g;else z.a.rsvp.menu=setPick(z.a.rsvp.menu,+t.dataset.i,t.dataset.v);render();return}
   if(a==="qzname"){const p=pBy(t.dataset.id);if(!p)return;z.a.name=p.name;z.a.pid=p.id;remember(p.id);
     if(!z.mode&&QUIZ[z.step]&&QUIZ[z.step].k==="name"){advance();return}render();return}
   if(a==="npchange"){delete z.a.pid;z.a.name="";try{localStorage.removeItem("ss-me-id")}catch(err){}render();return}
@@ -1240,7 +1244,7 @@ function quizAct(a,t){
 }
 /* names are locked to the group list: a player taps their own name, and answers are linked to that player's id */
 const meId=()=>{try{const v=localStorage.getItem("ss-me-id")||"";return pBy(v)&&!pBy(v).removed?v:""}catch(e){return ""}};
-const me=()=>{const p=pBy(meId());return p?{name:p.name,pid:p.id}:{}};
+const me=()=>{const p=pBy(meId());return p?{name:p.name,pid:p.id,g:p.g,side:p.side}:{}};
 const remember=id=>{try{if(id)localStorage.setItem("ss-me-id",id)}catch(e){}};
 function namePicker(act,a){
   const p=a.pid&&pBy(a.pid);
@@ -1371,6 +1375,7 @@ function pendSummary(a){
   if(r)bits.push(r.v==="yes"?"👍"+(r.warm?"☀️ In + warm-up":" In"):r.v==="reserve"?"🙋 Reserve":((REASON[r.reason]||["👎","Out"])[0]+" Out – "+((REASON[r.reason]||[0,"can't make it"])[1])));
   if(r&&r.date!==S.date)bits.push("for "+fmtD(r.date));
   if(r&&r.menu)bits.push("🍽️ "+menuText(r.menu,a.g));
+  if(a.side)bits.push(sideLabel(a.side));
   if(!a.partial)bits.push("🎴 player card"+(a.motto?" “"+a.motto+"”":""));
   if((a.away||[]).length)bits.push("✈️ away "+a.away.map(fmtRange).join(", "));
   return bits.join(" · ");
@@ -1541,7 +1546,7 @@ document.addEventListener("click",e=>{
     case "pendno":{const x=(S.pending||[])[+t.dataset.i];if(!x)break;
       mutate(s=>{s.pending=s.pending.filter(y=>!(y.tok===x.tok&&y.pid===x.pid))});toast("❌ Ignored");break}
     case "menugo":ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});break;
-    case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
+    case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.side)q.side=t.dataset.side;else if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
     case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
       if(k==="none")setRsvp(id,null);else if(k==="reserve")setRsvp(id,"reserve");else if(k==="in"||k==="warm")setRsvp(id,"yes",{warm:k==="warm"});else setRsvp(id,"no",{reason:k});
       if(ui.sheet===null)render();break}
@@ -1625,5 +1630,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
