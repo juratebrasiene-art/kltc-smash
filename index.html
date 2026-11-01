@@ -1575,7 +1575,7 @@ document.addEventListener("click",e=>{
   if(a==="chatme"){remember(id);render();return}
   if(a==="chatnotme"){try{localStorage.removeItem("ss-me-id")}catch(err){}render();return}
   if(a==="chatsend"){sendChat();return}
-  if(a.startsWith("qz")){quizAct(a,t);return}
+  if(a.startsWith("qz")||a==="npchange"){quizAct(a,t);return} // npchange: "Not you?" on the check-in and drop-out screens
   if(a==="copy"){const txt=$("#wa-"+t.dataset.k).textContent;
     const ok=()=>{toast("Copied – paste it in WhatsApp")};
     try{navigator.clipboard.writeText(txt).then(ok,()=>selectText(t.dataset.k))}catch(err){selectText(t.dataset.k)}return}
@@ -1697,4 +1697,5 @@ const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
-</script></body></html>
+</script>
+</body></html>
