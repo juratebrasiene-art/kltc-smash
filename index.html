@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
@@ -582,7 +581,7 @@ function render(){
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
     '<h1><span class="h-sat">Saturday</span><span class="h-smash">Smash!</span></h1></div></div>'+
-    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button><a class="helpbtn" style="text-decoration:none" href="https://juratebrasiene-art.github.io/kltc-smash/preview.html" target="_blank" rel="noopener">🎾 App tour</a>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Put the app on my phone</button>':'')+'</div>'+
+    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button><a class="helpbtn" style="text-decoration:none" href="'+TOUR+'" target="_blank" rel="noopener">🎾 App tour</a>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Put the app on my phone</button>':'')+'</div>'+
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
@@ -1158,22 +1157,27 @@ function vCards(){
   if(!ps.length)h+='<div class="card empty-note">No players yet.</div>';
   return h;
 }
+const TOUR="https://juratebrasiene-art.github.io/kltc-smash/preview.html";
 const HELP={
   player:[
-    ["📲","p-tactics","Tap the link","Opens like a website. No app to install.","copylink"],
+    ["📲","p-tactics","Put it on your phone","Add to Home Screen – opens like an app.","install"],
     ["🎴","p-attack","Make your card","2 minutes, once. Change it any time.","quiz"],
-    ["📅","p-net","Every Monday","Saturday tab: in or out + 🍽️ menu.","avail"],
-    ["🃏","p-fun","Flip the cards","Meet the squad. Tap to flip.","tab:cards"],
-    ["📋","p-all","Friday: order of play","On the Saturday tab.","tab:today"],
-    ["✈️","p-wall","Away for a while?","Add your dates on the Saturday tab.","avail"]
+    ["📅","p-net","Every Monday","In or out, 🍽️ menu and 🔥/🎯 side.","avail"],
+    ["🚪","p-wall","Can't make it?","🚪 Drop out – only you can.","drop"],
+    ["📋","p-all","Order of play","Saturday tab, once it's locked.","tab:today"],
+    ["💬","p-fun","Group chat","Lifts, swaps, banter.","tab:chat"],
+    ["🃏","p-tactics","Flip the cards","Meet the squad. Tap to flip.","tab:cards"],
+    ["✈️","p-net","Away for a while?","Add your dates – no chasing.","avail"]
   ],
   org:[
-    ["👍","p-all","Who's in","Fills itself from the Monday link. Tap a name to change it.","go:today:sec-roll"],
+    ["👍","p-all","Who's in","Fills itself from the Monday link. Players who said in are locked.","go:today:sec-roll"],
+    ["🔒","p-wall","New phones","Tap ✅ once per phone.","go:today:sec-pend"],
     ["🎲","p-tactics","Make the order","Shuffle. Then Lock it in.","go:today:sec-oop"],
     ["📋","p-net","Post it","Send tab → green button.","go:share:"],
-    ["🔄","p-attack","Drop-out?","Tap Out. Pick a sub. 🦸 badge!","go:players:"],
+    ["🚪","p-attack","Drop-outs","Players drop out themselves. Find a sub – 🦸 badge!","go:today:"],
     ["🏆","p-fun","Scores & crown","Type 6-4. Finish the day 👑","go:today:sec-oop"],
-    ["📥","p-wall","Cards arrive","By themselves – within a few minutes.","tab:cards"]
+    ["📥","p-wall","Cards arrive","By themselves – within a few minutes.","tab:cards"],
+    ["💬","p-fun","Chat","Read it, 🙈 hide a message.","tab:chat"]
   ]
 };
 function vHelp(){
@@ -1182,7 +1186,7 @@ function vHelp(){
   return '<div class="row spread"><h3>How it works</h3><button class="x" data-act="close" aria-label="Close">×</button></div>'+
     (canEdit?'<div class="seg" style="margin:8px 0 2px"><button class="in" aria-pressed="'+(k==="player")+'" data-act="helpfor" data-k="player">I\'m a player</button><button class="in" aria-pressed="'+(k==="org")+'" data-act="helpfor" data-k="org">I\'m the organiser</button></div>':'<p class="sub">Six steps. That\'s it. 🎾</p>')+
     '<div class="steps">'+HELP[k].map(([ic,c,t,l],i)=>'<button class="step" data-act="helpgo" data-k="'+k+'" data-i="'+i+'" style="--pc:var(--'+c+');animation-delay:'+(i*70)+'ms"><span class="sn">'+(i+1)+'</span><span class="bub">'+ic+'</span><b>'+esc(t.replace("{org}",org().name||"us"))+'</b><span class="sl">'+esc(l)+'</span><span class="go">'+(HELP[k][i][4]==="copylink"?'Copy link':HELP[k][i][4].startsWith("tip")?'How?':'Go')+' →</span></button>').join("")+'</div>'+
-    '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="'+(k==="player"?'gocard':'close')+'">'+(k==="player"?'Get my card 🎾':'Let\'s go 🎾')+'</button></div>';
+    '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="'+(k==="player"?'gocard':'close')+'">'+(k==="player"?'Get my card 🎾':'Let\'s go 🎾')+'</button><a class="btn ghost" style="text-decoration:none" href="'+TOUR+'" target="_blank" rel="noopener">🎾 Full app tour →</a></div>';
 }
 /* ---------- squad dashboard (organiser): everything the player cards tell us ---------- */
 function vDash(){
@@ -1561,8 +1565,10 @@ document.addEventListener("click",e=>{
     if(g==="copylink"){const url=S.link||"";if(!url){toast("No link yet");return}
       try{navigator.clipboard.writeText(url).then(()=>toast("📲 Link copied – paste it to a friend"),()=>toast(url))}catch(err){toast(url)}return}
     if(g==="tip:thumbs"){toast("In the WhatsApp group: press and hold the roll-call message, tap 👍 or 👎");return}
+    if(g==="install"){ui.sheet={type:"install"};render();return}
     ui.sheet=null;
-    if(g==="quiz"){ui.tab="quiz";ui.quiz={step:0,a:{}}}
+    if(g==="drop"){ui.tab="today";ui.quiz={mode:"avail",drop:true,a:me()}}
+    else if(g==="quiz"){ui.tab="quiz";ui.quiz={step:0,a:{}}}
     else if(g==="avail"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
     else if(g.startsWith("tab:")){ui.tab=g.slice(4)}
     else if(g.startsWith("go:")){const [,tab,sec]=g.split(":");ui.tab=tab;render();
@@ -1699,5 +1705,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
