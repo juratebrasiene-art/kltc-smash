@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
@@ -597,7 +596,7 @@ function vToday(){
   const h=headcount();const oop=shownOOP();const last=S.history.length?S.history.slice().sort((a,b)=>a.date<b.date?1:-1)[0]:null;
   const warm=S.players.filter(p=>p.status==="in"&&p.warmup);
   const resv=live().filter(p=>p.status==="reserve"&&!rsvp(p)); // not answered yet (🙋 reserves have answered)
-  let html='<section class="card weekbox"><div><div class="eyebrow">Every week</div><h2>📅 Are you in this Saturday?</h2><p class="sub">'+esc(when())+' – 20 seconds: in or out, warm-up and your 🍽️ menu.</p></div><button class="btn ball" data-act="qzavail">Tell us →</button></section>';
+  let html='<section class="card weekbox"><div><div class="eyebrow">Every week</div><h2>📅 Are you in this Saturday?</h2><p class="sub">'+esc(when())+' – 20 seconds: in or out, warm-up and your 🍽️ menu.</p></div><div class="row"><button class="btn ball" data-act="qzavail">Tell us →</button><button class="btn ghost" data-act="qzdrop">🚪 Drop out</button></div></section>';
   if(last&&last.potd){html+='<div class="potd"><div class="crown">👑</div><div><div class="eyebrow">Last time · '+fmtD(last.date)+'</div><h3>'+esc(nm(last.potd))+'</h3><p>Player of the day'+(last.heroes.length?' · 🦸 Hero: '+esc(last.heroes.map(nm).join(", ")):'')+'</p></div></div>'}
   const w=wx();
   if(w){const f=(S.forecasts||{})[S.date]||S.forecast;
@@ -605,6 +604,9 @@ function vToday(){
       '<div class="wxt"><b>'+f.t+'°C</b><span>💧 '+f.rain+'% rain</span><span>💨 '+f.wind+' km/h</span></div><p class="kit"><b>Kit check:</b> '+esc(kit(f))+'</p><p class="sub">Kingswood · updated '+esc(f.at||"")+' · it\'s in the Monday message too</p></div></section>'}
   else html+='<section class="wxcard muted"><span class="wxi">🌦️</span><div><div class="eyebrow">Forecast</div><p class="sub">The forecast for '+esc(fmtD(S.date))+' appears here up to 2 weeks before – it refreshes at 12:00 and 20:00.</p></div></section>';
   if(canEdit&&(S.pending||[]).length)html+=vPending();
+  const drops=S.oop?live().filter(p=>p.rsvp&&p.rsvp.date===S.date&&p.rsvp.v==="no"&&attendedIn(S.oop).includes(p.id)):[];
+  if(canEdit&&drops.length)html+='<section class="card pend"><h2>🚪 Dropped out</h2><p class="sub">They\'re still on the order of play. Tap to pick a sub – the 🦸 badge goes to whoever steps in.</p>'+
+    drops.map(p=>'<div class="pitem"><div><b>'+esc(p.name)+'</b><p class="sub">'+esc((REASON[p.rsvp.reason]||["🚪","can\'t make it"]).join(" "))+'</p></div><button class="btn small ball" data-act="status" data-id="'+p.id+'" data-v="out">Find a sub</button></div>').join("")+'</section>';
   html+=vRoll();
   // headcount
   let viz='';for(let c=0;c<S.courts;c++){const filled=Math.max(0,Math.min(4,h.n-c*4));viz+='<div class="cz'+(filled?'':' empty')+'" title="Court '+(c+1)+'">'+[0,1,2,3].map(i=>'<i class="'+(i<filled?'on':'')+'"></i>').join("")+'</div>'}
@@ -769,7 +771,10 @@ function waIntroGroup(){
   return "Hi all 🎾 Nick and I are trying something fun for Saturdays – *Saturday Smash*!\n• Order of play all in one place\n• Player cards – find out what kind of player you are 🧱🥷🚀\n• A little ladder, with 🦸 hero points for stepping in when someone drops out\n\nFirst step is a 2-minute quiz. It also tells us when you can play, so less chasing 😄\n"+(S.link?S.link+"#quiz":"[link]")+"\nTotally optional – any feedback welcome!";
 }
 /* roll call poll: one tap answers "in", "in + warm-up" or a fun reason for being out */
-const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["reserve","🙋","Reserve – call me if you're short"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","🏡","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"]];
+const POLL=[["in","👍","I'm in"],["warm","☀️","In + triples warm-up"],["reserve","🙋","Reserve – call me if you're short"],["injury","🤕","Out – nursing an injury"],["away","✈️","Out – off on an adventure"],["family","🏡","Out – family duty calls"],["sofa","🛋️","Out – the sofa won this week"],["ill","🤒","Out – feeling unwell"],["work","💼","Out – work came up"],["other","🙏","Out – something came up"]];
+/* a player's own "I'm in" is theirs: only they can drop out (🚪 Drop out), the organiser can't untick them */
+const saidIn=p=>!!(p&&p.rsvp&&p.rsvp.date===S.date&&p.rsvp.v==="yes");
+function lockedIn(id){const p=pBy(id);if(!saidIn(p))return false;toast(first(id)+" said they're in – only "+first(id)+" can drop out (🚪 Drop out in the app)");return true}
 const REASON=Object.fromEntries(POLL.filter(o=>o[2].startsWith("Out")).map(([k,ic,l])=>[k,[ic,l.replace(/^Out – /,"")]]));
 /* Saturday-afternoon forecast for Kingswood, refreshed by the twice-daily collector */
 /* "Kit check": what to wear, from the Saturday forecast – keep in step with kit() in collect_cards.py */
@@ -1092,6 +1097,11 @@ function vQuiz(){
   if(z.mode==="avail"){
     if(z.done)return '<section class="card"><h2>'+(canEdit?'Updated ✓':savedHead(z))+'</h2><p class="sub">'+(canEdit?'Saved to '+esc(z.a.name)+'\'s profile.':savedSub(z,"All done – nothing to send. 🎾"))+'</p>'+(z.saved===true?'':'<pre class="wa" id="wa-avail">'+esc(availText(z.a))+'</pre>'+sendRow("avail",availText(z.a),"update"))+'<button class="btn ghost" data-act="qzaway0">Done</button></div></section>';
     const r=z.a.rsvp||{},pk=r.v==="yes"?(r.warm?"warm":"in"):r.v==="reserve"?"reserve":r.v==="no"?r.reason:null;
+    if(z.drop)return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">Drop out</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>🚪 Can\'t make '+esc(fmtD(S.date))+'?</h2>'+
+      '<p class="sub">Sorry to lose you! Pick a reason – '+esc(org().name||"Jurate")+' sees it in the app and finds a sub. No need to message anyone.</p>'+
+      '<p class="status-tag" style="margin-top:10px">Who are you?</p>'+namePicker("qzname",z.a)+
+      '<div class="qopts" style="margin-top:10px">'+POLL.filter(o=>REASON[o[0]]).map(o=>'<button class="qopt" aria-pressed="'+(pk===o[0])+'" data-act="qzwk" data-v="'+o[0]+'"><span class="qi">'+o[1]+'</span><span>'+esc(REASON[o[0]][1].replace(/^./,c=>c.toUpperCase()))+'</span></button>').join("")+'</div>'+
+      '<div class="row" style="margin-top:14px"><button class="btn clay" data-act="qzavaildone">🚪 Drop out</button></div></section>';
     return '<section class="quiz"><div class="row spread"><div class="eyebrow" style="color:var(--muted)">20 seconds</div><button class="btn small ghost" data-act="qzaway0">← Back</button></div><h2>📅 This Saturday</h2>'+
       '<p class="sub"><b style="color:var(--ink)">'+esc(when())+'</b>'+(wx()?' · '+esc(wx().text):'')+'</p>'+
       (wx()?'<p class="kit"><b>Kit check:</b> '+esc(kit((S.forecasts||{})[S.date]))+'</p>':'')+
@@ -1261,6 +1271,7 @@ function quizAct(a,t){
   const z=ui.quiz;
   if(a==="qzstart"||a==="qzagain"){ui.quiz={step:0,a:me()};render();return}
   if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});return}
+  if(a==="qzdrop"){ui.tab="today";ui.quiz={mode:"avail",drop:true,a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzmine"){ui.quiz={mode:"pick",a:{}};render();return}
   if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
@@ -1277,7 +1288,7 @@ function quizAct(a,t){
     if(z.a.rsvp.v==="no")z.a.rsvp.reason=k;render();return}
   if(a==="qzrsvp"){z.a.rsvp=Object.assign({},z.a.rsvp,{date:S.date,v:t.dataset.v});const n=$("#qa-name");if(n)z.a.name=n.value.trim();render();return}
   if(a==="qzavaildone"){const n=$("#qa-name");z.a.name=n?n.value.trim():z.a.name;const v=readAway("qzaw");if(v)z.a.away=(z.a.away||[]).concat(v);
-    if(!z.a.pid){toast("Tap your name first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Pick one answer – or add away dates");return}
+    if(!z.a.pid){toast("Tap your name first");return}if(z.drop&&!(z.a.rsvp&&z.a.rsvp.v==="no")){toast("Pick a reason first");return}if(!z.a.rsvp&&!(z.a.away||[]).length){toast("Pick one answer – or add away dates");return}
     remember(z.a.pid);
     z.a.partial=true;z.done=true;if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);render();return}
   if(!z)return;
@@ -1570,7 +1581,7 @@ document.addEventListener("click",e=>{
   if(!canEdit)return;
   switch(a){
     case "chathide":mutate(s=>{s.chatHidden=(s.chatHidden||[]).concat(+id)});toast("Hidden – it disappears for everyone within a few minutes");break;
-    case "status":{const p=pBy(id),v=t.dataset.v;if(p.status===v)return;
+    case "status":{const p=pBy(id),v=t.dataset.v;if(p.status===v)return;if(v!=="in"&&lockedIn(id))return;
       if(S.oop&&p.status==="in"&&v!=="in"&&attendedIn(S.oop).includes(id)){ui.sheet={type:"swap",id};render();return}
       if(S.oop&&v==="in"&&!attendedIn(S.oop).includes(id)){mutate(s=>{pBy(id).status="in"});toast("Unlock the order of play to fit "+first(id)+" in");return}
       mutate(s=>{pBy(id).status=v});break}
@@ -1600,7 +1611,7 @@ document.addEventListener("click",e=>{
       mutate(s=>{s.pending=s.pending.filter(y=>!(y.tok===x.tok&&y.pid===x.pid))});toast("❌ Ignored");break}
     case "menugo":ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});break;
     case "mnpick":mutate(s=>{const q=pBy(id);if(t.dataset.side)q.side=t.dataset.side;else if(t.dataset.g)q.g=t.dataset.g;else if(q.rsvp&&q.rsvp.date===s.date)q.rsvp.menu=setPick(q.rsvp.menu,+t.dataset.i,t.dataset.v)});break;
-    case "dorsvp":{const k=t.dataset.v;ui.sheet=null;
+    case "dorsvp":{const k=t.dataset.v;if(k!=="in"&&k!=="warm"&&lockedIn(id))break;ui.sheet=null;
       if(k==="none")setRsvp(id,null);else if(k==="reserve")setRsvp(id,"reserve");else if(k==="in"||k==="warm")setRsvp(id,"yes",{warm:k==="warm"});else setRsvp(id,"no",{reason:k});
       if(ui.sheet===null)render();break}
     case "pawadd":{const a=readAway("paw");if(!a){toast("Pick a From date first");return}mutate(s=>applyAway(pBy(id),[a]));toast("✈️ Away dates saved");break}
@@ -1686,5 +1697,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
