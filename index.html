@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
@@ -998,6 +997,7 @@ const chatSeen=()=>{try{return +localStorage.getItem("ss-chat-seen")||0}catch(e)
 const chatUnread=()=>ui.tab==="chat"?0:chat.msgs.filter(m=>okMsg(m)&&m.id>chatSeen()&&m.pid!==meId()).length;
 const typingChat=()=>document.activeElement&&document.activeElement.id==="chat-msg";
 async function loadChat(){
+  if(!PUBLIC){const first=!chat.loaded;chat.msgs=S.chatFeed||[];chat.loaded=true;if(first&&!ui.sheet&&!ui.quiz&&!typingChat())render();return} // claude.ai can't reach the database: the 2-minute check copies the chat in
   try{const r=await fetch(CHAT_URL+"chat_feed?select=id,created_at,pid,body,th&order=id.desc&limit=200",{headers:{apikey:DB.key}});if(!r.ok)throw 0;
     const m=(await r.json()).reverse();const changed=!chat.loaded||m.length!==chat.msgs.length||(m.length&&m[m.length-1].id!==(chat.msgs[chat.msgs.length-1]||{}).id);
     chat.msgs=m;chat.loaded=true;chat.err="";if(changed&&!typingChat()&&!ui.sheet&&!ui.quiz)render()}
@@ -1019,7 +1019,7 @@ function vChat(){
     list.length?list.map(m=>'<div class="msg'+(m.pid===me?' me':'')+'"><div class="mh"><b>'+esc(pBy(m.pid).name)+'</b><span>'+esc(chatTime(m.created_at))+'</span>'+
       (canEdit?'<button class="x" data-act="chathide" data-id="'+m.id+'" title="Hide this message for everyone" aria-label="Hide message">🙈</button>':'')+'</div><div class="mb">'+esc(m.body)+'</div></div>').join(""):
     '<p class="empty-note">No messages yet – say hi 👋</p>')+'</div></section>';
-  if(!PUBLIC){h+='<section class="card"><p class="sub">To post, use the players\' app on your phone – your phone is approved. Here you can read and 🙈 hide a message for everyone.</p></section>';return h}
+  if(!PUBLIC){h+='<section class="card"><p class="sub">Here you see the chat up to 2 minutes behind, and can 🙈 hide a message for everyone. To post or see it live, use the app on your phone (your phone is approved)'+(S.link?' – <a href="'+esc(S.link)+'#chat" target="_blank" rel="noopener">open the live chat</a>':'')+'.</p></section>';return h}
   if(!me)return h+'<section class="card"><h2>Who are you?</h2><p class="sub">Tap your name to join the chat.</p>'+namePicker("chatme",{})+'</section>';
   const iam='<div class="iam"><span>👤 <b>'+esc(pBy(me).name)+'</b></span><button class="btn small ghost" data-act="chatnotme">Not you?</button></div>';
   if(!myPhoneOk())return h+'<section class="card">'+iam+'<p class="sub" style="margin-top:10px">This phone needs '+who+'\'s ✅ once before you can post. Answer <b style="color:var(--ink)">📅 Are you in this Saturday?</b> on the Saturday tab – once '+who+' approves your phone, you can chat here.</p></section>';
@@ -1698,5 +1698,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
