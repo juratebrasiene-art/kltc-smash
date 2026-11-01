@@ -1,5 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
-<title>KLTC Saturday Smash</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Saturday Smash 🎾 KLTC"><meta property="og:description" content="Order of play, player cards and the Saturday ladder. What kind of player are you?"><meta property="og:image" content="https://juratebrasiene-art.github.io/kltc-smash/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://juratebrasiene-art.github.io/kltc-smash/"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="app-180.png"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#1f5d46"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Sat Smash"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>KLTC Saturday Smash</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&amp;family=Figtree:wght@400;500;600;700&amp;display=swap">
 <style id="tpl-style">
@@ -113,6 +112,11 @@ main{padding-block:18px 60px}
 .cn b{display:block;font-size:28px;color:var(--court)}
 .teams{min-width:0;display:grid;gap:2px}
 .howto{border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin-top:10px}.howto h4{margin:0 0 4px}.howto ol{margin:0;padding-left:0;list-style:none;display:grid;gap:6px}.howto b:first-child{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--court);color:#fff;font-size:12px;margin-right:6px}
+.chatlog{max-height:62vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:85%;align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
+.msg.me{align-self:flex-end;background:var(--good-soft);border-color:transparent}
+.mh{font-size:12px;color:var(--muted);display:flex;gap:6px;align-items:center}.mh b{color:var(--ink)}
+.mb{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:2px}
 .pend{border:2px solid var(--clay)}.pitem{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
 .np input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .nplist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto}
@@ -572,7 +576,7 @@ function render(){
   else if(now<st.getTime()){const d=st.getTime()-now,dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4);
     when='<span class="chip ball">First ball in <span class="digits">'+(dd?dd+"d ":"")+hh+"h "+(dd?"":mm+"m")+'</span></span>'}
   else when='<span class="chip ball">Played – '+(canEdit?'finish the day for the ladder':'scores coming')+'</span>';
-  const tabs=[["today","Saturday"],["quiz","🎴 My card"],["cards","Cards"],["players","Players"],["ladder","Ladder"]].concat(canEdit?[["dash","📊 Squad"],["share","📲 Send"]]:[]);
+  const unread=chatUnread();const tabs=[["today","Saturday"],["chat","💬 Chat"+(unread?" ("+unread+")":"")],["quiz","🎴 My card"],["cards","Cards"],["players","Players"],["ladder","Ladder"]].concat(canEdit?[["dash","📊 Squad"],["share","📲 Send"]]:[]);
   app.innerHTML=
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
@@ -581,9 +585,10 @@ function render(){
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
-  '<main class="gut"><div class="col stack">'+({today:()=>ui.quiz&&ui.quiz.mode==="avail"?vQuiz():vToday(),quiz:vQuiz,cards:vCards,dash:vDash,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
+  '<main class="gut"><div class="col stack">'+({today:()=>ui.quiz&&ui.quiz.mode==="avail"?vQuiz():vToday(),quiz:vQuiz,chat:vChat,cards:vCards,dash:vDash,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
   (ui.sheet?vSheet():"")+'<div id="toastbox"></div>';
   renderToast();ui.flip=false;
+  if(ui.tab==="chat")afterChat();
 }
 function renderToast(){const b=$("#toastbox");if(b)b.innerHTML=ui.toast?'<div class="toast" role="status">'+esc(ui.toast)+'</div>':""}
 
@@ -972,6 +977,48 @@ function applyAnswers(a){
    The public half (no level, priority or away dates) is readable by the players' site;
    the full card is sealed with a lock whose only key sits on the organiser's Mac. */
 const DB={url:"https://dpglrbalafiriijbwxxn.supabase.co/rest/v1/cards",key:"sb_publishable_dQJ3g3_c3hTo7EtlGtF6FQ_edrpn-H_"};
+
+/* ---------- 💬 group chat: everyone reads; only phones the organiser has approved can post ---------- */
+const CHAT_URL=DB.url.replace(/cards$/,"");
+const chat={msgs:[],loaded:false,err:"",mine:"",busy:false,draft:""};
+const trustTh={}; // player id -> scrambled keys of approved phones
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,"0")).join("")}
+async function chatTrust(){for(const p of S.players){if(p.removed)continue;const l=(p.th||[]).slice();for(const d of p.devs||[])l.push(await sha(d));trustTh[p.id]=l}
+  if(!chat.mine)try{chat.mine=await sha(deviceKey())}catch(e){}}
+const okMsg=m=>!(S.chatHidden||[]).includes(m.id)&&pBy(m.pid)&&!pBy(m.pid).removed&&(trustTh[m.pid]||[]).includes(m.th);
+const myPhoneOk=()=>{const me=meId();return !!(me&&chat.mine&&(trustTh[me]||[]).includes(chat.mine))};
+const chatSeen=()=>{try{return +localStorage.getItem("ss-chat-seen")||0}catch(e){return 0}};
+const chatUnread=()=>ui.tab==="chat"?0:chat.msgs.filter(m=>okMsg(m)&&m.id>chatSeen()&&m.pid!==meId()).length;
+const typingChat=()=>document.activeElement&&document.activeElement.id==="chat-msg";
+async function loadChat(){
+  try{const r=await fetch(CHAT_URL+"chat_feed?select=id,created_at,pid,body,th&order=id.desc&limit=200",{headers:{apikey:DB.key}});if(!r.ok)throw 0;
+    const m=(await r.json()).reverse();const changed=!chat.loaded||m.length!==chat.msgs.length||(m.length&&m[m.length-1].id!==(chat.msgs[chat.msgs.length-1]||{}).id);
+    chat.msgs=m;chat.loaded=true;chat.err="";if(changed&&!typingChat()&&!ui.sheet&&!ui.quiz)render()}
+  catch(e){chat.err="Couldn't load the chat – check your signal and try again";if(!chat.loaded&&ui.tab==="chat"&&!typingChat())render()}
+}
+async function sendChat(){
+  const el=$("#chat-msg"),body=((el&&el.value)||"").trim().slice(0,500),me=meId();
+  if(!body||!me||chat.busy||!myPhoneOk())return;chat.busy=true;
+  try{const r=await fetch(CHAT_URL+"chat",{method:"POST",headers:{apikey:DB.key,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({pid:me,name:String(pBy(me).name).slice(0,40),body,tok:deviceKey()})});
+    if(!r.ok)throw 0;chat.draft="";if(el)el.value="";await loadChat()}
+  catch(e){toast("Couldn't send – check your signal")}
+  chat.busy=false;render();
+}
+const chatTime=t=>new Date(t).toLocaleString("en-GB",{weekday:"short",hour:"2-digit",minute:"2-digit"});
+function vChat(){
+  const me=meId(),list=chat.msgs.filter(okMsg),who=esc(org().name||"Jurate");
+  let h='<section class="card"><h2>💬 Group chat</h2><p class="sub">Lifts, swaps, banter. Only phones '+who+' has approved ✅ can post, so every name here is the real person.</p></section>';
+  h+='<section class="card"><div class="chatlog" id="chatlog">'+(!chat.loaded?'<p class="empty-note">'+esc(chat.err||"Loading…")+'</p>':
+    list.length?list.map(m=>'<div class="msg'+(m.pid===me?' me':'')+'"><div class="mh"><b>'+esc(pBy(m.pid).name)+'</b><span>'+esc(chatTime(m.created_at))+'</span>'+
+      (canEdit?'<button class="x" data-act="chathide" data-id="'+m.id+'" title="Hide this message for everyone" aria-label="Hide message">🙈</button>':'')+'</div><div class="mb">'+esc(m.body)+'</div></div>').join(""):
+    '<p class="empty-note">No messages yet – say hi 👋</p>')+'</div></section>';
+  if(!PUBLIC){h+='<section class="card"><p class="sub">To post, use the players\' app on your phone – your phone is approved. Here you can read and 🙈 hide a message for everyone.</p></section>';return h}
+  if(!me)return h+'<section class="card"><h2>Who are you?</h2><p class="sub">Tap your name to join the chat.</p>'+namePicker("chatme",{})+'</section>';
+  const iam='<div class="iam"><span>👤 <b>'+esc(pBy(me).name)+'</b></span><button class="btn small ghost" data-act="chatnotme">Not you?</button></div>';
+  if(!myPhoneOk())return h+'<section class="card">'+iam+'<p class="sub" style="margin-top:10px">This phone needs '+who+'\'s ✅ once before you can post. Answer <b style="color:var(--ink)">📅 Are you in this Saturday?</b> on the Saturday tab – once '+who+' approves your phone, you can chat here.</p></section>';
+  return h+'<section class="card">'+iam+'<div class="row" style="align-items:flex-end;margin-top:10px;flex-wrap:nowrap"><textarea id="chat-msg" maxlength="500" placeholder="Message as '+esc(first(me))+'…" style="min-height:56px;flex:1">'+esc(chat.draft)+'</textarea><button class="btn ball" data-act="chatsend"'+(chat.busy?' disabled':'')+'>Send</button></div></section>';
+}
+function afterChat(){const l=$("#chatlog");if(l)l.scrollTop=l.scrollHeight;const top=chat.msgs.length?chat.msgs[chat.msgs.length-1].id:0;if(top>chatSeen())try{localStorage.setItem("ss-chat-seen",String(top))}catch(e){}}
 const LOCK="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApes+ajbXwQF/BKjph6lmBXS/kz23kRer46xR5loFriHN50ufdDITVZPC0zirHKiRN9Gct9ESB8aY+T40xxDMZoWNnKXhavbls+j2bGDEXfvZq/4mwi+vpUFOqJg912RsDH4W9yVP/hLjWyfae+EGmcbn3AGddnBw05/x7fCsB5iKcCofpFkeAD880OKuIp1fOE1J7/7ch/z26JHqlQ1+xey/yM2JPyIusm1dbIJMg+TCTuqJrhZd5y1BfXBD9xFq71PA1hLAy7CMaVUyS2p2iY68Ez0Qfj8kzAc6rM3+w5+TBFsYaf/MrhyZTjnxUwkdfWPPIx/oa57XU+wygQQxtQIDAQAB";
 const shortName=n=>{const w=String(n).trim().split(/\s+/);return w.length>1?w[0]+" "+w[w.length-1][0].toUpperCase()+".":String(n).trim()};
 async function seal(text){
@@ -1512,12 +1559,16 @@ document.addEventListener("click",e=>{
   if(a==="jump"){const el=document.getElementById(t.dataset.k);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});el.classList.add("glow");setTimeout(()=>el.classList.remove("glow"),1800)}return}
   if(a==="flip"){const c=t.closest(".tcard");if(c)c.classList.toggle("flipped");return}
   if(a==="profile"){ui.sheet={type:"profile",id};render();return}
+  if(a==="chatme"){remember(id);render();return}
+  if(a==="chatnotme"){try{localStorage.removeItem("ss-me-id")}catch(err){}render();return}
+  if(a==="chatsend"){sendChat();return}
   if(a.startsWith("qz")){quizAct(a,t);return}
   if(a==="copy"){const txt=$("#wa-"+t.dataset.k).textContent;
     const ok=()=>{toast("Copied – paste it in WhatsApp")};
     try{navigator.clipboard.writeText(txt).then(ok,()=>selectText(t.dataset.k))}catch(err){selectText(t.dataset.k)}return}
   if(!canEdit)return;
   switch(a){
+    case "chathide":mutate(s=>{s.chatHidden=(s.chatHidden||[]).concat(+id)});toast("Hidden – it disappears for everyone within a few minutes");break;
     case "status":{const p=pBy(id),v=t.dataset.v;if(p.status===v)return;
       if(S.oop&&p.status==="in"&&v!=="in"&&attendedIn(S.oop).includes(id)){ui.sheet={type:"swap",id};render();return}
       if(S.oop&&v==="in"&&!attendedIn(S.oop).includes(id)){mutate(s=>{pBy(id).status="in"});toast("Unlock the order of play to fit "+first(id)+" in");return}
@@ -1560,6 +1611,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.act==="qztext"){e.preventDefault();quizAct("qznext",e.target)}});
 document.addEventListener("input",e=>{
+  if(e.target.id==="chat-msg"){chat.draft=e.target.value;return}
   if(e.target.id!=="np-q")return;const q=e.target.value.trim().toLowerCase();
   document.querySelectorAll(".nplist button").forEach(b=>{b.hidden=!!q&&!b.dataset.n.split(/\s+/).some(w=>w.startsWith(q))&&!b.dataset.n.startsWith(q)});
 });
@@ -1604,14 +1656,16 @@ function start(data){
   try{if(!localStorage.getItem("ss-seen-help")){ui.sheet={type:"help"};localStorage.setItem("ss-seen-help","1")}}catch(e){}
   if(location.hash==="#quiz")ui.tab="quiz";
   if(location.hash==="#cards")ui.tab="cards";
+  if(location.hash==="#chat")ui.tab="chat";
   if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
+  chatTrust().then(loadChat);setInterval(()=>{if(!document.hidden)loadChat()},20000);
   if(PUBLIC){canEdit=false;preview=false;render();
     try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"})}catch(e){}
     // phones keep apps open in the background: come back after a minute or more and it reloads the latest version
     let hiddenAt=0;document.addEventListener("visibilitychange",()=>{if(document.hidden)hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>60000&&!ui.quiz)location.reload()});
-    setInterval(()=>{if(!document.hidden&&!ui.quiz&&!ui.sheet)location.reload()},15*60000);
+    setInterval(()=>{if(!document.hidden&&!ui.quiz&&!ui.sheet&&!chat.draft)location.reload()},15*60000);
     addEventListener("beforeinstallprompt",e=>{e.preventDefault();ui.installEv=e;if(ui.sheet&&ui.sheet.type==="install")render()});
     return}
   const c=window.claude;
@@ -1631,5 +1685,4 @@ if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
 </script>
-
 </body></html>
