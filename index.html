@@ -1336,7 +1336,7 @@ function regular(p){
 function normPhone(v){let d=String(v||"").replace(/\D/g,"");if(d.startsWith("00"))d=d.slice(2);if(d.startsWith("0"))d="44"+d.slice(1);return d.length>=10?d:""}
 function phones(){try{return JSON.parse(localStorage.getItem("ss-phones")||"{}")}catch(e){return {}}}
 function setPhone(id,v){const m=phones();if(v)m[id]=v;else delete m[id];try{localStorage.setItem("ss-phones",JSON.stringify(m));return true}catch(e){return false}}
-const phoneOf=p=>phones()[p.id]||"";
+const phoneOf=p=>phones()[p.id]||p.phone||""; // numbers live in the private organiser state; the public build never copies them
 const org=()=>S.org||{name:"",phone:""};
 const orgHref=msg=>{const ph=normPhone(org().phone);return ph?waLink(ph,msg):""};
 const sendHint=()=>'Tap the yellow button – WhatsApp opens with it ready. '+(orgHref("x")?'It goes straight to '+esc(org().name||'the organiser')+'.':'Pick <b>'+esc(org().name||'Jurate')+'</b> and press send.');
@@ -1623,4 +1623,5 @@ const hot=window.claude&&window.claude.hot;
 if(hot&&hot.snapshot)hot.snapshot(()=>({tab:ui.tab}));
 if(hot&&hot.ready)hot.ready(start);else start((hot&&hot.data)||{});
 })();
-</script></body></html>
+</script>
+</body></html>
