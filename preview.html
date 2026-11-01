@@ -1,0 +1,167 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Saturday Smash tour</title>
+<meta name="theme-color" content="#1f5d46">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f3f5ef;--surface:#fff;--ink:#15241d;--muted:#5d6e66;--line:#dbe2dc;--court:#1f5d46;--deep:#123b2c;--ball:#d6ee3b;--ball-ink:#273000;--clay:#c2532d;--clay-soft:#f7e3da;--good:#1f7a4f;--good-soft:#dcefe3;--net:#5a3fa6;--net-soft:#ebe6f8;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;--body:"Figtree",system-ui,-apple-system,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1712;--surface:#13241c;--ink:#e7efe9;--muted:#97aba1;--line:#223a2e;--court:#226b50;--deep:#0d2c21;--good:#5cc38c;--good-soft:#163527;--clay:#e2754f;--clay-soft:#3a2219;--net:#9d86e8;--net-soft:#262040}}
+:root[data-theme="dark"]{--bg:#0c1712;--surface:#13241c;--ink:#e7efe9;--muted:#97aba1;--line:#223a2e;--court:#226b50;--deep:#0d2c21;--good:#5cc38c;--good-soft:#163527;--clay:#e2754f;--clay-soft:#3a2219;--net:#9d86e8;--net-soft:#262040}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body)}
+.band{background:linear-gradient(160deg,var(--court),var(--deep));color:#f3f7ef;padding:calc(18px + env(safe-area-inset-top)) 16px 18px}
+.col{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.85}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(38px,10vw,60px);line-height:.9;margin:4px 0 6px}
+h1 b{color:var(--ball)}
+.band p{margin:0;max-width:60ch;opacity:.92}
+.back{display:inline-block;margin-top:12px;color:var(--ball-ink);background:var(--ball);border-radius:999px;padding:8px 14px;font-weight:700;text-decoration:none}
+main{padding:18px 16px 50px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.phone{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.num{font-family:var(--display);font-weight:900;font-size:16px;color:var(--court);letter-spacing:.04em}
+.ttl{font-family:var(--display);font-weight:800;font-size:24px;line-height:1;margin:0}
+.lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:4px 0 0}
+.court{border:1.5px solid var(--line);border-radius:12px;padding:8px 10px}
+.ch{display:flex;justify-content:space-between;align-items:center;font-weight:700}
+.kind{font-size:11px;font-weight:700;color:var(--muted)}
+.pair{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:3px 0}
+.fh,.bh{font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px}
+.fh{background:var(--clay-soft);color:var(--clay)}
+.bh{background:var(--net-soft);color:var(--net)}
+.vs{font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--muted)}
+.big{font-family:var(--display);font-weight:900;font-size:62px;line-height:1;text-align:center;color:var(--court);margin:8px 0 0}
+.note{background:var(--clay-soft);color:var(--clay);border-radius:12px;padding:8px 10px;font-size:13px;font-weight:600}
+.btn{display:block;width:100%;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:14px;padding:11px;font:600 15px var(--body);text-align:left}
+.btn.win{border-color:var(--good);background:var(--good-soft);color:var(--good)}
+.btn.ball{background:var(--ball);color:var(--ball-ink);border-color:transparent;text-align:center;font-weight:800}
+.bot{border:2px solid var(--court);border-radius:14px;padding:10px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:14px}
+.row:first-of-type{border-top:0}
+.w{background:var(--good-soft);color:var(--good);font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px}
+.crown{background:linear-gradient(140deg,var(--court),var(--deep));color:#f3f7ef;border-radius:14px;padding:12px;text-align:center}
+.crown h3{font-family:var(--display);font-weight:900;font-size:28px;margin:2px 0 0}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.bdg{background:var(--ball);color:var(--ball-ink);font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px}
+.stat b{display:block;font-family:var(--display);font-weight:900;font-size:30px;color:var(--court);line-height:1}
+.who{display:flex;gap:10px;align-items:center}
+.av{width:46px;height:46px;border-radius:50%;background:#d9472b;display:grid;place-items:center;font-size:24px}
+.cap{font-size:13px;color:var(--muted);margin:2px 0 0}
+.sec{max-width:1080px;margin:26px auto 12px}
+.sec h2{font-family:var(--display);font-weight:900;font-size:34px;line-height:1;margin:0}
+.sec p{margin:4px 0 0;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;gap:12px}
+.ic{flex:none;width:46px;height:46px;border-radius:50%;background:var(--court);display:grid;place-items:center;font-size:24px}
+.step h3{margin:0;font-size:16px}
+.step p{margin:3px 0 0;font-size:14px;color:var(--muted)}
+.when{display:inline-block;margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;background:var(--good-soft);color:var(--good)}
+.when.you{background:var(--clay-soft);color:var(--clay)}
+.foot{max-width:1080px;margin:22px auto 0;color:var(--muted);font-size:13px;text-align:center}
+</style></head><body>
+<header class="band"><div class="col">
+<div class="eyebrow">KLTC · Sat 2–4 Advanced</div>
+<h1>The Saturday Smash <b>tour</b> 🎾</h1>
+<p>How the app runs our Saturdays today – and a sneak peek at what's coming next.</p>
+<a class="back" href="./">← Back to the app</a>
+</div></header>
+<main><div class="sec"><h2>How it works now</h2><p>One link for everything: <b>tinyurl.com/kltc-play</b> – add it to your home screen and it opens like an app.</p></div>
+<div class="steps col">
+<div class="step"><div class="ic">📲</div><div><h3>Put it on your phone</h3><p>iPhone: Safari → Share → Add to Home Screen. Android: Chrome → ⋮ → Install app. It opens full screen with the 🎾 icon and updates itself.</p></div></div>
+<div class="step"><div class="ic">🎴</div><div><h3>Make your player card – once</h3><p>A 2-minute quiz: are you The Wall, The Net Ninja or The Big Hitter? Tap your name from the group list – no typing, no fake names. Change it any time with ✏️ Update my card.</p></div></div>
+<div class="step"><div class="ic">🔒</div><div><h3>Your phone gets a ✅ once</h3><p>The first time you answer from a phone, Jurate confirms it's really you. After that your answers count straight away – nobody can answer in your name.</p></div></div>
+<div class="step"><div class="ic">📅</div><div><h3>Monday 9am: "Are you in?"</h3><p>The app gets the week ready by itself and opens the Monday message with the forecast and kit tip – Jurate presses Send to the group.</p><span class="when">Automatic · Jurate sends</span></div></div>
+<div class="step"><div class="ic">👍</div><div><h3>Tap in or out – 20 seconds</h3><p>In, in + 1:30 warm-up, reserve, or out with a reason. No more chasing in the group chat.</p></div></div>
+<div class="step"><div class="ic">🍽️</div><div><h3>Order your Saturday menu</h3><p>Three sessions – 🥗 Starter, 🍝 Main, 🍰 Dessert. Pick mixed, ladies'/men's doubles, singles or chef's choice for each – plus 🔥 forehand or 🎯 backhand side.</p></div></div>
+<div class="step"><div class="ic">📥</div><div><h3>Answers arrive by themselves</h3><p>Every few minutes (7am–11pm) new cards and answers move into the organiser app and onto everyone's phones.</p><span class="when">Automatic</span></div></div>
+<div class="step"><div class="ic">☁️</div><div><h3>Forecast and kit check</h3><p>The Saturday forecast and a "what to wear" tip refresh twice a day, up to 2 weeks ahead.</p><span class="when">Automatic</span></div></div>
+<div class="step"><div class="ic">🎾</div><div><h3>Order of play</h3><p>Built from who's in, everyone's menu, levels and sides – partners mix every session. Jurate locks it and it's on every phone.</p></div></div>
+<div class="step"><div class="ic">🚪</div><div><h3>Can't make it? Drop out</h3><p>Tap 🚪 Drop out and pick a reason. Only you can take yourself out – once you're in, nobody else can untick you.</p></div></div>
+<div class="step"><div class="ic">🦸</div><div><h3>Short of players?</h3><p>The app shows who's on reserve or on call, with a one-tap WhatsApp to ask them. Whoever steps in gets the 🦸 Hero badge.</p><span class="when you">Jurate sends</span></div></div>
+<div class="step"><div class="ic">💬</div><div><h3>Group chat in the app</h3><p>Lifts, swaps, banter. Only approved phones can post, so every name is the real person. WhatsApp stays for anything urgent.</p></div></div>
+<div class="step"><div class="ic">🏆</div><div><h3>Ladder and cards</h3><p>Win 3, draw 2, lose 1, hero +2. Collect everyone's player cards in the sticker album – tap one to flip it.</p></div></div>
+<div class="step"><div class="ic">🔐</div><div><h3>Private stays private</h3><p>Levels, priorities, away dates and phone numbers are only in Jurate's organiser app – never on the public page.</p></div></div>
+</div>
+<div class="sec"><h2>Coming soon ✨</h2><p>Example names and scores – nothing below is real yet.</p></div>
+<div class="grid col">
+
+<section class="phone">
+<div class="num">01</div><h2 class="ttl">Order of play with sides</h2>
+<p class="cap">Built from everyone's 🍽️ menu – and who likes which side.</p>
+<div class="lbl">🥗 Starter · 2:00–2:40</div>
+<div class="court"><div class="ch">Court 1 <span class="kind">👫 Mixed</span></div>
+<div class="pair"><span class="fh">🔥 FH</span>Nick R <span class="bh">🎯 BH</span>Jurate</div><div class="vs">VS</div>
+<div class="pair"><span class="fh">🔥 FH</span>Seb <span class="bh">🎯 BH</span>Shula</div></div>
+<div class="court"><div class="ch">Court 2 <span class="kind">👬 Men's doubles</span></div>
+<div class="pair"><span class="fh">🔥 FH</span>Ryan <span class="bh">🎯 BH</span>Oscar</div><div class="vs">VS</div>
+<div class="pair"><span class="fh">🔥 FH</span>Even <span class="bh">🎯 BH</span>Victor</div></div>
+<div class="court"><div class="ch">Court 3 <span class="kind">🎯 Ladies' singles</span></div><div class="pair">Emma <span class="vs">VS</span> Gillian</div></div>
+<p class="cap">🔥 FH = forehand side (right) · 🎯 BH = backhand side (left)</p>
+</section>
+
+<section class="phone">
+<div class="num">02</div><h2 class="ttl">Round timer</h2>
+<p class="cap">A countdown on every phone.</p>
+<div class="lbl">🥗 Starter · Court 1</div>
+<div class="big">12:48</div>
+<p class="cap" style="text-align:center">left in this session</p>
+<div class="note">🔔 "5 minutes left!" pops up for everyone</div>
+<div class="lbl">Next · 🍝 Main 2:40</div>
+<div class="pair">➡️ You move to <b>Court 3 · 👬 Men's doubles</b></div>
+</section>
+
+<section class="phone">
+<div class="num">03</div><h2 class="ttl">Who won? One tap</h2>
+<p class="cap">Any one of the four players taps – that's it for the court.</p>
+<div class="lbl">Session over · Court 1</div>
+<p style="margin:0">You & Nick R <span class="vs">VS</span> Seb & Shula</p>
+<button class="btn win">🏆 We won</button>
+<button class="btn">🤝 Draw</button>
+<button class="btn">😅 We lost</button>
+<p class="cap">The other team sees "Nick R says you lost" → ✅ Right / ❌ Not right. "Not right" goes to Jurate.</p>
+</section>
+
+<section class="phone">
+<div class="num">04</div><h2 class="ttl">Results after each session</h2>
+<p class="cap">Posted in 💬 Chat by the app – nobody has to type it.</p>
+<div class="bot"><b>🤖 Starter results</b>
+<div class="row"><span>Court 1</span><span><span class="w">WON</span> Nick R & Jurate</span></div>
+<div class="row"><span>Court 2</span><span>🤝 Draw</span></div>
+<div class="row"><span>Court 3</span><span><span class="w">WON</span> Emma</span></div>
+<p style="margin:6px 0 0;font-size:13px">🏅 New badge: Jurate – 🔥 Hot streak!</p></div>
+<div class="lbl">Ladder top 3</div>
+<div class="row"><span>🥇 Jurate</span><b>9</b></div><div class="row"><span>🥈 Nick R</span><b>8</b></div><div class="row"><span>🥉 Emma</span><b>6</b></div>
+<button class="btn ball">📲 Send results to the WhatsApp group</button>
+</section>
+
+<section class="phone">
+<div class="num">05</div><h2 class="ttl">All courts done!</h2>
+<p class="cap">The end-of-day screen.</p>
+<div class="crown"><div style="font-size:30px">👑</div><div class="eyebrow">Player of the day</div><h3>Jurate</h3><p style="margin:0;font-size:13px;opacity:.9">3 wins out of 3 – clean sweep</p></div>
+<div class="lbl">Final ladder</div>
+<div class="row"><span>🥇 Jurate</span><span>12 pts</span></div><div class="row"><span>🥈 Nick R</span><span>10 pts</span></div><div class="row"><span>🥉 Emma</span><span>9 pts</span></div>
+<div class="lbl">Badges earned today</div>
+<div class="badges"><span class="bdg">🏆 Clean sweep · Jurate</span><span class="bdg">🦸 Hero · Victor</span><span class="bdg">🎾 First win · Oscar</span></div>
+<p class="cap">✅ 9 of 9 results in · 16 played · 3 sessions</p>
+<button class="btn ball">📲 Send the day to the group</button>
+</section>
+
+<section class="phone">
+<div class="num">06</div><h2 class="ttl">Stats & badges on your card</h2>
+<p class="cap">Every player builds their own record.</p>
+<div class="who"><div class="av">🚀</div><div><b>Jurate</b><div class="cap" style="margin:0">The Big Hitter · 🔥 forehand side</div></div></div>
+<div class="stats"><div class="stat"><span class="lbl" style="margin:0">Played</span><b>14</b></div><div class="stat"><span class="lbl" style="margin:0">Win rate</span><b>64%</b></div></div>
+<div class="row"><span>🤝 Favourite partner</span><b>Nick R</b></div>
+<div class="row"><span>😈 Nemesis</span><b>Seb</b></div>
+<div class="lbl">Badges</div>
+<div class="badges"><span class="bdg">🏆 Clean sweep</span><span class="bdg">🔥 Hot streak</span><span class="bdg">🦸 Hero ×2</span><span class="bdg">☀️ Early bird</span></div>
+</section>
+
+</div>
+<p class="foot">More ideas on the way: smart sub finder, monthly awards, clubhouse screen, ball rota. Tell Jurate what you'd like! 🎾</p>
+</main>
+</body></html>
