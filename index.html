@@ -121,6 +121,11 @@ main{padding-block:18px 60px}
 .pend{border:2px solid var(--clay)}.pitem{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
 .np input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
 .nplist{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;max-height:260px;overflow-y:auto}
+/* partner picker: large, high-contrast, one name per row (easy to read and tap) */
+.slots{display:grid;gap:10px;margin-top:8px}.slot{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:56px;border:2px dashed var(--muted);border-radius:14px;padding:12px 16px;font-weight:700;font-size:18px;color:var(--muted);background:none;text-align:left}.slot.on{border:3px solid var(--court);background:var(--good-soft);color:var(--ink)}.slot.on span{font-size:22px;color:var(--clay);font-weight:800}
+#mt-q{font-size:18px;padding:14px 16px;min-height:56px;border:2px solid var(--muted)}
+.mtlist{display:grid;gap:8px;max-height:none;overflow:visible}.mtlist button{width:100%;min-height:56px;border-radius:14px;padding:12px 16px;font-size:18px;font-weight:700;text-align:left;border:2px solid var(--muted)}.mtlist button:active{background:var(--good-soft)}
+.mthint{font-size:16px;color:var(--ink);margin-top:8px}
 .nplist button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 12px;font-weight:600;font-size:14px}
 .iam{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 12px;border:2px solid var(--court);border-radius:12px}
 .kit{margin:6px 0 2px;font-size:14.5px;line-height:1.35}
@@ -1144,8 +1149,11 @@ function vQuiz(){
   let body="";
   if(q.type==="away")body=awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add these dates</button><button class="btn ball" data-act="qznext">'+((z.a.away||[]).length?"Next":"No gaps – I'm around")+' →</button></div>';
   else if(q.k==="name")body=namePicker("qzname",z.a)+(z.a.pid?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">Next →</button></div>':'');
-  else if(q.type==="mates"){const sel=val||[];body='<div class="nplist">'+live().filter(x=>x.id!==z.a.pid).sort((x,y)=>x.name.localeCompare(y.name)).map(x=>'<button data-act="qzmate" data-id="'+x.id+'"'+(sel.includes(x.id)?' style="border-color:var(--court);background:var(--good-soft)"':'')+'>'+(sel.includes(x.id)?'✓ ':'')+esc(x.name)+'</button>').join("")+'</div>'+
-    '<p class="sub" style="margin-top:6px">'+sel.length+' of 3 picked</p><div class="row" style="margin-top:10px"><button class="btn ball" data-act="qznext">'+(sel.length?"Next":"Skip – anyone is fine")+' →</button></div>'}
+  else if(q.type==="mates"){const sel=(val||[]).filter(pBy);
+    body='<div class="slots">'+[0,1,2].map(n=>sel[n]?'<button class="slot on" data-act="qzmate" data-id="'+sel[n]+'" aria-label="Remove '+esc(nm(sel[n]))+'">✓ '+esc(nm(sel[n]))+' <span aria-hidden="true">×</span></button>':'<span class="slot">Partner '+(n+1)+'</span>').join("")+'</div>'+
+    (sel.length<3?'<div class="np" style="margin-top:10px"><input type="search" id="mt-q" placeholder="🔎 Type a name…" autocomplete="off" aria-label="Find a partner">'+
+      '<p class="mthint">Type the first letters of a name, then tap it.</p><div class="nplist mtlist">'+live().filter(x=>x.id!==z.a.pid&&!sel.includes(x.id)).sort((x,y)=>x.name.localeCompare(y.name)).map(x=>'<button hidden data-act="qzmate" data-id="'+x.id+'" data-n="'+esc(x.name.toLowerCase())+'">'+esc(x.name)+'</button>').join("")+'</div></div>':'')+
+    '<div class="row" style="margin-top:16px"><button class="btn ball" style="font-size:18px;padding:14px 24px" data-act="qznext">'+(sel.length?"Next":"Skip – anyone is fine")+' →</button></div>'}
   else if(q.type==="text")body='<input type="text" id="qz-'+q.k+'" maxlength="60" value="'+esc(val||"")+'" placeholder="'+(q.k==="name"?"e.g. Jane Beaven":"e.g. Eye of the Tiger")+'" data-act="qztext" data-k="'+q.k+'">'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">'+(q.optional&&!val?"Skip":"Next")+' →</button></div>';
   else body='<div class="qopts">'+(q.k==="partner"?partnerOpts((z.a.pid&&pBy(z.a.pid)&&pBy(z.a.pid).g)||z.a.g):q.opts).map(([v,ic,l])=>{const on=q.type==="multi"?(val||[]).includes(v):val===v;
@@ -1659,6 +1667,8 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset&&e.target.dataset.act==="qztext"){e.preventDefault();quizAct("qznext",e.target)}});
 document.addEventListener("input",e=>{
   if(e.target.id==="chat-msg"){chat.draft=e.target.value;return}
+  if(e.target.id==="mt-q"){const q=e.target.value.trim().toLowerCase();let shown=0; // partner search: show only up to 6 matches while typing
+    document.querySelectorAll(".mtlist button").forEach(b=>{const ok=!!q&&shown<6&&(b.dataset.n.split(/\s+/).some(w=>w.startsWith(q))||b.dataset.n.startsWith(q));b.hidden=!ok;if(ok)shown++});return}
   if(e.target.id!=="np-q")return;const q=e.target.value.trim().toLowerCase();
   document.querySelectorAll(".nplist button").forEach(b=>{b.hidden=!!q&&!b.dataset.n.split(/\s+/).some(w=>w.startsWith(q))&&!b.dataset.n.startsWith(q)});
 });
