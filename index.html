@@ -155,7 +155,7 @@ main{padding-block:18px 60px}
 .seg button[aria-pressed="true"].reserve{background:var(--ball);color:var(--ball-ink)}
 .seg button[aria-pressed="true"].out{background:var(--clay);color:#fff}
 .stars{display:inline-flex;gap:2px}
-.rk{display:inline-flex;gap:3px;align-items:center;font-size:12px;color:var(--muted)}.rk button{border:1px solid var(--line);background:none;color:var(--ink);border-radius:6px;padding:1px 7px;font-size:12px;line-height:1.5}.rk button.on{background:var(--court);border-color:var(--court);color:var(--on-court)}.ph{font-size:12px;color:var(--muted);text-decoration:none}
+.rk{display:inline-flex;gap:3px;align-items:center;font-size:12px;color:var(--muted)}.rk button{border:1px solid var(--line);background:none;color:var(--ink);border-radius:6px;padding:1px 7px;font-size:12px;line-height:1.5}.rk button.on{background:var(--court);border-color:var(--court);color:var(--on-court)}.rk button.r2.on{background:var(--ball);border-color:var(--ball);color:var(--ball-ink)}.rk button.r3.on{background:var(--clay);border-color:var(--clay);color:#fff}.rk button[tabindex]{cursor:default;padding:0 6px}.pst{font-size:12.5px;color:var(--muted);margin-top:2px}.pst b{color:var(--ink);font-variant-numeric:tabular-nums}.pst b.w{color:var(--good)}.pst b.l{color:var(--clay)}.ph{display:block;font-size:12.5px;color:var(--muted);text-decoration:none;margin-top:1px}
 .stars button{border:0;background:none;padding:2px;font-size:15px;line-height:1;color:var(--line)}
 .stars button.on{color:var(--court)}
 .tog{border:1.5px solid var(--line);background:none;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700;color:var(--muted)}
@@ -671,23 +671,24 @@ function vPlayers(){
   const tot=season();
   const order={in:0,reserve:1,out:2};
   const ravg=p=>{const r=[p.rankN,p.rankV].filter(Boolean);return r.length?r.reduce((x,y)=>x+y)/r.length:9};
-  const srt=canEdit?ui.psort||"status":"status";
+  const srt=canEdit?ui.psort||"rank":"status";
   const ps=live().sort((a,b)=>srt==="name"?a.name.localeCompare(b.name):srt==="rank"?(ravg(a)-ravg(b))||a.name.localeCompare(b.name):(order[a.status]-order[b.status])||a.name.localeCompare(b.name));
   const c=k=>live().filter(p=>p.status===k).length;
-  let html='<section class="card"><div class="row spread"><div><h2>Squad</h2><p class="sub">'+live().length+' players · '+c("in")+' in · '+c("reserve")+' reserve · '+c("out")+' out</p></div>'+(canEdit?'<span class="seg">'+[["status","Status"],["name","A–Z"],["rank","Rank"]].map(([k,l])=>'<button aria-pressed="'+(srt===k)+'" data-act="psort" data-v="'+k+'">'+l+'</button>').join("")+'</span>':'')+'</div>';
+  let html='<section class="card"><div class="row spread"><div><h2>Squad</h2><p class="sub">'+(canEdit?live().length+' players · '+live().filter(p=>p.rankN).length+' ranked · '+live().filter(p=>p.g).length+' men\'s/ladies\' set · '+live().filter(p=>p.side).length+' side set':c("in")+' in · '+c("reserve")+' reserve · '+c("out")+' out')+'</p></div>'+(canEdit?'<span class="seg">'+[["rank","By rank"],["name","A–Z"]].map(([k,l])=>'<button aria-pressed="'+(srt===k)+'" data-act="psort" data-v="'+k+'">'+l+'</button>').join("")+'</span>':'')+'</div>';
+  if(canEdit)html+='<p class="sub" style="margin-top:8px"><b>Rank:</b> <span class="rk"><button class="r1 on" tabindex="-1">1</button></span> strongest · <span class="rk"><button class="r2 on" tabindex="-1">2</button></span> middle · <span class="rk"><button class="r3 on" tabindex="-1">3</button></span> developing. Rank, men\'s/ladies\' and side are what the order of play uses to make fair pairs. In / reserve / out is set each week on the Saturday tab.</p>';
   if(!canEdit)html+='<p class="ro" style="margin-top:8px">Want to play or pull out? Message the group – the organiser updates this page.</p>';
   html+='<div class="plist" style="margin-top:8px">';
   if(!ps.length)html+='<div class="empty-note">No players yet. Paste the names from WhatsApp below.</div>';
   ps.forEach(p=>{
     const bs=badgesFor(p.id,tot).map(([k,t])=>'<span class="badge '+k+'">'+t+'</span>').join("");
-    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div><div class="pmeta">'+
-      (canEdit?'<span class="stars" aria-label="Level">'+[1,2,3,4,5].map(i=>'<button class="'+(i<=p.level?'on':'')+'" aria-label="Level '+i+'" data-act="level" data-id="'+p.id+'" data-v="'+i+'">●</button>').join("")+'</span>'+
-        '<button class="tog" aria-pressed="'+!!p.warmup+'" data-act="warm" data-id="'+p.id+'">Warm-up</button>'+
-        [["rankN","Nick"],["rankV","Val"]].map(([k,l])=>'<span class="rk">'+l+' '+[1,2,3].map(i=>'<button class="'+(p[k]===i?'on':'')+'" aria-label="'+l+' rank '+i+'" data-act="rank" data-k="'+k+'" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>').join("")+
-        (phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':''):'<span class="status-tag">'+p.status+'</span>'+(p.warmup&&p.status==="in"?'<span class="badge">Warm-up</span>':''))+
+    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(()=>{const o=tot[p.id];return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
+      (canEdit?'<span class="rk">Rank '+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>'+
+        '<span class="rk">'+[["m","Men's"],["f","Ladies'"]].map(([k,l])=>'<button class="'+(p.g===k?'on':'')+'" data-act="pg" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
+        '<span class="rk">Side '+SIDES.map(([k,i,l])=>'<button class="'+(p.side===k?'on':'')+'" title="'+l+'" data-act="pside" data-id="'+p.id+'" data-v="'+k+'">'+l.split(" ")[0]+'</button>').join("")+'</span>'+
+        '<button class="tog" aria-pressed="'+!!p.warmup+'" data-act="warm" data-id="'+p.id+'">Warm-up</button>':'<span class="status-tag">'+p.status+'</span>'+(p.warmup&&p.status==="in"?'<span class="badge">Warm-up</span>':''))+
       (regular(p)?'<span class="badge '+regular(p).cls+'">'+regular(p).label+'</span>':'')+(awayNow(p)?'<span class="badge">✈️ till '+esc(fmtD(awayNow(p).to).replace(/^\w+ /,""))+'</span>':(p.away||[]).filter(a=>a.to>=S.date).slice(0,1).map(a=>'<span class="badge">✈️ '+esc(fmtRange(a))+'</span>').join(""))+
       bs+'</div></div>'+
-      (canEdit?'<div class="row" style="gap:4px"><span class="seg">'+["in","reserve","out"].map(s=>'<button class="'+s+'" aria-pressed="'+(p.status===s)+'" data-act="status" data-id="'+p.id+'" data-v="'+s+'">'+(s==="in"?"In":s==="reserve"?"Reserve":"Out")+'</button>').join("")+'</span><button class="x" aria-label="Remove '+esc(p.name)+'" data-act="remove" data-id="'+p.id+'">×</button></div>':'')+
+      (canEdit?'<div class="row" style="gap:4px"><button class="x" aria-label="Remove '+esc(p.name)+'" data-act="remove" data-id="'+p.id+'">×</button></div>':'')+
     '</div>';
   });
   html+='</div></section>';
@@ -700,7 +701,7 @@ function vPlayers(){
   if(canEdit)html+='<section class="card"><h2>Add players</h2><p class="sub">Paste straight from WhatsApp – one name per line or separated by commas. New names start as <b>In</b>.</p>'+
     '<textarea id="bulk" placeholder="Nick R&#10;Jane Beaven&#10;Seb" style="margin-top:10px"></textarea>'+
     '<div class="row" style="margin-top:10px"><button class="btn" data-act="bulk">Add to squad</button><button class="btn ghost" data-act="bulkres">Add as reserves</button></div>'+
-    '<p class="sub" style="margin-top:12px">Level dots (1–5) balance the pairs so every match is close. Leave everyone on 3 if you\'d rather not rate.</p></section>';
+    '<p class="sub" style="margin-top:12px">New players start without a rank – tap 1, 2 or 3 on their row.</p></section>';
   return html;
 }
 function vLadder(){
@@ -1602,6 +1603,8 @@ document.addEventListener("click",e=>{
     case "level":mutate(s=>{pBy(id).level=+t.dataset.v});break;
     case "rank":mutate(s=>{const p=pBy(id),k=t.dataset.k,v=+t.dataset.v;p[k]=p[k]===v?null:v;const r=[p.rankN,p.rankV].filter(Boolean);if(r.length)p.level=Math.round(5-r.reduce((x,y)=>x+y)/r.length)});break; // rank 1 (strongest) = level 4, 2 = 3, 3 = 2
     case "psort":ui.psort=t.dataset.v;render();break;
+    case "pg":mutate(s=>{const p=pBy(id),v=t.dataset.v;if(p.g===v)delete p.g;else p.g=v});break;
+    case "pside":mutate(s=>{const p=pBy(id),v=t.dataset.v;if(p.side===v)delete p.side;else p.side=v});break;
     case "warm":mutate(s=>{const p=pBy(id);p.warmup=!p.warmup});break;
     case "remove":ui.sheet={type:"remove",id};render();break;
     case "doremove":mutate(s=>{const p=pBy(id);p.status="out";p.removed=true});
