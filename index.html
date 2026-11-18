@@ -691,7 +691,7 @@ function vPlayers(){
   if(!ps.length)html+='<div class="empty-note">No players yet. Paste the names from WhatsApp below.</div>';
   ps.forEach(p=>{
     const bs=badgesFor(p.id,tot).map(([k,t])=>'<span class="badge '+k+'">'+t+'</span>').join("");
-    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(canEdit&&mateIds(p).filter(pBy).length?'<div class="pst">'+[["x","Mixed partner"],["d",(p.g==="m"?"Men's":p.g==="f"?"Ladies'":"Ladies'/men's")+" partner"]].filter(([k])=>mateMap(p.mates)[k]&&pBy(mateMap(p.mates)[k])).map(([k,l])=>l+': <b>'+esc(first(mateMap(p.mates)[k]))+'</b>').join(" · ")+'</div>':'')+(()=>{const o=tot[p.id];if(!canEdit&&p.id!==meId())return '';return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
+    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(canEdit&&mateIds(p).filter(pBy).length?'<div class="pst">'+[["x","Mixed partner"],["d",(p.g==="m"?"Men's":p.g==="f"?"Ladies'":"Ladies'/men's")+" partner"]].filter(([k])=>mateMap(p.mates)[k]&&pBy(mateMap(p.mates)[k])).map(([k,l])=>l+': <b>'+esc(first(mateMap(p.mates)[k]))+'</b>').join(" · ")+'</div>':'')+(()=>{const o=tot[p.id];if(!mine(p.id))return '';return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
       (canEdit?'<span class="rk">Rank '+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>'+
         '<span class="rk">'+[["m","Men's"],["f","Ladies'"]].map(([k,l])=>'<button class="'+(p.g===k?'on':'')+'" data-act="pg" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
         '<span class="rk">Doubles '+[["mixed","Mixed"],["same",p.g==="m"?"Men\'s":p.g==="f"?"Ladies\'":"Ladies\'/men\'s"]].map(([k,l])=>'<button class="'+(prefs(p).includes(k)?'on':'')+'" data-act="ppref" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
@@ -754,6 +754,7 @@ function congratsWall(){
 }
 function myLadder(tot,today){
   const id=meId();
+  if(id&&!myPhoneOk())return '<section class="card myl"><h2>My ladder 🔒</h2><p class="mybig-sub">Your ladder opens only on <b>your own phone</b> – the one you sent your player card from.</p><p class="mybig-sub" style="margin-top:8px">Not showing? Send your card from this phone (🎴 My card). Once Jurate approves it, your place and progress appear here.</p></section>';
   if(!id)return '<section class="card myl"><h2>My ladder 🏆</h2><p class="mybig-sub">Your place on the ladder and your results are private – only you see them on your phone.</p>'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="tab" data-k="quiz">Show me mine – pick my name</button></div></section>';
   const all=rank(tot),i=all.findIndex(e=>e[0]===id),t=tot[id],f=first(id);
@@ -1061,6 +1062,7 @@ async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncod
 async function chatTrust(){for(const p of S.players){if(p.removed)continue;const l=(p.th||[]).slice();for(const d of p.devs||[])l.push(await sha(d));trustTh[p.id]=l}
   if(!chat.mine)try{chat.mine=await sha(deviceKey())}catch(e){}}
 const okMsg=m=>!(S.chatHidden||[]).includes(m.id)&&pBy(m.pid)&&!pBy(m.pid).removed&&(trustTh[m.pid]||[]).includes(m.th);
+const mine=id=>canEdit||(!!id&&id===meId()&&myPhoneOk());
 const myPhoneOk=()=>{const me=meId();return !!(me&&chat.mine&&(trustTh[me]||[]).includes(chat.mine))};
 const chatSeen=()=>{try{return +localStorage.getItem("ss-chat-seen")||0}catch(e){return 0}};
 const chatUnread=()=>ui.tab==="chat"?0:chat.msgs.filter(m=>okMsg(m)&&m.id>chatSeen()&&m.pid!==meId()).length;
@@ -1390,7 +1392,8 @@ function quizAct(a,t){
     advance()}
 }
 /* names are locked to the group list: a player taps their own name, and answers are linked to that player's id */
-const meId=()=>{try{const v=localStorage.getItem("ss-me-id")||"";return pBy(v)&&!pBy(v).removed?v:""}catch(e){return ""}};
+const phoneOwner=()=>{if(!chat.mine)return "";const p=live().find(q=>(trustTh[q.id]||[]).includes(chat.mine));return p?p.id:""};
+const meId=()=>{const o=phoneOwner();if(o)return o;try{const v=localStorage.getItem("ss-me-id")||"";return pBy(v)&&!pBy(v).removed?v:""}catch(e){return ""}};
 const me=()=>{const p=pBy(meId());return p?{name:p.name,pid:p.id,g:p.g,side:p.side}:{}};
 const remember=id=>{try{if(id)localStorage.setItem("ss-me-id",id)}catch(e){}};
 function namePicker(act,a){
@@ -1415,13 +1418,13 @@ function profileSheet(id){
   const p=pBy(id);if(!p)return "";
   const tot=season()[id];
   if(!p.q)return '<h3>'+esc(p.name)+'</h3><p class="sub">No player card yet. Send them the quiz link from the WhatsApp tab.</p>'+
-    (tot&&(canEdit||id===meId())?'<p class="sub" style="margin-top:8px">Season: '+tot.days+' Saturdays · '+tot.pts+' pts</p>':'')+profileEdit(p)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="close">Close</button></div>';
+    (tot&&mine(id)?'<p class="sub" style="margin-top:8px">Season: '+tot.days+' Saturdays · '+tot.pts+' pts</p>':'')+profileEdit(p)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="close">Close</button></div>';
   const a=Object.assign({name:p.name},p.q),pr=persona(a),rg=regular(p);
   return '<div class="pc-icon" style="font-size:44px">'+pr.icon+'</div><h3>'+esc(p.name)+'</h3><div class="pc-persona" style="color:var(--court)">'+esc(pr.name)+(rg?' · '+rg.label:'')+'</div><p class="sub">'+esc(pr.line)+'</p>'+
     '<div class="pgrid">'+
     [["Season goal",optLabel("goal",a.goal)],["Here for",(a.motives||[]).map(v=>optLabel("motives",v)).join(", ")],["Saturdays",optLabel("avail",a.avail)],(canEdit?["Priority",optLabel("priority",a.priority)]:["",""]),["Late swaps",optLabel("oncall",a.oncall)],
      ["Warm-up",optLabel("warm",a.warm)],["Style",optLabel("style",a.style)],["Weapon",optLabel("weapon",a.weapon)],["Wants",(a.better||[]).map(v=>optLabel("better",v)).join(", ")],["Post-match",optLabel("fuel",a.fuel)],["Rain at 1:45",optLabel("rain",a.rain)],
-     ["Season",!(canEdit||id===meId())?"":tot?tot.days+" Saturdays · "+tot.pts+" pts · streak "+streak(id):"Starts after the first Finish the day"]]
+     ["Season",!mine(id)?"":tot?tot.days+" Saturdays · "+tot.pts+" pts · streak "+streak(id):"Starts after the first Finish the day"]]
      .filter(x=>x[1]).map(([k,v])=>'<div><span>'+k+'</span><b>'+esc(v)+'</b></div>').join("")+'</div>'+
     (a.motto?'<p class="pc-motto" style="color:var(--ink)">“'+esc(a.motto)+'”</p>':'')+profileEdit(p)+
     '<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="close">Close</button></div>';
@@ -1768,7 +1771,7 @@ function start(data){
   if(location.hash==="#menu"||location.hash==="#week"){ui.tab="today";ui.quiz={mode:"avail",a:me()}}
   render();
   setInterval(()=>{if(!ui.sheet&&!(document.activeElement&&document.activeElement.matches("input,textarea")))render()},30000);
-  chatTrust().then(loadChat);setInterval(()=>{if(!document.hidden)loadChat()},20000);
+  chatTrust().then(()=>{if(PUBLIC&&phoneOwner())render();loadChat()});setInterval(()=>{if(!document.hidden)loadChat()},20000);
   if(PUBLIC){canEdit=false;preview=false;render();
     try{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js",{updateViaCache:"none"})}catch(e){}
     // phones keep apps open in the background: come back after a minute or more and it reloads the latest version
