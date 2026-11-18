@@ -1095,6 +1095,8 @@ function vQuiz(){
     return '<section class="quizhero"><div class="eyebrow">My player card · 2 minutes, once</div><h2>What kind of Saturday player are you?</h2>'+
       '<p>Make your player card once – are you The Wall, The Net Ninja or The Big Hitter? Change it whenever you like with ✏️ Update my card.</p>'+
       '<div class="row"><button class="btn ball" data-act="qzstart">Start the quiz 🎾</button><button class="btn ghost" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="qzmine">✏️ Update my card</button><button class="btn ghost small" style="color:var(--on-court);border-color:rgba(255,255,255,.4)" data-act="help">📖 How it works</button></div></section>'+
+      (()=>{const p=pBy(meId());if(!p||!p.q)return '';const n=QUIZ.filter(q=>q.k!=="name"&&q.type!=="away"&&!q.optional&&p.q[q.k]===undefined).length;
+        return n?'<section class="card pend"><h2>🆕 '+n+' new question'+(n===1?'':'s')+' on your card</h2><p class="sub">Answer just '+(n===1?'that one':'those')+' – 10 seconds. The rest of your card stays as it is.</p><div class="row" style="margin-top:10px"><button class="btn ball" data-act="qzupd" data-id="'+p.id+'">Answer now →</button></div></section>':''})()+
       (canEdit?vTracker():'')+
       '<section class="card"><h2>The squad so far</h2><p class="sub">'+done+' of '+total+' player cards in</p><div class="meter"><b style="width:'+(total?done/total*100:0)+'%"></b></div>'+
       '<div class="cards">'+live().filter(p=>p.q).map(p=>{const pr=persona(p.q);return '<button class="mini pc-'+pr.key+'" data-act="profile" data-id="'+p.id+'"><span class="mi">'+pr.icon+'</span><b>'+esc(p.name)+'</b><span>'+esc(pr.name)+'</span></button>'}).join("")+
@@ -1290,7 +1292,8 @@ function quizAct(a,t){
   if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzdrop"){ui.tab="today";ui.quiz={mode:"avail",drop:true,a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzmine"){ui.quiz={mode:"pick",a:{}};render();return}
-  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];ui.quiz={step:0,upd:true,a:a2};render();return}
+  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];const miss=QUIZ.map((q,i)=>i).filter(i=>{const q=QUIZ[i],v=a2[q.k];return q.k!=="name"&&q.type!=="away"&&!q.optional&&(v===undefined||v===""||(Array.isArray(v)&&!v.length))});
+    ui.quiz=miss.length?{step:miss[0],upd:true,only:miss,a:a2}:{step:0,upd:true,a:a2};render();window.scrollTo({top:0});return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
   if(!z)return;
   if(a==="qzawadd"){const v=readAway("qzaw");if(!v){toast("Pick a From date first");return}const n=$("#qa-name");if(n)z.a.name=n.value.trim();z.a.away=(z.a.away||[]).concat(v);render();return}
@@ -1331,7 +1334,7 @@ function namePicker(act,a){
     '<p class="sub" style="margin-top:6px">Not on the list? Message '+esc(org().name||"Jurate")+' and you\'ll be added.</p></div>';
 }
 function advance(){
-  const z=ui.quiz;z.step++;
+  const z=ui.quiz;if(z.only){const nx=z.only.find(i=>i>z.step);z.step=nx===undefined?QUIZ.length:nx}else z.step++;
   if(z.step>=QUIZ.length){remember(z.a.name);if(canEdit)mutate(()=>{applyAnswers(z.a)});else saveCard(z);confetti();}
   render();window.scrollTo({top:0,behavior:"smooth"});
 }
