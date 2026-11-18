@@ -480,6 +480,7 @@ function buildOOP(seed){
   const ids=inIds();const n=ids.length;
   if(n<4||S.courts<1)return null;
   const lvl=id=>pBy(id)?.level||3;
+  const mate=(x,y)=>((pBy(x)?.mates||[]).includes(y)?1:0)+((pBy(y)?.mates||[]).includes(x)?1:0); // 2 = both picked each other
   const key=(a,b)=>a<b?a+"|"+b:b+"|"+a;
   const sat={},part={},opp={};ids.forEach(i=>sat[i]=0);
   let lastRest=[];const rounds=[];
@@ -500,6 +501,7 @@ function buildOOP(seed){
         if(c.a.length===2){s+=((part[key(c.a[0],c.a[1])]||0)**2+(part[key(c.b[0],c.b[1])]||0)**2)*10}
         for(const x of c.a)for(const y of c.b)s+=(opp[key(x,y)]||0)*3;
         s+=Math.abs(c.a.reduce((t,i)=>t+lvl(i),0)-c.b.reduce((t,i)=>t+lvl(i),0))*4;
+        if(c.a.length===2)for(const tm of [c.a,c.b]){const f=mate(tm[0],tm[1]);if(f&&!(part[key(tm[0],tm[1])]||0))s-=f*15} // favourite partners: together once a day
         if(c.a.length===2)for(const tm of [c.a,c.b]){const x=pBy(tm[0])?.side,y=pBy(tm[1])?.side;if(x&&x===y&&x!=="e")s+=5} // both partners want the same side
         for(const id of c.a.concat(c.b))if(!wishMet(id,c,k))s+=12;
       }return s};
@@ -681,7 +683,7 @@ function vPlayers(){
   if(!ps.length)html+='<div class="empty-note">No players yet. Paste the names from WhatsApp below.</div>';
   ps.forEach(p=>{
     const bs=badgesFor(p.id,tot).map(([k,t])=>'<span class="badge '+k+'">'+t+'</span>').join("");
-    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(()=>{const o=tot[p.id];return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
+    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(canEdit&&(p.mates||[]).filter(pBy).length?'<div class="pst">Favourite partners: <b>'+p.mates.filter(pBy).map(x=>esc(first(x))).join(", ")+'</b></div>':'')+(()=>{const o=tot[p.id];return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
       (canEdit?'<span class="rk">Rank '+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>'+
         '<span class="rk">'+[["m","Men's"],["f","Ladies'"]].map(([k,l])=>'<button class="'+(p.g===k?'on':'')+'" data-act="pg" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
         '<span class="rk">Doubles '+[["mixed","Mixed"],["same",p.g==="m"?"Men\'s":p.g==="f"?"Ladies\'":"Ladies\'/men\'s"]].map(([k,l])=>'<button class="'+(prefs(p).includes(k)?'on':'')+'" data-act="ppref" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
@@ -890,6 +892,7 @@ const QUIZ=[
   {k:"oncall",type:"one",q:"Someone pulls out at 9am on Saturday. Can we call you?",hint:"On-call players get first dibs on the 🦸 Hero badge (+2 points)",opts:[["yes","🦸","Yes – I'll be your hero"],["maybe","🙂","Only if I'm free, ask anyway"],["no","🙅","Please don't – I plan ahead"]]},
   {k:"warm",type:"one",q:"The 1:30 triples warm-up?",opts:[["always","☀️","Always – I love it"],["sometimes","🌤️","Sometimes"],["no","🕑","I'll arrive for 2pm"]]},
   {k:"partner",type:"multi",max:2,q:"Which doubles do you enjoy?",hint:"Tick one or both – the order of play uses it to give you the games you like",opts:[["mixed","👫","Mixed doubles"],["same","👭","Ladies' / men's doubles"]]},
+  {k:"mates",type:"mates",max:3,skippable:true,q:"Who do you love partnering in doubles?",hint:"Pick up to 3 – on a Saturday you're both playing, the order of play puts you together at least once. Only the organiser sees this."},
   {k:"style",type:"one",q:"Which one is you on court?",opts:[["attack","🚀","I go for it – big shots, short points"],["wall","🧱","Everything comes back. Everything."],["net","🥷","Straight to the net – volleys win"],["tactics","♟️","Angles, slices, I play the opponent"],["fun","🎉","I'm here for the drama and the trick shots"]]},
   {k:"weapon",type:"one",q:"Your secret weapon?",opts:[["serve","💥","The serve"],["forehand","🔥","Forehand"],["backhand","🎯","Backhand"],["volley","🏐","Volleys"],["lob","🌈","The lob"],["legs","🏃","My legs – I get to everything"]]},
   {k:"level",type:"one",q:"Honest level check (only used to balance matches)",opts:[["2","🌱","Solid club player"],["3","🎾","Strong club player"],["4","⭐","Team / league player"],["5","🏅","County or ex-competitive"]]},
@@ -919,7 +922,7 @@ const ymd=d=>d.slice(2).replace(/-/g,""),unymd=c=>"20"+c.slice(0,2)+"-"+c.slice(
 const b64=t=>btoa(unescape(encodeURIComponent(t))).replace(/=+$/,""),unb64=t=>decodeURIComponent(escape(atob(t+"===".slice((t.length+3)%4))));
 function enc(a){
   const one=V2S.map(k=>{const i=qOf(k).opts.findIndex(o=>o[0]===a[k]);return i<0?"-":i.toString(36)}).join("");
-  const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".");
+  const many=V2M.map(k=>{let m=0;(a[k]||[]).forEach(v=>{const i=qOf(k).opts.findIndex(o=>o[0]===v);if(i>=0)m|=1<<i});return m.toString(36)}).join(".")+(Array.isArray(a.mates)?"."+a.mates.join("+"):"");
   const r=a.rsvp?(a.rsvp.v==="yes"?(a.rsvp.warm?"w":"y"):a.rsvp.v==="reserve"?"r":"n")+ymd(a.rsvp.date)+(a.g||a.rsvp.menu||a.side?"."+(a.g||"-")+(a.rsvp.menu||"")+(a.side?":"+a.side:""):"")+(a.rsvp.reason?"!"+a.rsvp.reason:""):"";
   const aw=(a.away||[]).map(w=>ymd(w.from)+(w.to&&w.to!==w.from?"-"+ymd(w.to):"")).join(",");
   return b64(["2",String(a.name||"").replace(/[~#]/g," ")+(a.pid?"#"+a.pid+(a.tok?"#"+a.tok:""):""),a.partial?"p":"f",a.partial?"":one,a.partial?"":many,r,aw,String(a.motto||"").slice(0,40)].join("~"));
@@ -933,7 +936,7 @@ function dec(code){
   if(kind==="p")a.partial=true;
   else{
     V2S.forEach((k,i)=>{const c=(one||"")[i];if(c&&c!=="-"){const o=qOf(k).opts[parseInt(c,36)];if(o)a[k]=o[0]}});
-    (many||"").split(".").forEach((m,j)=>{const bits=parseInt(m||"0",36);a[V2M[j]]=qOf(V2M[j]).opts.filter((o,i)=>bits&(1<<i)).map(o=>o[0])});
+    (many||"").split(".").forEach((m,j)=>{if(j===V2M.length){a.mates=m?m.split("+"):[];return}if(j>V2M.length)return;const bits=parseInt(m||"0",36);a[V2M[j]]=qOf(V2M[j]).opts.filter((o,i)=>bits&(1<<i)).map(o=>o[0])});
     if(rest.join("~"))a.motto=rest.join("~");
   }
   if(r){const [body,why]=r.split("!"),[rv,gm]=body.split(".");a.rsvp={date:unymd(rv.slice(1)),v:{y:"yes",w:"yes",r:"reserve"}[rv[0]]||"no"};
@@ -983,7 +986,8 @@ function applyAnswers(a){
   if(a.rsvp&&a.rsvp.v==="no"&&a.rsvp.reason){S.missLog=(S.missLog||[]).filter(m=>!(m.id===p.id&&m.date===a.rsvp.date));S.missLog.push({date:a.rsvp.date,id:p.id,reason:a.rsvp.reason})}
   if(a.rsvp&&a.rsvp.date===S.date){p.rsvp=a.rsvp;if(a.rsvp.v==="yes"&&!awayOn(p,S.date))p.status="in";if(a.rsvp.v==="no"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out";if(a.rsvp.v==="reserve"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="reserve"}
   if(a.partial)return p;
-  const keep=["goal","fuel","rain","motives","avail","priority","oncall","warm","style","weapon","level","better","motto","partner"];
+  const keep=["goal","fuel","rain","motives","avail","priority","oncall","warm","style","weapon","level","better","motto","partner","mates"];
+  if(Array.isArray(a.mates))p.mates=a.mates.filter(x=>x!==p.id&&pBy(x)).slice(0,3);
   if(Array.isArray(a.partner)&&a.partner.length)p.pref=a.partner.slice();
   p.q=Object.assign({},p.q||{});keep.forEach(k=>{if(a[k]!==undefined)p.q[k]=a[k]});p.q.at=iso(new Date());
   if(a.level)p.level=+a.level;
@@ -1140,6 +1144,8 @@ function vQuiz(){
   let body="";
   if(q.type==="away")body=awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add these dates</button><button class="btn ball" data-act="qznext">'+((z.a.away||[]).length?"Next":"No gaps – I'm around")+' →</button></div>';
   else if(q.k==="name")body=namePicker("qzname",z.a)+(z.a.pid?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">Next →</button></div>':'');
+  else if(q.type==="mates"){const sel=val||[];body='<div class="nplist">'+live().filter(x=>x.id!==z.a.pid).sort((x,y)=>x.name.localeCompare(y.name)).map(x=>'<button data-act="qzmate" data-id="'+x.id+'"'+(sel.includes(x.id)?' style="border-color:var(--court);background:var(--good-soft)"':'')+'>'+(sel.includes(x.id)?'✓ ':'')+esc(x.name)+'</button>').join("")+'</div>'+
+    '<p class="sub" style="margin-top:6px">'+sel.length+' of 3 picked</p><div class="row" style="margin-top:10px"><button class="btn ball" data-act="qznext">'+(sel.length?"Next":"Skip – anyone is fine")+' →</button></div>'}
   else if(q.type==="text")body='<input type="text" id="qz-'+q.k+'" maxlength="60" value="'+esc(val||"")+'" placeholder="'+(q.k==="name"?"e.g. Jane Beaven":"e.g. Eye of the Tiger")+'" data-act="qztext" data-k="'+q.k+'">'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">'+(q.optional&&!val?"Skip":"Next")+' →</button></div>';
   else body='<div class="qopts">'+(q.k==="partner"?partnerOpts((z.a.pid&&pBy(z.a.pid)&&pBy(z.a.pid).g)||z.a.g):q.opts).map(([v,ic,l])=>{const on=q.type==="multi"?(val||[]).includes(v):val===v;
@@ -1293,7 +1299,7 @@ function quizAct(a,t){
   if(a==="qzavail"){ui.tab="today";ui.quiz={mode:"avail",a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzdrop"){ui.tab="today";ui.quiz={mode:"avail",drop:true,a:me()};render();window.scrollTo({top:0});return}
   if(a==="qzmine"){ui.quiz={mode:"pick",a:{}};render();return}
-  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];const miss=QUIZ.map((q,i)=>i).filter(i=>{const q=QUIZ[i],v=a2[q.k];return q.k!=="name"&&q.type!=="away"&&!q.optional&&(v===undefined||v===""||(Array.isArray(v)&&!v.length))});
+  if(a==="qzupd"){const p=pBy(t.dataset.id);if(!p)return;const a2=JSON.parse(JSON.stringify(p.q||{}));delete a2.at;a2.name=p.name;a2.pid=p.id;a2.away=[];const miss=QUIZ.map((q,i)=>i).filter(i=>{const q=QUIZ[i],v=a2[q.k];return q.k!=="name"&&q.type!=="away"&&!q.optional&&(v===undefined||v===""||(!q.skippable&&Array.isArray(v)&&!v.length))});
     ui.quiz=miss.length?{step:miss[0],upd:true,only:miss,a:a2}:{step:0,upd:true,a:a2};render();window.scrollTo({top:0});return}
   if(a==="qzaway0"){ui.quiz=null;render();return}
   if(!z)return;
@@ -1315,10 +1321,11 @@ function quizAct(a,t){
   if(!z)return;
   const q=QUIZ[z.step];
   if(a==="qzback"){z.step=Math.max(0,z.step-1);render();return}
+  if(a==="qzmate"){const v=t.dataset.id,cur=z.a.mates||[];z.a.mates=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=3?cur.slice(1).concat(v):cur.concat(v);render();return}
   if(a==="qzpick"){const v=t.dataset.v;
     if(q.type==="multi"){const cur=z.a[q.k]||[];z.a[q.k]=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=q.max?cur.slice(1).concat(v):cur.concat(v);render();return}
     z.a[q.k]=v;render();setTimeout(()=>{if(ui.quiz===z&&QUIZ[z.step]===q)advance()},260);return}
-  if(a==="qznext"){const inp=$("#qz-"+q.k);if(inp)z.a[q.k]=inp.value.trim();
+  if(a==="qznext"){const inp=$("#qz-"+q.k);if(inp)z.a[q.k]=inp.value.trim();if(q.type==="mates"&&!z.a.mates)z.a.mates=[];
     if(q.k==="name"&&!z.a.pid){toast("Tap your name first");return}
     if(q.type==="text"&&!q.optional&&!z.a[q.k]){toast("Pop your name in first");return}
     advance()}
