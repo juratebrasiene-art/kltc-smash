@@ -346,6 +346,34 @@ pre.wa{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1
 .mini span:last-child{font-size:12.5px;color:var(--muted)}
 .mi{font-size:26px;line-height:1}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- refined look (18 Nov): calm, clear, easy to read ---------- */
+body{font-size:16px;line-height:1.5}
+.sub{font-size:15px;line-height:1.5}
+.card{border:0;border-radius:18px;padding:20px;box-shadow:0 1px 2px rgba(10,30,20,.06),0 6px 20px rgba(10,30,20,.06)}
+.card h2,.quiz h2,.quizhero h2,.album h2,.pcard h2,.potd h3,.sheet h3,.secttl{font-family:var(--body);font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.card h2{font-size:22px;margin-bottom:6px}
+.quiz h2{font-size:24px}.quizhero h2,.album h2{font-size:28px}.sheet h3{font-size:24px}.potd h3{font-size:24px}
+.eyebrow{font-size:11.5px;letter-spacing:.12em;font-weight:700}
+.band{padding-block:16px 14px}
+.logo{width:clamp(56px,15vw,76px)}
+h1{font-size:clamp(32px,8.5vw,50px)}
+.chip{font-weight:600;font-size:13.5px}
+.helpbtn{border:1.5px solid rgba(255,255,255,.45);color:var(--on-court);font-weight:600;padding:5px 14px}
+.helpbtn:hover{transform:none}
+.tab{font-size:15px;font-weight:600;padding:14px 12px 12px}
+.tab .dot{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:var(--clay);color:#fff;font-size:12px;padding:0 6px;margin-left:4px}
+.btn{font-weight:600;padding:13px 22px;font-size:16px}
+.btn.small{padding:9px 16px;font-size:14.5px}
+.btn.ball{background:var(--court);color:var(--on-court)}
+.quizhero .btn.ball,.album .btn.ball,.pcard .btn.ball,.potd .btn.ball{background:#fff;color:var(--court-deep)}
+.btn.ghost{border:1.5px solid var(--line);font-weight:600}
+.qopt{border-width:1.5px;font-size:16px;min-height:56px}
+.qopt[aria-pressed="true"]{border-color:var(--court);box-shadow:inset 0 0 0 1px var(--court)}
+.rtile{border-width:1.5px}.rtile[aria-pressed=true]{box-shadow:0 0 0 2px var(--court);background:var(--good-soft)}
+.nrow{border:0;box-shadow:inset 0 0 0 1px var(--line);font-weight:600}
+.badge{font-weight:600}
+.stack{gap:18px}
 </style>
 <div id="app"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -588,20 +616,23 @@ function render(){
   else if(now<st.getTime()){const d=st.getTime()-now,dd=Math.floor(d/864e5),hh=Math.floor(d%864e5/36e5),mm=Math.floor(d%36e5/6e4);
     when='<span class="chip ball">First ball in <span class="digits">'+(dd?dd+"d ":"")+hh+"h "+(dd?"":mm+"m")+'</span></span>'}
   else when='<span class="chip ball">Played – '+(canEdit?'finish the day for the ladder':'scores coming')+'</span>';
-  const unread=chatUnread();const tabs=[["today","Saturday"],["chat","💬 Chat"+(unread?" ("+unread+")":"")],["quiz","🎴 My card"],["cards","Cards"],["players","Players"],["ladder",canEdit?"Ladder":"🏆 Ladder"]].concat(canEdit?[["dash","📊 Squad"],["share","📲 Send"]]:[]);
+  const unread=chatUnread();const tabs=[["today","Saturday"],["chat","Chat"+(unread?' <span class="dot">'+unread+'</span>':"")],["quiz","My card"],["cards","Cards"],["players","Players"],["ladder","Ladder"]].concat(canEdit?[["dash","Squad"],["share","Send"]]:[]);
   app.innerHTML=
   '<header class="band gut"><div class="col">'+
     '<div class="brand">'+LOGO+'<div style="min-width:0"><div class="eyebrow">'+esc(S.club)+' · '+esc(S.group)+'</div>'+
     '<h1><span class="h-sat">Saturday</span><span class="h-smash">Smash!</span></h1></div></div>'+
-    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">📖 How it works</button><a class="helpbtn" style="text-decoration:none" href="'+TOUR+'" target="_blank" rel="noopener">🎾 App tour</a>'+(PUBLIC&&!isApp()?'<button class="helpbtn" data-act="install">📲 Put the app on my phone</button>':'')+'</div>'+
+    '<div class="board"><span class="chip">'+fmtD(S.date)+' · '+hhmm(mins(S.start))+'–'+hhmm(mins(S.start)+S.rounds*S.roundMins)+'</span>'+(wx()?'<span class="chip" title="Forecast for Kingswood, updated '+esc(wx().at||"")+'">'+esc(wx().text)+'</span>':'')+when+'<button class="helpbtn" data-act="help">Help</button></div>'+
   '</div></header>'+
   '<nav class="tabs gut" aria-label="Sections"><div class="col">'+tabs.map(([k,l])=>'<button class="tab" role="tab" aria-selected="'+(ui.tab===k)+'" data-act="tab" data-k="'+k+'">'+l+'</button>').join("")+
     '<span class="save" id="savestate">'+esc(ui.save||(PUBLIC?"":canEdit?(preview?"Preview – not saved":""):"View only"))+'</span></div></nav>'+
   '<main class="gut"><div class="col stack">'+({today:()=>ui.quiz&&ui.quiz.mode==="avail"?vQuiz():vToday(),quiz:vQuiz,chat:vChat,cards:vCards,dash:vDash,players:vPlayers,ladder:vLadder,share:vShare}[ui.tab]||vToday)()+'</div></main>'+
   (ui.sheet?vSheet():"")+'<div id="toastbox"></div>';
-  renderToast();ui.flip=false;
+  renderToast();ui.flip=false;calm();
   if(ui.tab==="chat")afterChat();
 }
+function calm(){const re=/^[\s\p{Extended_Pictographic}\uFE0F\u200D\u20E3]+|[\s\p{Extended_Pictographic}\uFE0F\u200D\u20E3]+$/gu;
+  document.querySelectorAll("main .card h2, .sheet h3, .album h2, main .btn, .sheet .btn, .helpbtn").forEach(h=>{const w=document.createTreeWalker(h,NodeFilter.SHOW_TEXT);const t=[];while(w.nextNode())t.push(w.currentNode);
+    if(t.length){t[0].nodeValue=t[0].nodeValue.replace(/^[\s\p{Extended_Pictographic}\uFE0F\u200D\u20E3]+/u,"");const l=t[t.length-1];l.nodeValue=l.nodeValue.replace(/[\s\p{Extended_Pictographic}\uFE0F\u200D\u20E3]+$/u,"")}});}
 function renderToast(){const b=$("#toastbox");if(b)b.innerHTML=ui.toast?'<div class="toast" role="status">'+esc(ui.toast)+'</div>':""}
 
 function vToday(){
@@ -631,7 +662,7 @@ function vToday(){
       (warm.length?'<p class="sub" style="margin-top:6px">'+warm.map(p=>esc(first(p.id))).join(", ")+'</p>':'')+'</div>':'')+
   '</section>';
   // OOP
-  html+='<section class="stack" id="sec-oop"><div class="row spread"><div><h2 style="font-family:var(--display);font-size:30px;margin:0;line-height:1">Order of play '+(S.oop?'':'<span class="draft">DRAFT</span>')+'</h2>'+
+  html+='<section class="stack" id="sec-oop"><div class="row spread"><div><h2 style="font-size:24px;margin:0;line-height:1.2;font-weight:700;letter-spacing:-.015em">Order of play '+(S.oop?'':'<span class="draft">DRAFT</span>')+'</h2>'+
     '<p class="sub">'+(S.oop?'Locked in. Drop-outs swap straight in.':'Changes live as people go in and out. Lock it in when the numbers are right.')+'</p></div>'+
     (canEdit?'<div class="row">'+(S.oop?'<button class="btn small ghost" data-act="unlock">Unlock</button>':'<button class="btn small ghost" data-act="shuffle">Shuffle</button><button class="btn small" data-act="lock"'+(oop?'':' disabled')+'>Lock it in</button>')+'</div>':'')+
   '</div>';
@@ -1261,6 +1292,7 @@ function vHelp(){
   const k=ui.helpFor==="org"&&canEdit?"org":"player";
   const who=esc(org().name||"the organiser");
   return '<div class="row spread"><h3>How it works</h3><button class="x" data-act="close" aria-label="Close">×</button></div>'+
+    '<div class="row" style="margin:6px 0 10px"><a class="btn small ghost" style="text-decoration:none" href="'+TOUR+'" target="_blank" rel="noopener">Take the app tour</a>'+(PUBLIC&&!isApp()?'<button class="btn small ghost" data-act="install">Put the app on my phone</button>':'')+'</div>'+
     (canEdit?'<div class="seg" style="margin:8px 0 2px"><button class="in" aria-pressed="'+(k==="player")+'" data-act="helpfor" data-k="player">I\'m a player</button><button class="in" aria-pressed="'+(k==="org")+'" data-act="helpfor" data-k="org">I\'m the organiser</button></div>':'<p class="sub">Six steps. That\'s it. 🎾</p>')+
     '<div class="steps">'+HELP[k].map(([ic,c,t,l],i)=>'<button class="step" data-act="helpgo" data-k="'+k+'" data-i="'+i+'" style="--pc:var(--'+c+');animation-delay:'+(i*70)+'ms"><span class="sn">'+(i+1)+'</span><span class="bub">'+ic+'</span><b>'+esc(t.replace("{org}",org().name||"us"))+'</b><span class="sl">'+esc(l)+'</span><span class="go">'+(HELP[k][i][4]==="copylink"?'Copy link':HELP[k][i][4].startsWith("tip")?'How?':'Go')+' →</span></button>').join("")+'</div>'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="'+(k==="player"?'gocard':'close')+'">'+(k==="player"?'Get my card 🎾':'Let\'s go 🎾')+'</button><a class="btn ghost" style="text-decoration:none" href="'+TOUR+'" target="_blank" rel="noopener">🎾 Full app tour →</a></div>';
