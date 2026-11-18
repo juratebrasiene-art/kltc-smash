@@ -1452,7 +1452,7 @@ function adminBlock(p){
     (phoneOf(p)?line("Mobile",'<a href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>'):'')+
     line("Ladder",tot&&(tot.days||tot.p)?tot.days+' Saturdays · '+tot.p+' played · <b class="w">'+tot.w+' won</b> · <b class="l">'+tot.l+' lost</b> · '+tot.pts+' pts':'No Saturdays yet')+
     line("Partners",[["x","Mixed"],["d",p.g==="m"?"Men's":p.g==="f"?"Ladies'":"Ladies'/men's"]].filter(([k])=>m[k]&&pBy(m[k])).map(([k,l])=>l+': <b>'+esc(first(m[k]))+'</b>').join(" · ")||'None picked')+
-    line("Rank",ui.rkEdit===p.id?'<span class="rk">'+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>':'<b class="rknum">'+(p.rankN||'–')+'</b> <button class="lnk" data-act="rkedit" data-id="'+p.id+'">change</button>')+
+    line("Rank",ui.rkEdit===p.id?'<span class="rk">'+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>':'<b class="rknum">'+(()=>{const r=[p.rankN,p.rankV].filter(Boolean);if(!r.length)return '–';const lo=Math.min(...r),hi=Math.max(...r);return lo===hi?lo:lo+'–'+hi})()+'</b> <button class="lnk" data-act="rkedit" data-id="'+p.id+'">change</button>')+
     line("Men's / Ladies'",p.g==="m"?"Men's":p.g==="f"?"Ladies'":fromCard)+
     line("Doubles",prefs(p).length?prefs(p).map(k=>k==="mixed"?"Mixed":p.g==="m"?"Men's":p.g==="f"?"Ladies'":"Ladies'/men's").join(" + "):fromCard)+
     line("Side",p.side?(SIDES.find(x=>x[0]===p.side)||["","",""])[2]:fromCard)+
@@ -1728,7 +1728,7 @@ document.addEventListener("click",e=>{
       if(S.oop&&v==="in"&&!attendedIn(S.oop).includes(id)){mutate(s=>{pBy(id).status="in"});toast("Unlock the order of play to fit "+first(id)+" in");return}
       mutate(s=>{pBy(id).status=v});break}
     case "level":mutate(s=>{pBy(id).level=+t.dataset.v});break;
-    case "rank":ui.rkEdit=null;mutate(s=>{const p=pBy(id),k=t.dataset.k,v=+t.dataset.v;p[k]=p[k]===v?null:v;const r=[p.rankN,p.rankV].filter(Boolean);if(r.length)p.level=Math.round(5-r.reduce((x,y)=>x+y)/r.length)});break; // rank 1 (strongest) = level 4, 2 = 3, 3 = 2
+    case "rank":ui.rkEdit=null;mutate(s=>{const p=pBy(id),v=+t.dataset.v;p.rankN=v;p.rankV=v;const r=[p.rankN,p.rankV].filter(Boolean);if(r.length)p.level=Math.round(5-r.reduce((x,y)=>x+y)/r.length)});break; // rank 1 (strongest) = level 4, 2 = 3, 3 = 2
     case "rkedit":ui.rkEdit=ui.rkEdit===id?null:id;render();break;
     case "rollopen":ui.rollOpen=ui.rollOpen===t.dataset.k||(ui.rollOpen===undefined&&t.dataset.k==="yes")?"":t.dataset.k;render();break;
     case "psort":ui.psort=t.dataset.v;render();break;
@@ -1836,7 +1836,7 @@ function start(data){
   (async()=>{
     try{
       art=await c.use("artifact");const u=await c.use("user");
-      if(art){preview=false;canEdit=u?await u.canEdit():false}
+      if(art){preview=false;canEdit=u?(!!(await u.canEdit())||!!(await u.isOwner())):true} // phone viewers may not tell who is looking: the page is private (owner + invited editors only), and a non-writer's first save turns it to View only
       else{canEdit=true;preview=true}
       if(fromInbox&&canEdit&&art){save();toast("📥 "+fromInbox+" new answer"+(fromInbox>1?"s":"")+(pendingAdded?" – "+pendingAdded+" from new phones to check 🔒":""))}
     }catch(err){canEdit=false}
