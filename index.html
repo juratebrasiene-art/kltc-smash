@@ -506,7 +506,7 @@ function buildOOP(seed){
         if(c.a.length===2){s+=((part[key(c.a[0],c.a[1])]||0)**2+(part[key(c.b[0],c.b[1])]||0)**2)*10}
         for(const x of c.a)for(const y of c.b)s+=(opp[key(x,y)]||0)*3;
         s+=Math.abs(c.a.reduce((t,i)=>t+lvl(i),0)-c.b.reduce((t,i)=>t+lvl(i),0))*4;
-        if(c.a.length===2)for(const tm of [c.a,c.b]){const f=mate(tm[0],tm[1]);if(f&&!(part[key(tm[0],tm[1])]||0))s-=f*15} // favourite partners: together once a day
+        if(c.a.length===2)for(const tm of [c.a,c.b]){const f=mate(tm[0],tm[1]);if(f&&!(part[key(tm[0],tm[1])]||0))s-=f*15} // tournament partners: together for one session a day to practise
         if(c.a.length===2)for(const tm of [c.a,c.b]){const x=pBy(tm[0])?.side,y=pBy(tm[1])?.side;if(x&&x===y&&x!=="e")s+=5} // both partners want the same side
         for(const id of c.a.concat(c.b))if(!wishMet(id,c,k))s+=12;
       }return s};
@@ -688,7 +688,7 @@ function vPlayers(){
   if(!ps.length)html+='<div class="empty-note">No players yet. Paste the names from WhatsApp below.</div>';
   ps.forEach(p=>{
     const bs=badgesFor(p.id,tot).map(([k,t])=>'<span class="badge '+k+'">'+t+'</span>').join("");
-    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(canEdit&&(p.mates||[]).filter(pBy).length?'<div class="pst">Favourite partners: <b>'+p.mates.filter(pBy).map(x=>esc(first(x))).join(", ")+'</b></div>':'')+(()=>{const o=tot[p.id];return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
+    html+='<div class="pl"><div style="min-width:0"><div class="pname"><button style="border:0;background:none;padding:0;font-weight:700;text-align:left" data-act="profile" data-id="'+p.id+'">'+esc(p.name)+'</button>'+(p.q?' <span class="badge fire">'+persona(p.q).icon+' '+esc(persona(p.q).name)+'</span>':'')+'</div>'+(canEdit&&phoneOf(p)?'<a class="ph" href="tel:+'+esc(normPhone(phoneOf(p)))+'">'+esc(phoneOf(p).replace(/^\+44\s?/,"0").replace(/^0?(\d{4})\s?(\d{3})\s?(\d{3})$/,"0$1 $2 $3"))+'</a>':'')+(canEdit&&(p.mates||[]).filter(pBy).length?'<div class="pst">Tournament partner'+(p.mates.filter(pBy).length>1?'s':'')+': <b>'+p.mates.filter(pBy).map(x=>esc(first(x))).join(", ")+'</b></div>':'')+(()=>{const o=tot[p.id];return '<div class="pst">'+(o&&(o.days||o.p)?'<b>'+(o.days||0)+'</b> Saturday'+(o.days===1?'':'s')+' · <b>'+o.p+'</b> played · <b class="w">'+o.w+'</b> won · <b class="l">'+o.l+'</b> lost · <b>'+o.pts+'</b> pts':'No Saturdays yet')+'</div>'})()+'<div class="pmeta">'+
       (canEdit?'<span class="rk">Rank '+[1,2,3].map(i=>'<button class="r'+i+(p.rankN===i?' on':'')+'" aria-label="Rank '+i+'" data-act="rank" data-k="rankN" data-id="'+p.id+'" data-v="'+i+'">'+i+'</button>').join("")+'</span>'+
         '<span class="rk">'+[["m","Men's"],["f","Ladies'"]].map(([k,l])=>'<button class="'+(p.g===k?'on':'')+'" data-act="pg" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
         '<span class="rk">Doubles '+[["mixed","Mixed"],["same",p.g==="m"?"Men\'s":p.g==="f"?"Ladies\'":"Ladies\'/men\'s"]].map(([k,l])=>'<button class="'+(prefs(p).includes(k)?'on':'')+'" data-act="ppref" data-id="'+p.id+'" data-v="'+k+'">'+l+'</button>').join("")+'</span>'+
@@ -896,8 +896,8 @@ const QUIZ=[
   {k:"away",type:"away",q:"Any Saturdays you'll be away?",hint:"Holidays, injury, a busy few months – add as many dates as you like, or skip"},
   {k:"oncall",type:"one",q:"Someone pulls out at 9am on Saturday. Can we call you?",hint:"On-call players get first dibs on the 🦸 Hero badge (+2 points)",opts:[["yes","🦸","Yes – I'll be your hero"],["maybe","🙂","Only if I'm free, ask anyway"],["no","🙅","Please don't – I plan ahead"]]},
   {k:"warm",type:"one",q:"The 1:30 triples warm-up?",opts:[["always","☀️","Always – I love it"],["sometimes","🌤️","Sometimes"],["no","🕑","I'll arrive for 2pm"]]},
-  {k:"partner",type:"multi",max:2,q:"Which doubles do you enjoy?",hint:"Tick one or both – the order of play uses it to give you the games you like",opts:[["mixed","👫","Mixed doubles"],["same","👭","Ladies' / men's doubles"]]},
-  {k:"mates",type:"mates",max:3,skippable:true,q:"Who do you love partnering in doubles?",hint:"Pick up to 3 – on a Saturday you're both playing, the order of play puts you together at least once. Only the organiser sees this."},
+  {k:"partner",type:"multi",max:2,q:"Pick your doubles flavour 🍦",hint:"Tick one or both – we'll serve more of what you love",opts:[["mixed","👫","Mixed doubles"],["same","👭","Ladies' / men's doubles"]]},
+  {k:"mates",type:"mates",max:2,skippable:true,q:"Got a partner in crime? 🕵️",hint:"Your tournament or league doubles partner – pick up to 2. On a Saturday you're both in, we'll team you up for one session to sharpen your moves."},
   {k:"style",type:"one",q:"Which one is you on court?",opts:[["attack","🚀","I go for it – big shots, short points"],["wall","🧱","Everything comes back. Everything."],["net","🥷","Straight to the net – volleys win"],["tactics","♟️","Angles, slices, I play the opponent"],["fun","🎉","I'm here for the drama and the trick shots"]]},
   {k:"weapon",type:"one",q:"Your secret weapon?",opts:[["serve","💥","The serve"],["forehand","🔥","Forehand"],["backhand","🎯","Backhand"],["volley","🏐","Volleys"],["lob","🌈","The lob"],["legs","🏃","My legs – I get to everything"]]},
   {k:"level",type:"one",q:"Honest level check (only used to balance matches)",opts:[["2","🌱","Solid club player"],["3","🎾","Strong club player"],["4","⭐","Team / league player"],["5","🏅","County or ex-competitive"]]},
@@ -910,7 +910,7 @@ const PERSONA={attack:["🚀","The Big Hitter"],wall:["🧱","The Wall"],net:["�
 /* every fun answer, in quiz order – level, priority and away dates stay off the card */
 const CARD_FACTS=[["Here for","motives"],["Season goal","goal"],["Saturdays","avail"],["Late swaps","oncall"],["Triples warm-up","warm"],["Doubles","partner"],["On court","style"],["Secret weapon","weapon"],["Saturdays need","better"],["Post-match fuel","fuel"],["Rain at 1:45","rain"]];
 const cardFacts=a=>CARD_FACTS.map(([l,k])=>[l,Array.isArray(a[k])?a[k].map(v=>optLabel(k,v)).filter(Boolean).join(" · "):optLabel(k,a[k])]).filter(x=>x[1]);
-const partnerOpts=g=>[["mixed","👫","Mixed doubles"],["same",g==="m"?"👬":"👭",g==="m"?"Men's doubles":g==="f"?"Ladies' doubles":"Ladies' / men's doubles"]];
+const partnerOpts=g=>[["mixed","👫","Mixed doubles – the classic boy-girl battle"],["same",g==="m"?"👬":"👭",g==="m"?"Men's doubles – the lads' showdown":g==="f"?"Ladies' doubles – girls rule the court":"Ladies' / men's doubles"]];
 const prefs=p=>!p||!p.pref?[]:Array.isArray(p.pref)?p.pref:p.pref==="any"?["mixed","same"]:[p.pref]; // ticked doubles types
 const optLabel=(k,v)=>{const q=QUIZ.find(x=>x.k===k);const o=q&&q.opts&&q.opts.find(x=>x[0]===v);return o?o[1]+" "+o[2]:""};
 function persona(a){
@@ -992,7 +992,7 @@ function applyAnswers(a){
   if(a.rsvp&&a.rsvp.date===S.date){p.rsvp=a.rsvp;if(a.rsvp.v==="yes"&&!awayOn(p,S.date))p.status="in";if(a.rsvp.v==="no"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="out";if(a.rsvp.v==="reserve"&&!(S.oop&&attendedIn(S.oop).includes(p.id)))p.status="reserve"}
   if(a.partial)return p;
   const keep=["goal","fuel","rain","motives","avail","priority","oncall","warm","style","weapon","level","better","motto","partner","mates"];
-  if(Array.isArray(a.mates))p.mates=a.mates.filter(x=>x!==p.id&&pBy(x)).slice(0,3);
+  if(Array.isArray(a.mates))p.mates=a.mates.filter(x=>x!==p.id&&pBy(x)).slice(0,2);
   if(Array.isArray(a.partner)&&a.partner.length)p.pref=a.partner.slice();
   p.q=Object.assign({},p.q||{});keep.forEach(k=>{if(a[k]!==undefined)p.q[k]=a[k]});p.q.at=iso(new Date());
   if(a.level)p.level=+a.level;
@@ -1150,10 +1150,10 @@ function vQuiz(){
   if(q.type==="away")body=awayForm("qzaw",z.a.away)+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-act="qzawadd">Add these dates</button><button class="btn ball" data-act="qznext">'+((z.a.away||[]).length?"Next":"No gaps – I'm around")+' →</button></div>';
   else if(q.k==="name")body=namePicker("qzname",z.a)+(z.a.pid?'<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">Next →</button></div>':'');
   else if(q.type==="mates"){const sel=(val||[]).filter(pBy);
-    body='<div class="slots">'+[0,1,2].map(n=>sel[n]?'<button class="slot on" data-act="qzmate" data-id="'+sel[n]+'" aria-label="Remove '+esc(nm(sel[n]))+'">✓ '+esc(nm(sel[n]))+' <span aria-hidden="true">×</span></button>':'<span class="slot">Partner '+(n+1)+'</span>').join("")+'</div>'+
-    (sel.length<3?'<div class="np" style="margin-top:10px"><input type="search" id="mt-q" placeholder="🔎 Type a name…" autocomplete="off" aria-label="Find a partner">'+
+    body='<div class="slots">'+[0,1].map(n=>sel[n]?'<button class="slot on" data-act="qzmate" data-id="'+sel[n]+'" aria-label="Remove '+esc(nm(sel[n]))+'">✓ '+esc(nm(sel[n]))+' <span aria-hidden="true">×</span></button>':'<span class="slot">'+(n?'2nd partner in crime (if you have one)':'My partner in crime')+'</span>').join("")+'</div>'+
+    (sel.length<2?'<div class="np" style="margin-top:10px"><input type="search" id="mt-q" placeholder="🔎 Type a name…" autocomplete="off" aria-label="Find a partner">'+
       '<p class="mthint">Type the first letters of a name, then tap it.</p><div class="nplist mtlist">'+live().filter(x=>x.id!==z.a.pid&&!sel.includes(x.id)).sort((x,y)=>x.name.localeCompare(y.name)).map(x=>'<button hidden data-act="qzmate" data-id="'+x.id+'" data-n="'+esc(x.name.toLowerCase())+'">'+esc(x.name)+'</button>').join("")+'</div></div>':'')+
-    '<div class="row" style="margin-top:16px"><button class="btn ball" style="font-size:18px;padding:14px 24px" data-act="qznext">'+(sel.length?"Next":"Skip – anyone is fine")+' →</button></div>'}
+    '<div class="row" style="margin-top:16px"><button class="btn ball" style="font-size:18px;padding:14px 24px" data-act="qznext">'+(sel.length?"Next":"I'm a free agent – skip")+' →</button></div>'}
   else if(q.type==="text")body='<input type="text" id="qz-'+q.k+'" maxlength="60" value="'+esc(val||"")+'" placeholder="'+(q.k==="name"?"e.g. Jane Beaven":"e.g. Eye of the Tiger")+'" data-act="qztext" data-k="'+q.k+'">'+
     '<div class="row" style="margin-top:14px"><button class="btn ball" data-act="qznext">'+(q.optional&&!val?"Skip":"Next")+' →</button></div>';
   else body='<div class="qopts">'+(q.k==="partner"?partnerOpts((z.a.pid&&pBy(z.a.pid)&&pBy(z.a.pid).g)||z.a.g):q.opts).map(([v,ic,l])=>{const on=q.type==="multi"?(val||[]).includes(v):val===v;
@@ -1329,7 +1329,7 @@ function quizAct(a,t){
   if(!z)return;
   const q=QUIZ[z.step];
   if(a==="qzback"){z.step=Math.max(0,z.step-1);render();return}
-  if(a==="qzmate"){const v=t.dataset.id,cur=z.a.mates||[];z.a.mates=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=3?cur.slice(1).concat(v):cur.concat(v);render();return}
+  if(a==="qzmate"){const v=t.dataset.id,cur=z.a.mates||[];z.a.mates=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=2?cur.slice(1).concat(v):cur.concat(v);render();return}
   if(a==="qzpick"){const v=t.dataset.v;
     if(q.type==="multi"){const cur=z.a[q.k]||[];z.a[q.k]=cur.includes(v)?cur.filter(x=>x!==v):cur.length>=q.max?cur.slice(1).concat(v):cur.concat(v);render();return}
     z.a[q.k]=v;render();setTimeout(()=>{if(ui.quiz===z&&QUIZ[z.step]===q)advance()},260);return}
